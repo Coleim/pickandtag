@@ -1,6 +1,9 @@
-import { Text, View } from "react-native";
+import { useRouter } from "expo-router";
+import { Button, View } from "react-native";
 
 export default function Index() {
+    const router = useRouter();
+    
   return (
     <View
       style={{
@@ -9,7 +12,9 @@ export default function Index() {
         alignItems: "center",
       }}
     >
-      <Text>Edit app/index.tsx to edit this screen.</Text>
+        <Button title="Collect New Trash" onPress={() => router.navigate('/collect/new-trash')} />
+
+        {/* All trashes will be listed here. */}
     </View>
   );
 }

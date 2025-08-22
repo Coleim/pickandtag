@@ -1,10 +1,21 @@
 
 import { buttonStyles } from "@/constants/ButtonStyles";
+import { Colors } from "@/constants/Colors";
 import { CameraView, useCameraPermissions } from "expo-camera";
-import { useRef } from "react";
+import { useRouter } from "expo-router";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Button, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 export default function NewTrash() {
+    const [takePhoto, setTakePhoto] = useState(false);
+    const router = useRouter();
+
+    const handlePhotoTaken = useCallback((uri: string) => {
+        console.log( 'Photo taken with URI:', uri );
+        // setPhotoUri(uri);
+        setTakePhoto(false);
+    }, []);
+
     return (
         <View style={styles.container}>
             <View style={styles.content}>
@@ -15,12 +26,12 @@ export default function NewTrash() {
                     Snap a picture of the trash you collected
                 </Text>
                 <View style={styles.cameraBox}>
-                    <TrashCamera />
+                    <TrashCamera takePhoto={takePhoto} onPhotoTaken={handlePhotoTaken} />
                 </View>
-                <TouchableOpacity style={buttonStyles.primary}>
+                <TouchableOpacity onPress={() => setTakePhoto(true)} style={buttonStyles.primary}>
                     <Text style={buttonStyles.primaryText}>Take Photo</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={[buttonStyles.secondary, buttonStyles.smaller, styles.bottomArea]}>
+                <TouchableOpacity onPress={ () => router.back() } style={[buttonStyles.secondary, buttonStyles.smaller, styles.bottomArea]}>
                     <Text style={buttonStyles.secondaryText}>Back</Text>
                 </TouchableOpacity>
             </View>
@@ -29,9 +40,21 @@ export default function NewTrash() {
 }
 
 
-function TrashCamera() {
+
+function TrashCamera({ takePhoto, onPhotoTaken }: {takePhoto: boolean, onPhotoTaken: (uri: string) => void}) {
     const [permission, requestPermission] = useCameraPermissions();
     const cameraRef = useRef<CameraView>(null);
+
+    useEffect(() => {
+        if (takePhoto) {
+            const snap = async () => {
+                if (!cameraRef.current) return;
+                const photo = await cameraRef.current.takePictureAsync();
+                onPhotoTaken(photo.uri);
+            };
+            snap();
+        }
+    }, [takePhoto, onPhotoTaken]);
 
     if (!permission) {
         // Camera permissions are still loading.
@@ -73,7 +96,7 @@ function TrashCamera() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "#FCFBF5",
+        backgroundColor: Colors.background,
         flexDirection: 'column',
     },
     content: {
@@ -88,7 +111,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         fontSize: 32,
         fontWeight: "700",
-        color: "#363C3B",
+        color: Colors.text,
         marginBottom: 12,
         lineHeight: 38
     },
@@ -97,7 +120,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
         fontSize: 18,
-        color: "#6B6F6E",
+        color: Colors.text,
         marginBottom: 40
     },
     cameraBox: {
@@ -112,61 +135,15 @@ const styles = StyleSheet.create({
         flex: 1,
         width: '100%',
         height: '100%',
-        borderRadius: 24,
-        overflow: "hidden",
-        alignSelf: "center",
-        borderWidth: 5,
-        borderColor: "#E3E3DD",
-        backgroundColor: "#FCFBF5",
-    },
-    primaryButton: {
-        backgroundColor: "#2E7D32",
-        borderRadius: 10,
-        paddingVertical: 10,
-        width: "80%",
-        alignSelf: "center",
-        alignItems: "center",
-        shadowColor: "#2E7D32",
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.08,
-        shadowRadius: 8
-    },
-    primaryButtonText: {
-        color: "#fff",
-        fontWeight: "700",
-        fontSize: 24
-    },
-    secondaryButton: {
-        backgroundColor: "#0288D1",
-        borderRadius: 10,
-        paddingVertical: 8,
-        width: "60%",
-        alignSelf: "center",
-        alignItems: "center",
-        shadowColor: "#0288D1",
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.08,
-        shadowRadius: 4,
-        marginBottom: 12,
+        borderRadius: 12,
+        borderWidth: 4,
+        borderColor: Colors.accent,
+        backgroundColor: Colors.background,
     },
     bottomArea: {
         width: "40%",
         margin: "auto",
         marginBottom: 20,
         justifyContent: 'flex-end',
-    },
-    secondaryButtonText: {
-        color: "#37474F",
-        fontWeight: "400",
-        fontSize: 20
-    },
-    bottomNav: {
-        flexDirection: "row",
-        justifyContent: "space-around",
-        alignItems: "center",
-        height: 64,
-        borderTopWidth: 1,
-        borderColor: "#E3E3DD",
-        backgroundColor: "#FCFBF5"
     }
 });

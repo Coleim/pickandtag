@@ -1,14 +1,16 @@
 
+import { TrashCamera } from "@/components/collect/trash-camera";
+import { TrashDetails } from "@/components/collect/trash-details";
 import { buttonStyles } from "@/constants/ButtonStyles";
 import { Colors } from "@/constants/Colors";
+import { addTrash } from "@/stores/trash-store";
+import { Trash } from "@/types/trash";
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import * as Crypto from 'expo-crypto';
 import * as Location from 'expo-location';
 import { useRouter } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { updateTrashStore } from "../stores/trash-store";
-import { TrashCamera } from "./trash-camera";
-import { TrashDetails } from "./trash-details";
 
 export default function NewTrash() {
   const [takingPhoto, setTakingPhoto] = useState(false);
@@ -17,6 +19,8 @@ export default function NewTrash() {
 
   const [location, setLocation] = useState<Location.LocationObject | null>(null);
   const [city, setCity] = useState<string | null>(null);
+  const [region, setRegion] = useState<string | null>(null);
+  const [subregion, setSubRegion] = useState<string | null>(null);
   const [country, setCountry] = useState<string | null>(null);
 
   useEffect(() => {
@@ -27,7 +31,7 @@ export default function NewTrash() {
         return;
       }
       let currentLocation = await Location.getCurrentPositionAsync({});
-      setLocation(location);
+      setLocation(currentLocation);
 
       // Reverse geocode
       let reverseGeocode = await Location.reverseGeocodeAsync({
@@ -35,9 +39,12 @@ export default function NewTrash() {
         longitude: currentLocation.coords.longitude,
       });
 
+
       if (reverseGeocode.length > 0) {
         const place = reverseGeocode[0];
-        setCity(place.city || place.subregion || null);
+        setSubRegion(place.subregion || null);
+        setRegion(place.region || null);
+        setCity(place.city || null);
         setCountry(place.country || null);
       }
     }
@@ -53,15 +60,23 @@ export default function NewTrash() {
 
   const handleTrashAdded = useCallback((category: string) => {
     // add to store
-    // generate id
-    updateTrashStore({
-      id: 123,
+    const newTrash: Trash = {
+      id: Crypto.randomUUID(),
       category,
-      location: JSON.stringify(location),
+      latitude: !location ? '' : location?.coords.latitude.toFixed(4),
+      longitude: !location ? '' : location?.coords.longitude.toFixed(4), //TODO: use only 4 digits after comma
       city: city ?? "",
+      region: region ?? "",
+      subregion: subregion ?? "",
       country: country ?? "",
-      imageBase64: base64Picture ?? ""
-    })
+      imageBase64: base64Picture ?? "",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      lastSyncedAt: new Date(),
+      syncStatus: 'dirty'
+    };
+    addTrash(newTrash);
+
   }, [])
 
   return (

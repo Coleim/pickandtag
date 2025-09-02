@@ -1,8 +1,19 @@
+import { trashStore } from "@/stores/trash-store";
+import { Trash } from "@/types/trash";
+import { useStore } from "@tanstack/react-store";
 import { useRouter } from "expo-router";
-import { Button, View } from "react-native";
+import { Button, Text, View } from "react-native";
 
 export default function Index() {
   const router = useRouter();
+
+  const trashesFromStore: Trash[] = useStore(trashStore);
+
+  function trashes() {
+    return trashesFromStore.map((trash: Trash, idx: number) => {
+      return <Text key={idx}>{trash.category}</Text>
+    })
+  }
 
   return (
     <View
@@ -15,6 +26,9 @@ export default function Index() {
       <Button title="Collect New Trash" onPress={() => router.navigate('/collect/new-trash')} />
 
       {/* All trashes will be listed here. */}
+      <View>
+        {trashes()}
+      </View>
     </View>
   );
 }

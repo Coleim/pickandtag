@@ -3,9 +3,10 @@ import { Colors } from "@/constants/Colors";
 import { Picker } from '@react-native-picker/picker';
 import { useState } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { NoteText, SubTitle } from "../global/titles";
 
 
-export function TrashDetails({ base64Picture, city, country, onAddTrash }: { base64Picture: string, city: string | null, country: string | null, onAddTrash: (category: string) => void }) {
+export function TrashDetails({ base64Picture, city, country, onAddTrash }: { base64Picture: string, city: string | null, country: string | null, onAddTrash: (category: string, addAnother: boolean) => void }) {
   const [category, setCategory] = useState("Plastique");
 
   return (
@@ -17,12 +18,10 @@ export function TrashDetails({ base64Picture, city, country, onAddTrash }: { bas
             uri: 'data:image/png;base64,' + base64Picture,
           }} />
       </View>
-      {city && country && (
-        <Text style={detailsStyles.location}>
-          Ce dechet a ete rammassé a {city}, {country}
-        </Text>
-      )}
-      <Text style={detailsStyles.question}>Quel type de déchet ?</Text>
+      {city && country &&
+        <NoteText text={`Ce déchet a été ramassé à ${city}, ${country}`} />
+      }
+      <SubTitle text={"Quel type de déchet ?"} />
       <View style={detailsStyles.pickerWrapper}>
         <Picker
           selectedValue={category}
@@ -31,7 +30,7 @@ export function TrashDetails({ base64Picture, city, country, onAddTrash }: { bas
           itemStyle={detailsStyles.pickerItem}
           dropdownIconColor={Colors.text}
         >
-          <Picker.Item label="Plastique" value="Plastique" />
+          <Picker.Item style={{ color: 'red' }} label="Plastique" value="Plastique" />
           <Picker.Item label="Métal" value="Métal" />
           <Picker.Item label="Verre" value="Verre" />
           <Picker.Item label="Papier" value="Papier" />
@@ -39,9 +38,13 @@ export function TrashDetails({ base64Picture, city, country, onAddTrash }: { bas
         </Picker>
       </View>
       {/* Submit Button */}
-      <TouchableOpacity onPress={() => onAddTrash(category)} style={[buttonStyles.primary, detailsStyles.submitButton]}>
-        <Text style={buttonStyles.primaryText}>Ajouter</Text>
+      <TouchableOpacity onPress={() => onAddTrash(category, false)} style={[buttonStyles.primary, detailsStyles.submitButton]}>
+        <Text style={buttonStyles.primaryText}>Collecter</Text>
       </TouchableOpacity>
+      <TouchableOpacity onPress={() => onAddTrash(category, true)} style={[buttonStyles.secondary, detailsStyles.submitButton]}>
+        <Text style={buttonStyles.primaryText}>Collecter et Ajouter un autre</Text>
+      </TouchableOpacity>
+
     </View>
   );
 }
@@ -67,14 +70,6 @@ const detailsStyles = StyleSheet.create({
     fontSize: 28,
     fontWeight: 'bold',
   },
-  headerTitle: {
-    color: Colors.background,
-    fontSize: 22,
-    fontWeight: 'bold',
-    flex: 1,
-    textAlign: 'center',
-    marginRight: 44, // to balance the back arrow
-  },
   image: {
     width: 180,
     height: 180,
@@ -87,25 +82,11 @@ const detailsStyles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  location: {
-    fontSize: 16,
-    color: Colors.text,
-    textAlign: 'center',
-    marginTop: 16,
-    marginBottom: 8,
-  },
-  question: {
-    fontSize: 26,
-    fontWeight: '700',
-    color: Colors.text,
-    textAlign: 'center',
-    marginBottom: 24,
-  },
   pickerWrapper: {
     backgroundColor: Colors.white,
     borderRadius: 16,
     marginHorizontal: 24,
-    marginBottom: 32,
+    marginBottom: 'auto',
     shadowColor: Colors.text,
     shadowOpacity: 0.04,
     shadowRadius: 4,
@@ -123,7 +104,7 @@ const detailsStyles = StyleSheet.create({
   submitButton: {
     marginHorizontal: 24,
     borderRadius: 16,
-    marginBottom: 32,
+    marginBottom: 12,
   },
 });
 

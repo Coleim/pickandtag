@@ -23,6 +23,7 @@ export default function Index() {
         alignItems: "center",
       }}
     >
+      <Button title="Home" onPress={() => router.navigate('/home')} />
       <Button title="Collect New Trash" onPress={() => router.navigate('/collect/new-trash')} />
 
       {/* All trashes will be listed here. */}

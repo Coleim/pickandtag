@@ -5,7 +5,7 @@ export const db = SQLite.openDatabaseSync("pickntag.db");
 
 async function initDb() {
   try {
-    const res = await db.execAsync(`
+    await db.execAsync(`
     CREATE TABLE IF NOT EXISTS trashes (
       id TEXT,
       category TEXT,
@@ -39,10 +39,11 @@ export async function insertTrash(trash: Trash) {
   try {
     const result = await db.runAsync(query, trash.id, trash.category, trash.latitude, trash.longitude,
       trash.city, trash.country, trash.region, trash.subregion, trash.imageBase64, trash.syncStatus, trash.createdAt.getTime(), trash.updatedAt.getTime(), trash.lastSyncedAt.getTime());
-    console.log(result.lastInsertRowId, result.changes);
+    // console.log(result.lastInsertRowId, result.changes);
   } catch (error) {
     console.log("error : ", error)
   }
 }
+
 
 

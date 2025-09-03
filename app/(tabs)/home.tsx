@@ -21,38 +21,39 @@ const mockCollects = [
 ];
 
 const mockBreakdown = [
-  { name: "Plastique", count: 8 },
-  { name: "Métal", count: 2 },
-  { name: "Verre", count: 1 },
-  { name: "Papier", count: 1 },
+  { name: "Plastique", personal: 5, group: 3 },
+  { name: "Métal", personal: 1, group: 1 },
+  { name: "Verre", personal: 1, group: 0 },
+  { name: "Papier", personal: 1, group: 0 },
 ];
 
 export default function HomeScreen() {
   const router = useRouter();
-  const total = mockBreakdown.reduce((sum, c) => sum + c.count, 0);
+  const totalGlobal = mockBreakdown.reduce((sum, c) => sum + c.personal + c.group, 0);
 
   return (
     <View style={styles.container}>
-      {/* HEADER */}
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>Tu as collecté</Text>
-        <Text style={styles.headerCount}>{total} déchets !</Text>
+      {/* HEADER + Breakdown bloc centré */}
+      <View style={styles.headerWrapper}>
+        <View style={styles.header}>
+          <Text style={styles.headerTitle}>Tu as collecté</Text>
+          <Text style={styles.headerCount}>{totalGlobal} déchets !</Text>
 
-        {/* Breakdown 2 items per line */}
-        <View style={styles.breakdownInline}>
-          {mockBreakdown.map((c) => (
-            <View key={c.name} style={styles.breakdownItem}>
-              <View
-                style={[
-                  styles.colorDot,
-                  { backgroundColor: categoryConfig[c.name]?.color || "#aaa" },
-                ]}
-              />
-              <Text style={styles.breakdownText}>
-                {c.count} {c.name.toLowerCase()}
-              </Text>
-            </View>
-          ))}
+          <View style={styles.breakdownInline}>
+            {mockBreakdown.map((c) => (
+              <View key={c.name} style={styles.breakdownItem}>
+                <View
+                  style={[
+                    styles.colorDot,
+                    { backgroundColor: categoryConfig[c.name]?.color || "#aaa" },
+                  ]}
+                />
+                <Text style={styles.breakdownText}>
+                  {c.personal + c.group} {c.name.toLowerCase()}
+                </Text>
+              </View>
+            ))}
+          </View>
         </View>
       </View>
 
@@ -96,28 +97,38 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#FAFAFA" },
 
+  headerWrapper: {
+    alignItems: "center",
+    marginBottom: 16,
+  },
+
   header: {
     backgroundColor: Colors.primary,
     borderBottomLeftRadius: 40,
     borderBottomRightRadius: 40,
-    padding: 24,
+    paddingVertical: 24,
+    paddingHorizontal: 16,
     alignItems: "center",
-    justifyContent: "center",
   },
-  headerTitle: { fontSize: 18, color: "#fff", marginBottom: 4 },
-  headerCount: { fontSize: 28, fontWeight: "700", color: "#fff" },
+
+  headerTitle: { fontSize: 18, color: "#fff", marginBottom: 4, textAlign: "center" },
+  headerCount: { fontSize: 28, fontWeight: "700", color: "#fff", textAlign: "center" },
 
   breakdownInline: {
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "center",
+    margin: 'auto',
     marginTop: 12,
   },
   breakdownItem: {
+    margin: 'auto',
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 6,
     width: "50%",
+    justifyContent: "flex-start", // pastilles alignées à gauche
+    paddingLeft: 8, // léger padding pour pastille
   },
   colorDot: { width: 12, height: 12, borderRadius: 6, marginRight: 6 },
   breakdownText: { color: "#fff", fontSize: 15 },
@@ -151,6 +162,7 @@ const styles = StyleSheet.create({
     marginTop: 8,
     marginBottom: 8,
   },
+
   collectItem: {
     flexDirection: "row",
     alignItems: "center",
@@ -166,8 +178,8 @@ const styles = StyleSheet.create({
 
   fab: {
     position: "absolute",
-    bottom: 32,
-    alignSelf: "center",
+    bottom: 14, // bouton légèrement plus bas
+    alignSelf: "center", // centré horizontalement
     backgroundColor: Colors.primary,
     width: 64,
     height: 64,
@@ -178,4 +190,3 @@ const styles = StyleSheet.create({
     shadowRadius: 6,
   },
 });
-

@@ -1,9 +1,9 @@
 import { buttonStyles } from "@/constants/ButtonStyles";
 import { Colors } from "@/constants/Colors";
-import { Picker } from '@react-native-picker/picker';
 import { useState } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { NoteText, SubTitle } from "../global/titles";
+import { CategoryPicker } from "./category-picker";
 
 
 export function TrashDetails({ base64Picture, city, country, onAddTrash }: { base64Picture: string, city: string | null, country: string | null, onAddTrash: (category: string, addAnother: boolean) => void }) {
@@ -22,28 +22,33 @@ export function TrashDetails({ base64Picture, city, country, onAddTrash }: { bas
         <NoteText text={`Ce déchet a été ramassé à ${city}, ${country}`} />
       }
       <SubTitle text={"Quel type de déchet ?"} />
-      <View style={detailsStyles.pickerWrapper}>
-        <Picker
-          selectedValue={category}
-          onValueChange={setCategory}
-          style={detailsStyles.picker}
-          itemStyle={detailsStyles.pickerItem}
-          dropdownIconColor={Colors.text}
-        >
-          <Picker.Item style={{ color: 'red' }} label="Plastique" value="Plastique" />
-          <Picker.Item label="Métal" value="Métal" />
-          <Picker.Item label="Verre" value="Verre" />
-          <Picker.Item label="Papier" value="Papier" />
-          <Picker.Item label="Autre" value="Autre" />
-        </Picker>
-      </View>
+      <CategoryPicker selected={category} onChange={setCategory} />
+
+      {/* <View style={detailsStyles.pickerWrapper}> */}
+      {/*   <Picker */}
+      {/*     selectedValue={category} */}
+      {/*     onValueChange={setCategory} */}
+      {/*     style={detailsStyles.picker} */}
+      {/*     itemStyle={detailsStyles.pickerItem} */}
+      {/*     dropdownIconColor={Colors.text} */}
+      {/*   > */}
+      {/*     <Picker.Item style={{ color: 'red' }} label="Plastique" value="Plastique" /> */}
+      {/*     <Picker.Item label="Métal" value="Métal" /> */}
+      {/*     <Picker.Item label="Verre" value="Verre" /> */}
+      {/*     <Picker.Item label="Papier" value="Papier" /> */}
+      {/*     <Picker.Item label="Autre" value="Autre" /> */}
+      {/*   </Picker> */}
+      {/* </View> */}
       {/* Submit Button */}
-      <TouchableOpacity onPress={() => onAddTrash(category, false)} style={[buttonStyles.primary, detailsStyles.submitButton]}>
-        <Text style={buttonStyles.primaryText}>Collecter</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => onAddTrash(category, true)} style={[buttonStyles.secondary, detailsStyles.submitButton]}>
-        <Text style={buttonStyles.primaryText}>Collecter et Ajouter un autre</Text>
-      </TouchableOpacity>
+      <View style={{ marginTop: 24 }}>
+
+        <TouchableOpacity onPress={() => onAddTrash(category, false)} style={[buttonStyles.primary, detailsStyles.submitButton]}>
+          <Text style={buttonStyles.primaryText}>Collecter</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => onAddTrash(category, true)} style={[buttonStyles.secondary, detailsStyles.submitButton]}>
+          <Text style={buttonStyles.primaryText}>Collecter et Ajouter un autre</Text>
+        </TouchableOpacity>
+      </View>
 
     </View>
   );
@@ -54,6 +59,7 @@ const detailsStyles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.background,
     flexDirection: 'column',
+    paddingTop: 20
   },
   map: {
     width: 300, // small map

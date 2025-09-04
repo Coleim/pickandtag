@@ -17,7 +17,8 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 export default function RootLayout() {
   return (
     <SafeAreaProvider>
-      {/* <SafeAreaView style={{ flex: 1 }} edges={['top', 'left', 'right', 'bottom']}> */}
+      {/* <Text >Notice that the status bar has light text!</Text> */}
+      {/* <StatusBar style="light" backgroundColor={Colors.accent} hidden={true} /> */}
       <Stack screenOptions={{ headerShown: false }}>
         {/* Les routes du projet seront résolues automatiquement */}
         <Stack.Screen name="(tabs)" />
@@ -26,8 +27,6 @@ export default function RootLayout() {
           options={{ presentation: "modal", headerShown: false }}
         />
       </Stack>
-      {/* </SafeAreaView> */}
-
     </SafeAreaProvider>
   );
 }

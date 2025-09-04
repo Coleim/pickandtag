@@ -16,7 +16,7 @@ export function TrashCamera({ takingPhoto, onPhotoTaken }: { takingPhoto: boolea
     if (takingPhoto) {
       const snap = async () => {
         if (!cameraRef.current) return;
-        const photo = await cameraRef.current.takePictureAsync({ base64: true, quality: 0 });
+        const photo = await cameraRef.current.takePictureAsync({ base64: true, quality: 0.5 });
         if (photo.base64) {
           onPhotoTaken(photo.base64);
         }

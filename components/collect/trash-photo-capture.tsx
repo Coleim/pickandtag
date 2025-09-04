@@ -1,6 +1,6 @@
 import { PrimaryButton } from "@/components/global/buttons";
 
-import { BodyText, Title } from "@/components/global/titles";
+import { BodyText } from "@/components/global/titles";
 import { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { TrashCamera } from "./trash-camera";
@@ -17,12 +17,13 @@ export default function TrashPhotoCapture({ onPhotoCaptured }: { onPhotoCaptured
 
   return (
     <View style={styles.content}>
-      <Title text={"Prends une photo du déchet"} />
+      {/* <Title text={"Prends une photo du déchet"} /> */}
       <BodyText text={"Prends une photo du déchet que tu as ramassé"} />
       <View style={styles.cameraBox}>
         <TrashCamera takingPhoto={takingPhoto} onPhotoTaken={handlePhotoTaken} />
       </View>
       <PrimaryButton onPress={() => setTakingPhoto(true)} title={"Prendre une photo"} loadingTitle={"Patientez"} loading={takingPhoto} />
+      {/* TODO: Option pas de photo */}
     </View>
   );
 }
@@ -32,6 +33,7 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     paddingHorizontal: 24,
+    paddingTop: 20,
     justifyContent: "flex-start",
   },
   cameraBox: {

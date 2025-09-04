@@ -24,7 +24,7 @@ export default function TabsLayout() {
     >
       <Tabs.Screen name="home" />
       <Tabs.Screen name="map" />
-      <Tabs.Screen name="groups" /> {/* 👈 nouvel onglet */}
+      <Tabs.Screen name="groups" />
       <Tabs.Screen name="leaderboard" />
       <Tabs.Screen name="profile" />
     </Tabs>

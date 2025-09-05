@@ -2,31 +2,39 @@
 
 ### For MVP - local storage
 
-[X] icone sur bouton prendre photo
+[ ] Gerer les permissions proprement (ne pas redemander si on a deja)
+[ ] Rajouter ce qu'on fait avec les permissions (peut etre mettre un lien vers des explications)
+[ ] Faire un "first time" pour le home screen (tant pis si on voit les autres tabs du menu en fait)
+[ ] Expliquer comment ca marche en 2-3 images + lien vers une video ?
+
+
+
+
+[ ] Route not found
+[ ] Gerer la premiere fois qu'on ouvre l'app : Tres "Vide"
+
 
 [ ] Sortir les couleurs en constantes
 [ ] Sortir les categories en const 
 [ ] Componentiser
 
 [ ] Convertir les Int en Date 
-[X] Afficher la liste from the store
-[X] Sort the trashes by dates
-[X] Display the "Now, yesterday , 3 days ago"
 [ ] Peut etre pas display tous les trash
 
-[X] Faire le compte des dechets
-
-[X] Trouver placeholder pour les stats sur le home 
-[X] Cacher les autres menus non implem
 
 
 [ ] Faire animation camera quand on prend la photo
 [ ] Pouvoir ajouter sans photos
 
+
+[ ] Gestion des autorisations 
+
+
 [ ] Publication sur Play Store
 [ ] Beta Tests
 
 ### Step 1 - Gamification
+
 
 [ ] System de leveling en fonction des trash collected
 

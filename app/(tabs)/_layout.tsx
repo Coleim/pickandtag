@@ -12,9 +12,9 @@ export default function TabsLayout() {
           tabBarIcon: ({ color, size }) => {
             let iconName: keyof typeof Ionicons.glyphMap = "home";
 
-            if (route.name === "home") iconName = "home";
+            if (route.name === "index") iconName = "home";
             else if (route.name === "map") iconName = "map-outline";
-            else if (route.name === "groups") iconName = "people-outline"; // 👥 icône pour groupes
+            else if (route.name === "groups") iconName = "people-outline";
             else if (route.name === "leaderboard") iconName = "trophy-outline";
             else if (route.name === "profile") iconName = "person-outline";
 

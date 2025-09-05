@@ -88,7 +88,7 @@ export default function NewTrash() {
       if (addAnother) {
         router.replace('/collect/new-trash');
       } else {
-        router.replace("/(tabs)/home");
+        router.replace("/(tabs)/index");
       }
     });
   }

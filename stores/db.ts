@@ -24,6 +24,7 @@ async function initDb() {
       PRIMARY KEY(id) 
    );
   `);
+    // await db.execAsync("DELETE FROM trashes")
   } catch (err) {
     console.log("err: ", err)
   }

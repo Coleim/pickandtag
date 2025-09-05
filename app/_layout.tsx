@@ -11,22 +11,49 @@
 //     </SafeAreaProvider>
 //     );
 // }
+
+// import { Stack } from "expo-router";
+// import { SafeAreaProvider } from "react-native-safe-area-context";
+//
+// export default function RootLayout() {
+//   return (
+//     <SafeAreaProvider>
+//       {/* <Text >Notice that the status bar has light text!</Text> */}
+//       {/* <StatusBar style="light" backgroundColor={Colors.accent} hidden={true} /> */}
+//       <Stack screenOptions={{ headerShown: false }}>
+//         {/* Les routes du projet seront résolues automatiquement */}
+//         <Stack.Screen name="(tabs)" />
+//         <Stack.Screen
+//           name="collect/new-trash"
+//           options={{ presentation: "modal", headerShown: false }}
+//         />
+//       </Stack>
+//     </SafeAreaProvider>
+//   );
+// }
+//
 import { Stack } from "expo-router";
+import React, { useState } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import RootGate from "./root-gate";
 
 export default function RootLayout() {
+  const [ready, setReady] = useState(false);
+
   return (
+
     <SafeAreaProvider>
-      {/* <Text >Notice that the status bar has light text!</Text> */}
-      {/* <StatusBar style="light" backgroundColor={Colors.accent} hidden={true} /> */}
-      <Stack screenOptions={{ headerShown: false }}>
-        {/* Les routes du projet seront résolues automatiquement */}
-        <Stack.Screen name="(tabs)" />
-        <Stack.Screen
-          name="collect/new-trash"
-          options={{ presentation: "modal", headerShown: false }}
-        />
-      </Stack>
+      {!ready ? (
+        <RootGate onReady={() => setReady(true)} />
+      ) : (
+        <Stack screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="(tabs)" />
+          <Stack.Screen
+            name="collect/new-trash"
+            options={{ presentation: "modal", headerShown: false }}
+          />
+        </Stack>
+      )}
     </SafeAreaProvider>
   );
 }

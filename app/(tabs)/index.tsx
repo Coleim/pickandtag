@@ -6,14 +6,29 @@ import { Trash } from "@/types/trash";
 import { FontAwesome5, Ionicons } from "@expo/vector-icons";
 import { useStore } from "@tanstack/react-store";
 import { useRouter } from "expo-router";
-import React, { useMemo } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import React, { useEffect, useMemo, useState } from "react";
+import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 
 export default function HomeScreen() {
   const router = useRouter();
   const trashes: Trash[] = useStore(trashStore);
   const totalGlobal = trashes.length;
+  const [isLoading, setIsLoading] = useState(true);
+
+
+  useEffect(() => {
+    console.log(" ?? ")
+    // Si le store n'est pas encore prêt, on attend
+    if (!trashes) return;
+    console.log("???")
+
+    // if (trashes.length <= 0) {
+    //   router.replace("/welcome"); // premier usage
+    // }
+    setIsLoading(false);
+  }, [trashes]);
+
   const categoryBreakdown = useMemo(() => {
 
     const map: Record<string, number> = {};
@@ -25,9 +40,17 @@ export default function HomeScreen() {
 
   }, [trashes]);
 
+  if (isLoading) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <ActivityIndicator size="large" />
+      </View>
+    );
+  }
+
+
   return (
     <View style={styles.container}>
-      {/* HEADER + Breakdown bloc centré */}
       <View style={styles.headerWrapper}>
         <View style={styles.header}>
           <Text style={styles.headerTitle}>Tu as collecté</Text>
@@ -42,15 +65,12 @@ export default function HomeScreen() {
                 <View key={c.type} style={[styles.breakdownPill, { backgroundColor: cfg.color }]}>
                   <Text style={styles.breakdownPillText}>
                     {count}
-                    {/* {c.type.toLowerCase()} */}
                   </Text>
                   <FontAwesome5 name={cfg.icon as any} size={20} color="#FFF" />
-
                 </View>
               );
             })}
           </View>
-
         </View>
       </View>
 

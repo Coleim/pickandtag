@@ -7,7 +7,10 @@ export const buttonStyles = StyleSheet.create({
     borderRadius: 10,
     paddingVertical: 14,
     paddingHorizontal: 32,
-    alignItems: "center"
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "center",
+    gap: 10
   },
   primaryText: {
     color: Colors.white,

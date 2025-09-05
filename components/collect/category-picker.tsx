@@ -1,6 +1,6 @@
 
 import { Colors } from "@/constants/Colors";
-import { MaterialIcons } from "@expo/vector-icons";
+import { FontAwesome5 } from "@expo/vector-icons";
 import React, { useRef } from "react";
 import { Animated, Dimensions, StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native";
 
@@ -13,13 +13,14 @@ type Category = {
 
 // Palette FR + Polystyrène ajouté
 const categories: Category[] = [
-  { label: "Plastique", value: "Plastique", color: "#FFD600", icon: "local-drink" },
-  { label: "Polystyrène", value: "Polystyrene", color: "#FF9800", icon: "view-week" },
-  { label: "Papier", value: "Papier", color: "#1565C0", icon: "description" },
-  { label: "Verre", value: "Verre", color: "#2E7D32", icon: "wine-bar" },
-  { label: "Métal", value: "Métal", color: "#B71C1C", icon: "build" },
-  { label: "Autre", value: "Autre", color: "#795548", icon: "delete" },
+  { label: "Plastique", value: "Plastique", color: "#FFD600", icon: "recycle" },
+  { label: "Polystyrène", value: "Polystyrene", color: "#FF9800", icon: "boxes" },
+  { label: "Papier", value: "Papier", color: "#1565C0", icon: "file-alt" },
+  { label: "Verre", value: "Verre", color: "#66BB6A", icon: "wine-bottle" },
+  { label: "Métal", value: "Métal", color: "#B71C1C", icon: "tools" },
+  { label: "Autre", value: "Autre", color: "#795548", icon: "trash" },
 ];
+
 
 export function CategoryPicker({
   selected,
@@ -60,9 +61,8 @@ export function CategoryPicker({
                 },
               ]}
             >
-              <MaterialIcons
-                name={cat.icon as any}
-                size={20}
+
+              <FontAwesome5 name={cat.icon as any} size={20}
                 color={isSelected ? "#fff" : cat.color}
                 style={{ marginRight: 6 }}
               />

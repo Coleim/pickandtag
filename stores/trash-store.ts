@@ -6,7 +6,10 @@ export const trashStore = new Store<Trash[]>([]);
 
 
 async function initializeTrashStore() {
-  const trashes = await getTrashes();
+  const trashes = (await getTrashes()).map((trash: any) => ({
+    ...trash,
+    createdAt: new Date(trash.createdAt)
+  }))
   trashStore.setState(trashes);
 }
 

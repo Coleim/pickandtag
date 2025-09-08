@@ -61,7 +61,7 @@ export default function Onboarding() {
 
           <TouchableOpacity
             style={styles.button}
-            onPress={() => router.replace("/collect/new-trash")} // redirection
+            onPress={() => router.navigate("/collect/new-trash")} // redirection
           >
             <Text style={styles.buttonText}>Commencer à collecter</Text>
           </TouchableOpacity>

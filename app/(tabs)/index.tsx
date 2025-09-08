@@ -1,33 +1,19 @@
 import { LastCollects } from "@/components/home/last-collects";
+import Onboarding from "@/components/home/onboarding";
 import { Colors } from "@/constants/Colors";
 import { TrashCategories } from "@/constants/TrashCategories";
 import { trashStore } from "@/stores/trash-store";
-import { Trash } from "@/types/trash";
 import { FontAwesome5, Ionicons } from "@expo/vector-icons";
 import { useStore } from "@tanstack/react-store";
 import { useRouter } from "expo-router";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo } from "react";
 import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 
 export default function HomeScreen() {
   const router = useRouter();
-  const trashes: Trash[] = useStore(trashStore);
+  const { isInit, items: trashes } = useStore(trashStore);
   const totalGlobal = trashes.length;
-  const [isLoading, setIsLoading] = useState(true);
-
-
-  useEffect(() => {
-    console.log(" ?? ")
-    // Si le store n'est pas encore prêt, on attend
-    if (!trashes) return;
-    console.log("???")
-
-    // if (trashes.length <= 0) {
-    //   router.replace("/welcome"); // premier usage
-    // }
-    setIsLoading(false);
-  }, [trashes]);
 
   const categoryBreakdown = useMemo(() => {
 
@@ -40,12 +26,16 @@ export default function HomeScreen() {
 
   }, [trashes]);
 
-  if (isLoading) {
+  if (!isInit) {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
         <ActivityIndicator size="large" />
       </View>
     );
+  }
+
+  if (trashes.length === 0) {
+    return <Onboarding />;
   }
 
 

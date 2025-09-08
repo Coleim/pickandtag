@@ -9,7 +9,7 @@ type WelcomeScreenProps = {
   onReady: () => void;
 };
 
-export default function WelcomeScreen({ onReady }: WelcomeScreenProps) {
+export default function PermissionsScreen({ onReady }: WelcomeScreenProps) {
   const router = useRouter();
   const [cameraGranted, setCameraGranted] = useState(false);
   const [locationGranted, setLocationGranted] = useState(false);
@@ -30,7 +30,7 @@ export default function WelcomeScreen({ onReady }: WelcomeScreenProps) {
     <View style={styles.container}>
       <Text style={styles.title}>Bienvenue sur Pick & Tag 🌱</Text>
 
-      <Image source={require("../assets/images/garbo.png")} style={styles.image} />
+      <Image source={require("@/assets/images/garbo.png")} style={styles.image} />
 
       <Text style={styles.subtitle}>
         Avant de commencer, nous avons besoin de quelques autorisations :

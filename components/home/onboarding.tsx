@@ -9,63 +9,70 @@ export default function Onboarding() {
   const router = useRouter();
 
   return (
-    <Swiper
-      loop={false}
-      showsPagination={true}
-      activeDotColor="#4CAF50"
-      dotColor="#ccc"
-    >
-      {/* Étape 1 */}
-      <View style={styles.slide}>
-        <Image
-          source={require("../assets/garbo-pick.png")}
-          style={styles.image}
-          resizeMode="contain"
-        />
-        <Text style={styles.text}>Garbo ramasse un déchet</Text>
-      </View>
+    <View style={{ flex: 1 }}>
+      <Text style={styles.title}>Bienvenue sur Pick & Tag 🌱</Text>
+      <Swiper
+        loop={false}
+        showsPagination={true}
+        activeDotColor="#4CAF50"
+        dotColor="#ccc"
+      >
+        {/* Étape 1 */}
+        <View style={styles.slide}>
+          <Image
+            source={require("@/assets/images/garbo-pick.png")}
+            style={styles.image}
+            resizeMode="contain"
+          />
+          <Text style={styles.text}>Aide Garbo et ramasse un déchet</Text>
+          <View style={styles.spacer}></View>
+        </View>
 
-      {/* Étape 2 */}
-      <View style={styles.slide}>
-        <Image
-          source={require("../assets/garbo-scan.png")}
-          style={styles.image}
-          resizeMode="contain"
-        />
-        <Text style={styles.text}>Il scanne le déchet avec l’application</Text>
-      </View>
+        {/* Étape 2 */}
+        <View style={styles.slide}>
+          <Image
+            source={require("@/assets/images/garbo-scan.png")}
+            style={styles.image}
+            resizeMode="contain"
+          />
+          <Text style={styles.text}>Scanne le avec l’application</Text>
+          <View style={styles.spacer}></View>
+        </View>
 
-      {/* Étape 3 */}
-      <View style={styles.slide}>
-        <Image
-          source={require("../assets/garbo-throw.png")}
-          style={styles.image}
-          resizeMode="contain"
-        />
-        <Text style={styles.text}>Puis il le jette dans la bonne poubelle</Text>
-      </View>
+        {/* Étape 3 */}
+        <View style={styles.slide}>
+          <Image
+            source={require("@/assets/images/garbo-throw.png")}
+            style={styles.image}
+            resizeMode="contain"
+          />
+          <Text style={styles.text}>Jette le dans la bonne poubelle</Text>
+          <View style={styles.spacer}></View>
+        </View>
 
-      {/* Étape 4 avec bouton */}
-      <View style={styles.slide}>
-        <Image
-          source={require("../assets/garbo-happy.png")}
-          style={styles.image}
-          resizeMode="contain"
-        />
-        <Text style={styles.text}>Garbo est fier de toi. À toi de jouer !</Text>
+        {/* Étape 4 avec bouton */}
+        <View style={styles.slide}>
+          <Image
+            source={require("@/assets/images/garbo-happy.png")}
+            style={styles.image}
+            resizeMode="contain"
+          />
+          <Text style={styles.text}>Garbo est fier de toi. À toi de jouer !</Text>
 
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => router.navigate("/collect/new-trash")} // redirection
-        >
-          <Text style={styles.buttonText}>Commencer à collecter</Text>
-        </TouchableOpacity>
-      </View>
-    </Swiper>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => router.replace("/collect/new-trash")} // redirection
+          >
+            <Text style={styles.buttonText}>Commencer à collecter</Text>
+          </TouchableOpacity>
+        </View>
+      </Swiper>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  title: { fontSize: 26, fontWeight: "bold", textAlign: "center", marginTop: 60, paddingHorizontal: 30 },
   slide: {
     flex: 1,
     justifyContent: "center",
@@ -82,6 +89,10 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "#333",
     marginBottom: 20,
+  },
+  spacer: {
+    marginTop: 40,
+    paddingVertical: 12,
   },
   button: {
     marginTop: 20,

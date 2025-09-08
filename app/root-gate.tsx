@@ -2,7 +2,7 @@ import { Camera } from "expo-camera";
 import * as Location from "expo-location";
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator, View } from "react-native";
-import WelcomeScreen from "./welcome-screen";
+import PermissionsScreen from "./permissions-screen";
 
 export default function RootGate({ onReady }: { onReady: () => void }) {
   const [loading, setLoading] = useState(true);
@@ -39,7 +39,7 @@ export default function RootGate({ onReady }: { onReady: () => void }) {
 
   if (showWelcome) {
     return (
-      <WelcomeScreen onReady={onReady} />
+      <PermissionsScreen onReady={onReady} />
     );
   }
 

@@ -4,9 +4,8 @@
 
 [ ] Gerer les permissions proprement (ne pas redemander si on a deja)
 [ ] Rajouter ce qu'on fait avec les permissions (peut etre mettre un lien vers des explications)
-[ ] Faire un "first time" pour le home screen (tant pis si on voit les autres tabs du menu en fait)
-[ ] Expliquer comment ca marche en 2-3 images + lien vers une video ?
-
+[X] Faire un "first time" pour le home screen (tant pis si on voit les autres tabs du menu en fait)
+[X] Expliquer comment ca marche en 2-3 images + lien vers une video ?
 
 
 

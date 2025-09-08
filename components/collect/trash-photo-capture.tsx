@@ -19,9 +19,7 @@ export default function TrashPhotoCapture({ onPhotoCaptured }: { onPhotoCaptured
     <View style={styles.content}>
       {/* <Title text={"Prends une photo du déchet"} /> */}
       <BodyText text={"Prends une photo du déchet que tu as ramassé"} />
-      <View style={styles.cameraBox}>
-        <TrashCamera takingPhoto={takingPhoto} onPhotoTaken={handlePhotoTaken} />
-      </View>
+      <TrashCamera takingPhoto={takingPhoto} onPhotoTaken={handlePhotoTaken} />
       <PrimaryButton onPress={() => setTakingPhoto(true)} title={"Prendre une photo"} loadingTitle={"Patientez"} loading={takingPhoto} iconName={takingPhoto ? null : "camera"} />
     </View>
   );

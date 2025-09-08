@@ -26,7 +26,7 @@ export default function TabsLayout() {
           tabBarStyle: { display: "none" },
         })}
       >
-        <Tabs.Screen name="home" />
+        <Tabs.Screen name="index" />
         {/* <Tabs.Screen name="map" /> */}
         {/* <Tabs.Screen name="groups" /> */}
         {/* <Tabs.Screen name="leaderboard" /> */}

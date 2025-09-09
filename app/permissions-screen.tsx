@@ -1,7 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Camera } from "expo-camera";
 import * as Location from "expo-location";
-import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
@@ -10,7 +9,6 @@ type WelcomeScreenProps = {
 };
 
 export default function PermissionsScreen({ onReady }: WelcomeScreenProps) {
-  const router = useRouter();
   const [cameraGranted, setCameraGranted] = useState(false);
   const [locationGranted, setLocationGranted] = useState(false);
 

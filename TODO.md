@@ -8,7 +8,7 @@
 [X] Expliquer comment ca marche en 2-3 images + lien vers une video ?
 
 
-
+[ ] Refaire les boutons => utiliser les boutons generique
 [ ] Sortir les couleurs en constantes
 [ ] Sortir les categories en const 
 [ ] Componentiser

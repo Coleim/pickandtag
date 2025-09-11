@@ -1,3 +1,5 @@
+import { Colors } from "@/constants/Colors";
+import { TrashCategories } from "@/constants/TrashCategories";
 import { CategoryConfig } from "@/types/categoryConfig";
 import { Trash } from "@/types/trash";
 import { FontAwesome5 } from "@expo/vector-icons";
@@ -42,11 +44,14 @@ const CollectItem = memo(({ item, categories }: CollectItemProps) => {
     <View style={styles.collectItem}>
       <FontAwesome5 name={cfg.icon as any} size={20} color={cfg.color} />
       <Text style={styles.collectText}>
-        {item.category} • {formatFriendlyDate(date)} à {item.city}
+        {item.category}•{formatFriendlyDate(date)} à {item.city}
       </Text>
+      <Text style={styles.xpText}>+{TrashCategories[item.category].points}xp</Text>
     </View>
   );
 });
+
+
 
 export default CollectItem;
 
@@ -62,6 +67,14 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     shadowOpacity: 0.05,
     shadowRadius: 4,
+  },
+  xpText: {
+    position: "absolute",
+    top: 0,
+    right: 6,
+    fontSize: 12,
+    fontWeight: "600",
+    color: Colors.accent,
   },
   collectText: { marginLeft: 8, fontSize: 16 },
 })

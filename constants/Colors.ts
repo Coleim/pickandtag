@@ -5,7 +5,8 @@ export const Colors = {
   background: "#FFF",
   text: "#37474F",           // Gris neutre
   white: "#FFFFFF",
-  disabled: "#B0BEC5",
+  disabled: "#e0e0e0",
+  // disabled: "#B0BEC5",
   plastic: "#FFD600",
   poly: "#FF9800",
   paper: "#1565C0",

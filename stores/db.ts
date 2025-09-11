@@ -27,19 +27,16 @@ async function initDb() {
    );
   `);
     await db.execAsync(`
-    CREATE TABLE IF NOT EXISTS players (
-      id TEXT,
-      xp INTEGER NOT NULL DEFAULT 0,
-      trash_collected INTEGER NOT NULL DEFAULT 0,
-      updated_at INTEGER
-    );
-  `);
+      CREATE TABLE IF NOT EXISTS players (
+        id TEXT,
+        xp INTEGER NOT NULL DEFAULT 0,
+        trash_collected INTEGER NOT NULL DEFAULT 0,
+        updated_at INTEGER
+      );
+    `);
 
-    // await db.execAsync("DELETE FROM trashes")
-    // await db.execAsync("DELETE FROM players")
-    const result: { count: number } | null = await db.getFirstAsync('SELECT COUNT(*) as count FROM players');
-    console.log("res: ", result)
-    if (result?.count === 0) {
+    const row: { count: number } | null = await db.getFirstAsync(`SELECT COUNT(*) as count FROM players`);
+    if (row?.count === 0) {
       const id = randomUUID();
       await db.runAsync(
         `INSERT INTO players(id, xp, trash_collected, updated_at) VALUES(?, 0, 0, CURRENT_TIMESTAMP)`,

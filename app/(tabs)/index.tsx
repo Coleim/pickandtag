@@ -1,6 +1,7 @@
 import { Fab } from "@/components/global/buttons";
 import { LastCollects } from "@/components/home/last-collects";
 import Onboarding from "@/components/home/onboarding";
+import PlayerStats from "@/components/home/player-stats";
 import { Colors } from "@/constants/Colors";
 import { TrashCategories } from "@/constants/TrashCategories";
 import { playerStore } from "@/stores/player-store";
@@ -46,7 +47,6 @@ export default function HomeScreen() {
         <View style={styles.header}>
           <Text style={styles.headerTitle}>Cette semaine, tu as collecté</Text>
           <Text style={styles.headerCount}>{totalGlobal.toLocaleString()} déchet{totalGlobal > 1 ? 's' : ''} !</Text>
-
           <View style={styles.breakdownWrapper}>
             {categoryBreakdown.map((c) => {
               const cfg = TrashCategories[c.type] || { color: "#aaa", icon: "trash" };
@@ -65,11 +65,9 @@ export default function HomeScreen() {
         </View>
       </View>
 
-      <View style={[styles.mapBox]} />
+      {/* <View style={[styles.mapBox]} /> */}
+      <PlayerStats />
 
-      <View>
-        <Text> -  XP : {xp} for level {level} </Text>
-      </View>
 
       {/* Dernières collectes */}
       <LastCollects trashes={trashes} />
@@ -116,7 +114,7 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
     paddingVertical: 24,
-    paddingHorizontal: 16,
+    paddingHorizontal: 10,
     width: "100%",
     alignItems: "center",
   },

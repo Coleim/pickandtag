@@ -6,13 +6,8 @@ import React, { useRef } from "react";
 import { Animated, Dimensions, StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native";
 
 
-export function CategoryPicker({
-  selected,
-  onChange,
-}: {
-  selected: string;
-  onChange: (value: string) => void;
-}) {
+export function CategoryPicker({ selected, onChange }: { selected: string; onChange: (value: string) => void; }) {
+
   const scaleAnim = useRef<{ [key: string]: Animated.Value }>({}).current;
 
   // Initialiser les Animated values pour chaque catégorie

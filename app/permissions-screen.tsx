@@ -1,8 +1,8 @@
-import { Ionicons } from "@expo/vector-icons";
+import { Button, Fab } from "@/components/global/buttons";
 import { Camera } from "expo-camera";
 import * as Location from "expo-location";
 import React, { useState } from "react";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Image, StyleSheet, Text, View } from "react-native";
 
 type WelcomeScreenProps = {
   onReady: () => void;
@@ -39,41 +39,19 @@ export default function PermissionsScreen({ onReady }: WelcomeScreenProps) {
           <Text style={styles.permissionText}>
             📷 Utilisation de l’appareil photo (scanner tes déchets)
           </Text>
-          <TouchableOpacity
-            style={[styles.permissionButton, cameraGranted && { backgroundColor: "#2E7D32" }]}
-            onPress={requestCamera}
-          >
-            <Text style={styles.permissionButtonText}>
-              {cameraGranted ? "Autorisé ✅" : "Autoriser"}
-            </Text>
-          </TouchableOpacity>
+          <Button title={cameraGranted ? "Autorisé ✅" : "Autoriser"} onPress={requestCamera} isPrimary={cameraGranted} />
         </View>
 
         <View style={styles.permissionItem}>
           <Text style={styles.permissionText}>
             📍 Accès à la localisation (cartographier ton impact)
           </Text>
-          <TouchableOpacity
-            style={[styles.permissionButton, locationGranted && { backgroundColor: "#2E7D32" }]}
-            onPress={requestLocation}
-          >
-            <Text style={styles.permissionButtonText}>
-              {locationGranted ? "Autorisé ✅" : "Autoriser"}
-            </Text>
-          </TouchableOpacity>
+          <Button title={locationGranted ? "Autorisé ✅" : "Autoriser"} onPress={requestLocation} isPrimary={locationGranted} />
         </View>
       </View>
 
       {allGranted && (
-        <TouchableOpacity
-          style={styles.fab}
-          onPress={() => {
-            onReady()
-          }}
-        >
-          <Ionicons name="add" size={28} color="white" />
-          <Text style={styles.fabText}>Démarrer</Text>
-        </TouchableOpacity>
+        <Fab onPress={onReady} title="Demarrer" />
       )}
     </View>
   );
@@ -89,25 +67,5 @@ const styles = StyleSheet.create({
   permissionText: { fontSize: 15, marginBottom: 8 },
   permissionButton: { backgroundColor: "#1976D2", paddingVertical: 10, borderRadius: 8, alignItems: "center" },
   permissionButtonText: { color: "white", fontWeight: "bold" },
-  fab: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    position: "absolute",
-    bottom: 60,
-    alignSelf: "center",
-    backgroundColor: "#2E7D32",
-    paddingHorizontal: 20,
-    height: 64,
-    borderRadius: 32,
-    shadowOpacity: 0.2,
-    shadowRadius: 6,
-  },
-  fabText: {
-    color: "white",
-    fontSize: 18,
-    fontWeight: "bold",
-    marginLeft: 8,
-  },
 });
 

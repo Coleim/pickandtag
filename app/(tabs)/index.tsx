@@ -1,18 +1,19 @@
+import { Fab } from "@/components/global/buttons";
 import { LastCollects } from "@/components/home/last-collects";
 import Onboarding from "@/components/home/onboarding";
 import { Colors } from "@/constants/Colors";
 import { TrashCategories } from "@/constants/TrashCategories";
-import { trashStore } from "@/stores/trash-store";
-import { FontAwesome5, Ionicons } from "@expo/vector-icons";
+import { playerStore } from "@/stores/player-store";
+import { FontAwesome5 } from "@expo/vector-icons";
 import { useStore } from "@tanstack/react-store";
 import { useRouter } from "expo-router";
 import React, { useMemo } from "react";
-import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 
 
 export default function HomeScreen() {
   const router = useRouter();
-  const { isInit, items: trashes } = useStore(trashStore);
+  const { isInit, trashes, xp, level } = useStore(playerStore);
   const totalGlobal = trashes.length;
 
   const categoryBreakdown = useMemo(() => {
@@ -43,8 +44,8 @@ export default function HomeScreen() {
     <View style={styles.container}>
       <View style={styles.headerWrapper}>
         <View style={styles.header}>
-          <Text style={styles.headerTitle}>Tu as collecté</Text>
-          <Text style={styles.headerCount}>{totalGlobal.toLocaleString()} déchets !</Text>
+          <Text style={styles.headerTitle}>Cette semaine, tu as collecté</Text>
+          <Text style={styles.headerCount}>{totalGlobal.toLocaleString()} déchet{totalGlobal > 1 ? 's' : ''} !</Text>
 
           <View style={styles.breakdownWrapper}>
             {categoryBreakdown.map((c) => {
@@ -56,7 +57,7 @@ export default function HomeScreen() {
                   <Text style={styles.breakdownPillText}>
                     {count}
                   </Text>
-                  <FontAwesome5 name={cfg.icon as any} size={20} color="#FFF" />
+                  <FontAwesome5 name={cfg.icon as any} size={20} color={Colors.white} />
                 </View>
               );
             })}
@@ -64,26 +65,16 @@ export default function HomeScreen() {
         </View>
       </View>
 
-      {/* MAP placeholder */}
       <View style={[styles.mapBox]} />
 
-      {/* <TouchableOpacity style={styles.mapButton}>
-          <Ionicons name="map-outline" size={20} color="#fff" />
-          <Text style={styles.mapButtonText}>Voir la carte</Text>
-        </TouchableOpacity>
-        */}
-
-      {/* <ProgressSection /> */}
+      <View>
+        <Text> -  XP : {xp} for level {level} </Text>
+      </View>
 
       {/* Dernières collectes */}
       <LastCollects trashes={trashes} />
       {/* Floating Add Button */}
-      <TouchableOpacity
-        style={styles.fab}
-        onPress={() => router.navigate("/collect/new-trash")}
-      >
-        <Ionicons name="add" size={32} color="#fff" />
-      </TouchableOpacity>
+      <Fab onPress={() => router.navigate("/collect/new-trash")} />
     </View >
   );
 }
@@ -95,25 +86,24 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     justifyContent: "center",
     marginTop: 12,
-    gap: 8, // espace entre les pills
+    gap: 8,
   },
   breakdownPill: {
-    paddingHorizontal: 12,
-    paddingVertical: 6,
+    width: 50,
+    height: 50,
     borderRadius: 20,
-    marginBottom: 6,
-    // borderWidth: 1,      // bordure blanche
-    // borderColor: "#fff",  // blanc
+    borderWidth: 1,
+    justifyContent: "flex-start",
+    alignItems: 'center',
+    borderColor: Colors.accent,
   },
   breakdownPillText: {
-    // color: "#000",
-    color: "#fff",
+
+    color: Colors.white,
     fontWeight: "600",
     fontSize: 14,
     textAlign: "center",
   },
-
-
   container: { flex: 1, backgroundColor: "#FAFAFA" },
 
   headerWrapper: {
@@ -131,25 +121,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 
-  headerTitle: { fontSize: 18, color: "#fff", marginBottom: 4, textAlign: "center" },
+  headerTitle: { fontSize: 18, color: "#fff", marginTop: 8, marginBottom: 4, textAlign: "center" },
   headerCount: { fontSize: 28, fontWeight: "700", color: "#fff", textAlign: "center" },
-
-  breakdownInline: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "center",
-    marginTop: 12,
-  },
-  breakdownItem: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 6,
-    width: "50%",
-    justifyContent: "flex-start",
-    paddingLeft: 8,
-  },
   colorDot: { width: 12, height: 12, borderRadius: 6, marginRight: 6 },
-  breakdownText: { color: "#fff", fontSize: 15 },
 
   mapBox: {
     height: 150,
@@ -173,19 +147,5 @@ const styles = StyleSheet.create({
   },
   mapButtonText: { color: "#fff", marginLeft: 6 },
 
-
-  fab: {
-    position: "absolute",
-    bottom: 14,
-    alignSelf: "center",
-    backgroundColor: Colors.primary,
-    width: 64,
-    height: 64,
-    borderRadius: 32,
-    alignItems: "center",
-    justifyContent: "center",
-    shadowOpacity: 0.2,
-    shadowRadius: 6,
-  },
 });
 

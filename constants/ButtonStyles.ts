@@ -10,7 +10,7 @@ export const buttonStyles = StyleSheet.create({
     alignItems: "center",
     flexDirection: "row",
     justifyContent: "center",
-    gap: 10
+    gap: 10,
   },
   primaryText: {
     color: Colors.white,
@@ -59,5 +59,40 @@ export const buttonStyles = StyleSheet.create({
     color: Colors.white,
     fontWeight: "700",
     fontSize: 18
-  }
+  },
+  fabWithTextPrimary: {
+    flexDirection: "row",
+    position: "absolute",
+    alignItems: "center",
+    justifyContent: "center",
+    alignSelf: "center",
+    backgroundColor: Colors.primary,
+    bottom: 14,
+    paddingHorizontal: 20,
+    paddingVertical: 14,
+    borderRadius: 32,
+    shadowOpacity: 0.2,
+    shadowRadius: 6,
+  },
+  fabText: {
+    color: Colors.white,
+    fontSize: 18,
+    fontWeight: "bold",
+    marginLeft: 8,
+  },
+  fab: {
+    position: "absolute",
+    bottom: 14,
+    alignSelf: "center",
+    backgroundColor: Colors.primary,
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    alignItems: "center",
+    justifyContent: "center",
+    shadowOpacity: 0.2,
+    shadowRadius: 6,
+  },
+
+
 });

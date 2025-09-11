@@ -62,6 +62,7 @@ export function ProgressSection() {
       </View>
 
       {/* Bouton stats */}
+
       <TouchableOpacity style={styles.button}>
         <Text style={styles.buttonText}>Voir les stats</Text>
       </TouchableOpacity>

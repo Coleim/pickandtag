@@ -1,4 +1,4 @@
-import { PrimaryButton } from "@/components/global/buttons";
+import { Button } from "@/components/global/buttons";
 
 import { BodyText } from "@/components/global/titles";
 import { useState } from "react";
@@ -20,7 +20,7 @@ export default function TrashPhotoCapture({ onPhotoCaptured }: { onPhotoCaptured
       {/* <Title text={"Prends une photo du déchet"} /> */}
       <BodyText text={"Prends une photo du déchet que tu as ramassé"} />
       <TrashCamera takingPhoto={takingPhoto} onPhotoTaken={handlePhotoTaken} />
-      <PrimaryButton onPress={() => setTakingPhoto(true)} title={"Prendre une photo"} loadingTitle={"Patientez"} loading={takingPhoto} iconName={takingPhoto ? null : "camera"} />
+      <Button onPress={() => setTakingPhoto(true)} title={"Prendre une photo"} loadingTitle={"Patientez"} loading={takingPhoto} iconName={takingPhoto ? null : "camera"} isPrimary />
     </View>
   );
 }

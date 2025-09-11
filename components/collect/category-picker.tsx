@@ -1,25 +1,9 @@
 
 import { Colors } from "@/constants/Colors";
+import { TrashCategories } from "@/constants/TrashCategories";
 import { FontAwesome5 } from "@expo/vector-icons";
 import React, { useRef } from "react";
 import { Animated, Dimensions, StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native";
-
-type Category = {
-  label: string;
-  value: string;
-  color: string;
-  icon: string;
-};
-
-// Palette FR + Polystyrène ajouté
-const categories: Category[] = [
-  { label: "Plastique", value: "Plastique", color: "#FFD600", icon: "recycle" },
-  { label: "Polystyrène", value: "Polystyrene", color: "#FF9800", icon: "boxes" },
-  { label: "Papier", value: "Papier", color: "#1565C0", icon: "file-alt" },
-  { label: "Verre", value: "Verre", color: "#66BB6A", icon: "wine-bottle" },
-  { label: "Métal", value: "Métal", color: "#B71C1C", icon: "tools" },
-  { label: "Autre", value: "Autre", color: "#795548", icon: "trash" },
-];
 
 
 export function CategoryPicker({
@@ -32,47 +16,48 @@ export function CategoryPicker({
   const scaleAnim = useRef<{ [key: string]: Animated.Value }>({}).current;
 
   // Initialiser les Animated values pour chaque catégorie
-  categories.forEach(cat => {
-    if (!scaleAnim[cat.value]) scaleAnim[cat.value] = new Animated.Value(1);
-  });
+  Object.keys(TrashCategories).forEach((key) => {
+    if (!scaleAnim[key]) scaleAnim[key] = new Animated.Value(1);
+  })
 
-  const handlePress = (value: string) => {
+
+  const handlePress = (key: string) => {
     // Animation de press
     Animated.sequence([
-      Animated.timing(scaleAnim[value], { toValue: 0.9, duration: 100, useNativeDriver: true }),
-      Animated.timing(scaleAnim[value], { toValue: 1, duration: 100, useNativeDriver: true }),
+      Animated.timing(scaleAnim[key], { toValue: 0.9, duration: 100, useNativeDriver: true }),
+      Animated.timing(scaleAnim[key], { toValue: 1, duration: 100, useNativeDriver: true }),
     ]).start();
-    onChange(value);
+    onChange(key);
   };
 
   return (
     <View style={styles.wrapper}>
-      {categories.map((cat) => {
-        const isSelected = selected === cat.value;
+      {Object.entries(TrashCategories).map(([key, value]) => {
+        const isSelected = selected === key;
         return (
-          <TouchableWithoutFeedback key={cat.value} onPress={() => handlePress(cat.value)}>
+          <TouchableWithoutFeedback key={key} onPress={() => handlePress(key)}>
             <Animated.View
               style={[
                 styles.pill,
                 {
-                  backgroundColor: isSelected ? cat.color : Colors.white,
-                  borderColor: isSelected ? cat.color : "#ccc",
-                  transform: [{ scale: scaleAnim[cat.value] }],
+                  backgroundColor: isSelected ? value.color : Colors.white,
+                  borderColor: isSelected ? value.color : "#ccc",
+                  transform: [{ scale: scaleAnim[key] }],
                 },
               ]}
             >
 
-              <FontAwesome5 name={cat.icon as any} size={20}
-                color={isSelected ? "#fff" : cat.color}
+              <FontAwesome5 name={value.icon as any} size={20}
+                color={isSelected ? "#fff" : value.color}
                 style={{ marginRight: 6 }}
               />
               <Text
                 style={[
                   styles.pillText,
-                  { color: isSelected ? "#fff" : cat.color },
+                  { color: isSelected ? "#fff" : value.color },
                 ]}
               >
-                {cat.label}
+                {value.label}
               </Text>
             </Animated.View>
           </TouchableWithoutFeedback>
@@ -97,7 +82,7 @@ const styles = StyleSheet.create({
   pill: {
     flexDirection: "row",
     alignItems: "center",
-    paddingHorizontal: 10, // ajusté pour tenir sur 2 lignes
+    paddingHorizontal: 10,
     paddingVertical: 10,
     borderRadius: 24,
     borderWidth: 1,

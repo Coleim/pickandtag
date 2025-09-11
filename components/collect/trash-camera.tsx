@@ -1,8 +1,8 @@
-import { buttonStyles } from "@/constants/ButtonStyles";
+import { Button } from "@/components/global/buttons";
 import { Colors } from "@/constants/Colors";
 import { CameraView, useCameraPermissions } from "expo-camera";
 import { useEffect, useRef, useState } from "react";
-import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 
 export function TrashCamera({
   takingPhoto,
@@ -51,14 +51,7 @@ export function TrashCamera({
         <Text style={{ textAlign: "center" }}>
           Nous avons besoin de votre autorisation pour utiliser l’appareil photo.
         </Text>
-        <TouchableOpacity
-          onPress={requestPermission}
-          style={[buttonStyles.accent, { margin: 20 }]}
-        >
-          <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <Text>Accorder l’accès</Text>
-          </View>
-        </TouchableOpacity>
+        <Button onPress={requestPermission} title="Accorder l’accès" />
       </View>
     );
   }

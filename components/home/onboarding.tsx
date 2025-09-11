@@ -1,8 +1,8 @@
+import { Button } from "@/components/global/buttons";
 import { useRouter } from "expo-router";
 import React from "react";
 import { Dimensions, Image, StyleSheet, Text, View } from "react-native";
 import Swiper from "react-native-swiper";
-import { PrimaryButton } from "../global/buttons";
 
 const { width, height } = Dimensions.get("window");
 
@@ -59,7 +59,7 @@ export default function Onboarding() {
             resizeMode="contain"
           />
           <Text style={styles.text}>Garbo est fier de toi. À toi de jouer !</Text>
-          <PrimaryButton title="Commencer à collecter" onPress={() => router.navigate("/collect/new-trash")} />
+          <Button title="Commencer à collecter" onPress={() => router.navigate("/collect/new-trash")} isPrimary />
         </View>
       </Swiper>
     </View>

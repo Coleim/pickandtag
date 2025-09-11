@@ -2,9 +2,16 @@ export const Colors = {
   primary: "#2E7D32",        // Vert forêt
   accent: "#66BB6A",         // Vert clair
   secondary: "#0288D1",      // Bleu océan
-  background: "#FFF",     // Sable doux
-  // background: "#FFF3E0",     // Sable doux
+  background: "#FFF",
   text: "#37474F",           // Gris neutre
   white: "#FFFFFF",
-  disabled: "#B0BEC5"
+  disabled: "#B0BEC5",
+  plastic: "#FFD600",
+  poly: "#FF9800",
+  paper: "#1565C0",
+  glass: "#66BB6A",
+  metal: "#B71C1C",
+  otherCategory: "#795548"
 };
+
+

@@ -1,7 +1,7 @@
-import { buttonStyles } from "@/constants/ButtonStyles";
 import { Colors } from "@/constants/Colors";
 import { useState } from "react";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Image, StyleSheet, View } from "react-native";
+import { Button } from "../global/buttons";
 import { NoteText, SubTitle } from "../global/titles";
 import { CategoryPicker } from "./category-picker";
 
@@ -23,31 +23,10 @@ export function TrashDetails({ base64Picture, city, country, onAddTrash }: { bas
       }
       <SubTitle text={"Quel type de déchet ?"} />
       <CategoryPicker selected={category} onChange={setCategory} />
-
-      {/* <View style={detailsStyles.pickerWrapper}> */}
-      {/*   <Picker */}
-      {/*     selectedValue={category} */}
-      {/*     onValueChange={setCategory} */}
-      {/*     style={detailsStyles.picker} */}
-      {/*     itemStyle={detailsStyles.pickerItem} */}
-      {/*     dropdownIconColor={Colors.text} */}
-      {/*   > */}
-      {/*     <Picker.Item style={{ color: 'red' }} label="Plastique" value="Plastique" /> */}
-      {/*     <Picker.Item label="Métal" value="Métal" /> */}
-      {/*     <Picker.Item label="Verre" value="Verre" /> */}
-      {/*     <Picker.Item label="Papier" value="Papier" /> */}
-      {/*     <Picker.Item label="Autre" value="Autre" /> */}
-      {/*   </Picker> */}
-      {/* </View> */}
       {/* Submit Button */}
-      <View style={{ marginTop: 24 }}>
-
-        <TouchableOpacity onPress={() => onAddTrash(category, false)} style={[buttonStyles.primary, detailsStyles.submitButton]}>
-          <Text style={buttonStyles.primaryText}>Collecter</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => onAddTrash(category, true)} style={[buttonStyles.secondary, detailsStyles.submitButton]}>
-          <Text style={buttonStyles.primaryText}>Collecter et Ajouter un autre</Text>
-        </TouchableOpacity>
+      <View style={{ marginTop: 24, gap: 10 }}>
+        <Button onPress={() => onAddTrash(category, false)} title="Collecter" isPrimary />
+        <Button onPress={() => onAddTrash(category, true)} title="Collecter et Ajouter un autre" />
       </View>
 
     </View>
@@ -59,7 +38,8 @@ const detailsStyles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.background,
     flexDirection: 'column',
-    paddingTop: 20
+    paddingTop: 20,
+    paddingHorizontal: 24,
   },
   map: {
     width: 300, // small map
@@ -106,12 +86,7 @@ const detailsStyles = StyleSheet.create({
   pickerItem: {
     fontSize: 20,
     color: Colors.text,
-  },
-  submitButton: {
-    marginHorizontal: 24,
-    borderRadius: 16,
-    marginBottom: 12,
-  },
+  }
 });
 
 

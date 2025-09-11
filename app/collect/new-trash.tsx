@@ -2,7 +2,7 @@
 import { TrashDetails } from "@/components/collect/trash-details";
 import TrashPhotoCapture from "@/components/collect/trash-photo-capture";
 import { Colors } from "@/constants/Colors";
-import { addTrash } from "@/stores/trash-store";
+import { addTrash } from "@/stores/player-store";
 import { LocationInfo } from "@/types/locationInfo";
 import { Trash } from "@/types/trash";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -91,6 +91,7 @@ export default function NewTrash() {
         router.back();
       }
     });
+
   }
 
   function getHeaderTitle() {

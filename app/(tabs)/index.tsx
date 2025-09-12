@@ -14,19 +14,18 @@ import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 
 export default function HomeScreen() {
   const router = useRouter();
-  const { isInit, trashes, currentXp, level } = useStore(playerStore);
-  const totalGlobal = trashes.length;
+  const { isInit, currentXp, weeklyTrashes, trashes } = useStore(playerStore);
+  const totalGlobal = weeklyTrashes.length;
 
   const categoryBreakdown = useMemo(() => {
 
     const map: Record<string, number> = {};
-    for (let trash of trashes) {
+    for (let trash of weeklyTrashes) {
       map[trash.category] = (map[trash.category] ?? 0) + 1;
     }
-
     return Object.entries(map).map(([type, amount]) => ({ type, amount }));
 
-  }, [trashes]);
+  }, [weeklyTrashes]);
 
   if (!isInit) {
     return (
@@ -70,7 +69,7 @@ export default function HomeScreen() {
 
 
       {/* Dernières collectes */}
-      <LastCollects trashes={trashes} />
+      <LastCollects trashes={weeklyTrashes} />
       {/* Floating Add Button */}
       <Fab onPress={() => router.navigate("/collect/new-trash")} />
     </View >

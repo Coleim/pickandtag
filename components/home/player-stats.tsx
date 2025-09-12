@@ -1,6 +1,7 @@
 import { getLevelForXP } from "@/constants/levels";
 import React from "react";
 import { StyleSheet, View } from "react-native";
+import { ShareTwitter } from "./share-twitter";
 import XPSection from "./xp-section";
 
 export default function PlayerStats({ currentXp }: { currentXp: number }) {
@@ -17,6 +18,7 @@ export default function PlayerStats({ currentXp }: { currentXp: number }) {
     <View style={styles.container}>
       <XPSection level={current.level} xp={currentXp} xpForNext={next?.xpRequired} title={current.title} />
       {/* <BadgesSection badges={badges} /> */}
+      <ShareTwitter xp={currentXp} />
     </View>
   );
 }

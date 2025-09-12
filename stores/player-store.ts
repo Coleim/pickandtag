@@ -6,15 +6,17 @@ import { addTrashToPlayer, getPlayer, getTrashes, insertTrash } from './db';
 type PlayerState = {
   isInit: boolean;
   trashes: Trash[];
+  weeklyTrashes: Trash[];
   currentXp: number;
-  level: number;
+  // level: number;
 };
 
 export const playerStore = new Store<PlayerState>({
   isInit: false,
   trashes: [],
+  weeklyTrashes: [],
   currentXp: 0,
-  level: 1
+  // level: 1
 });
 
 let initPromise: Promise<void> | null = null;
@@ -33,8 +35,9 @@ export function initializeTrashStore() {
           ...t,
           createdAt: new Date(t.createdAt), // here we just convert from db timestamp to a real date
         })),
+        weeklyTrashes: trashes.filter((t: any) => new Date(t.createdAt) > getLastWeekDates()).map(t => ({ ...t, createdAt: new Date(t.createdAt) })),
         currentXp: player?.xp ?? 0,
-        level: calculatePlayerLevel(player?.xp ?? 0)
+        // level: calculatePlayerLevel(player?.xp ?? 0)
       });
 
     })();
@@ -44,6 +47,27 @@ export function initializeTrashStore() {
 
 
 initializeTrashStore();
+
+
+function getLastWeekDates(): Date {
+
+  // Calculate last week's Monday at 00:00
+  const lastMonday = new Date();
+  const day = lastMonday.getDay();
+  lastMonday.setDate(lastMonday.getDate() - day - 6);
+  lastMonday.setHours(0, 0, 0, 0);
+
+  return lastMonday;
+
+  // const now = new Date();
+  // const lastHour = new Date(now);
+  // lastHour.setHours(now.getHours() - 2);
+  // return lastHour;
+
+
+  // return date;
+}
+
 
 export async function addTrash(trash: Trash) {
   await initializeTrashStore();
@@ -57,14 +81,11 @@ export async function addTrash(trash: Trash) {
     return {
       ...prev,
       trashes: [...playerStore.state.trashes, trash],
+      weeklyTrashes: [...playerStore.state.weeklyTrashes.filter((t: any) => t.createdAt > getLastWeekDates()), trash],
       currentXp: newXP,
-      level: calculatePlayerLevel(newXP),
+      // level: calculatePlayerLevel(newXP),
     };
   });
 }
 
 
-//TODO: Better and maybe move to a utils file
-function calculatePlayerLevel(xp: number): number {
-  return Math.floor(Math.log2(xp / 100 + 1)) + 1;
-}

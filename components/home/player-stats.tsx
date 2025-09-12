@@ -1,13 +1,11 @@
+import { getLevelForXP } from "@/constants/levels";
 import React from "react";
 import { StyleSheet, View } from "react-native";
-import BadgesSection from "./badges-section";
 import XPSection from "./xp-section";
 
-export default function PlayerStats() {
-  const level = 1;
-  const xp = 30;
-  const xpForNext = 100;
-  const title = "Apprenti écolo 🌱";
+export default function PlayerStats({ currentXp }: { currentXp: number }) {
+
+  const { current, next } = getLevelForXP(currentXp);
 
   const badges = [
     { id: "1", name: "Verre", color: "green", icon: "wine-bottle" },
@@ -17,8 +15,8 @@ export default function PlayerStats() {
 
   return (
     <View style={styles.container}>
-      <XPSection level={level} xp={xp} xpForNext={xpForNext} title={title} />
-      <BadgesSection badges={badges} />
+      <XPSection level={current.level} xp={currentXp} xpForNext={next?.xpRequired} title={current.title} />
+      {/* <BadgesSection badges={badges} /> */}
     </View>
   );
 }

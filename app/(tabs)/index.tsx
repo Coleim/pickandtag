@@ -14,7 +14,7 @@ import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 
 export default function HomeScreen() {
   const router = useRouter();
-  const { isInit, trashes, xp, level } = useStore(playerStore);
+  const { isInit, trashes, currentXp, level } = useStore(playerStore);
   const totalGlobal = trashes.length;
 
   const categoryBreakdown = useMemo(() => {
@@ -66,7 +66,7 @@ export default function HomeScreen() {
       </View>
 
       {/* <View style={[styles.mapBox]} /> */}
-      <PlayerStats />
+      <PlayerStats currentXp={currentXp} />
 
 
       {/* Dernières collectes */}

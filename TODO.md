@@ -67,3 +67,19 @@ Niveau	Titre	XP requis (total cumulé)
 18	Héros légendaire 🏆	12 000 XP
 19	Champion éternel 🔥	15 000 XP
 20	Avatar de Gaïa 🌌	19 000 XP
+
+
+## Features a developper
+
+- XP / Levels
+- Gains de badges
+- Series / Streaks 
+- Multiplicateurs
+
+- Pouvoir voir ses propres stats (et filtrer par jour / location ? autre ? )
+
+- Collectes groupees
+- Classements par semaines / pays / region / ville
+
+- Profile
+- Carte avec les marqueurs

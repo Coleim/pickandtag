@@ -5,12 +5,14 @@ import { StyleSheet, Text, View } from "react-native";
 type XPProps = {
   level: number;
   xp: number;
-  xpForNext: number;
+  xpForNext?: number | undefined;
   title: string;
 };
 
 export default function XPSection({ level, xp, xpForNext, title }: XPProps) {
-  const progress = Math.min(xp / xpForNext, 1);
+
+
+  const progress = xpForNext ? Math.min(xp / xpForNext, 1) : xp;
 
   return (
     <View style={styles.section}>
@@ -23,7 +25,7 @@ export default function XPSection({ level, xp, xpForNext, title }: XPProps) {
 
 
       <Text style={styles.text}>
-        XP : {xp} / {xpForNext}
+        XP : {xp} / {xpForNext ?? xp}
       </Text>
     </View>
   );

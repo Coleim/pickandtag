@@ -35,6 +35,10 @@ async function initDb() {
       );
     `);
 
+
+    // await db.execAsync('DELETE FROM players')
+    // await db.execAsync('DELETE FROM trashes')
+
     const row: { count: number } | null = await db.getFirstAsync(`SELECT COUNT(*) as count FROM players`);
     if (row?.count === 0) {
       const id = randomUUID();

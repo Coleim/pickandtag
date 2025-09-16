@@ -1,4 +1,3 @@
-
 import { TrashDetails } from "@/components/collect/trash-details";
 import TrashPhotoCapture from "@/components/collect/trash-photo-capture";
 import { Colors } from "@/constants/Colors";
@@ -6,7 +5,6 @@ import { addTrash } from "@/stores/player-store";
 import { LocationInfo } from "@/types/locationInfo";
 import { Trash } from "@/types/trash";
 import { MaterialIcons } from "@expo/vector-icons";
-// import * as Crypto from 'expo-crypto';
 import { randomUUID } from 'expo-crypto';
 import * as Location from 'expo-location';
 import { useRouter } from "expo-router";
@@ -15,39 +13,26 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function NewTrash() {
-  const [base64Picture, setBase64Picture] = useState<string>('');
   const router = useRouter();
 
   const [locationInfo, setLocationInfo] = useState<LocationInfo>({ latitude: '', longitude: '', city: '', region: '', subregion: '', country: '' });
+  const [base64Picture, setBase64Picture] = useState<string>('');
 
   useEffect(() => {
     async function getCurrentLocation() {
-
-      console.log(" get current location ")
-
       let { status } = await Location.requestForegroundPermissionsAsync();
-      console.log(" status ", status)
       if (status !== 'granted') {
         return;
       }
-      console.log("getting loccc ")
-      // let currentLocation = await Location.getCurrentPositionAsync({});
       let currentLocation = await Location.getLastKnownPositionAsync({});
 
-      console.log(" log found: ", currentLocation)
-
-
       if (currentLocation) {
-
         setLocationInfo(prev => ({ ...prev, latitude: currentLocation.coords.latitude.toFixed(4), longitude: currentLocation.coords.longitude.toFixed(4) }));
-
         // Reverse geocode
         let reverseGeocode = await Location.reverseGeocodeAsync({
           latitude: currentLocation.coords.latitude,
           longitude: currentLocation.coords.longitude,
         });
-
-
         if (reverseGeocode.length > 0) {
           const place = reverseGeocode[0];
           setLocationInfo(prev => ({
@@ -60,7 +45,6 @@ export default function NewTrash() {
         }
       }
     }
-
     getCurrentLocation();
   }, []);
 
@@ -83,7 +67,6 @@ export default function NewTrash() {
   };
 
   function handleTrashAdded(category: string, addAnother: boolean) {
-    // add to store
     addTrash(createTrash(category)).then(() => {
       if (addAnother) {
         router.replace('/collect/new-trash');
@@ -91,7 +74,6 @@ export default function NewTrash() {
         router.back();
       }
     });
-
   }
 
   function getHeaderTitle() {

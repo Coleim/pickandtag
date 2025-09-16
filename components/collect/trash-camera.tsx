@@ -17,7 +17,6 @@ export function TrashCamera({
 
   useEffect(() => {
     if (!permission) return;
-
     if (takingPhoto) {
       const snap = async () => {
         if (!cameraRef.current) return;

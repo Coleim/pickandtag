@@ -2,10 +2,9 @@ import { Fab } from "@/components/global/buttons";
 import { LastCollects } from "@/components/home/last-collects";
 import Onboarding from "@/components/home/onboarding";
 import PlayerStats from "@/components/home/player-stats";
+import TrashBreakdown from "@/components/stats/trashes-breakdown";
 import { Colors } from "@/constants/Colors";
-import { TrashCategories } from "@/constants/TrashCategories";
 import { playerStore } from "@/stores/player-store";
-import { FontAwesome5 } from "@expo/vector-icons";
 import { useStore } from "@tanstack/react-store";
 import { useRouter } from "expo-router";
 import React, { useMemo } from "react";
@@ -18,7 +17,6 @@ export default function HomeScreen() {
   const totalGlobal = weeklyTrashes.length;
 
   const categoryBreakdown = useMemo(() => {
-
     const map: Record<string, number> = {};
     for (let trash of weeklyTrashes) {
       map[trash.category] = (map[trash.category] ?? 0) + 1;
@@ -30,6 +28,9 @@ export default function HomeScreen() {
   if (!isInit) {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <Text>Please Wait</Text>
+        <Text>Init: {isInit ? "true" : "false"}</Text>
+        <Text>Trashes: {trashes.length}</Text>
         <ActivityIndicator size="large" />
       </View>
     );
@@ -39,34 +40,33 @@ export default function HomeScreen() {
     return <Onboarding />;
   }
 
-
   return (
     <View style={styles.container}>
       <View style={styles.headerWrapper}>
-        <View style={styles.header}>
-          <Text style={styles.headerTitle}>Cette semaine, tu as collecté</Text>
-          <Text style={styles.headerCount}>{totalGlobal.toLocaleString()} déchet{totalGlobal > 1 ? 's' : ''} !</Text>
-          <View style={styles.breakdownWrapper}>
-            {categoryBreakdown.map((c) => {
-              const cfg = TrashCategories[c.type] || { color: "#aaa", icon: "trash" };
-              const count = c.amount;
-              if (count === 0) return null; // éviter les catégories à 0
-              return (
-                <View key={c.type} style={[styles.breakdownPill, { backgroundColor: cfg.color }]}>
-                  <Text style={styles.breakdownPillText}>
-                    {count}
-                  </Text>
-                  <FontAwesome5 name={cfg.icon as any} size={20} color={Colors.white} />
-                </View>
-              );
-            })}
-          </View>
-        </View>
+        <TrashBreakdown totalGlobal={totalGlobal} categoryBreakdown={categoryBreakdown} />
+        {/* <View style={styles.header}> */}
+        {/*   <Text style={styles.headerTitle}>Cette semaine, tu as collecté</Text> */}
+        {/*   <Text style={styles.headerCount}>{totalGlobal.toLocaleString()} déchet{totalGlobal > 1 ? 's' : ''} !</Text> */}
+        {/*   <View style={styles.breakdownWrapper}> */}
+        {/*     {categoryBreakdown.map((c) => { */}
+        {/*       const cfg = TrashCategories[c.type] || { color: "#aaa", icon: "trash" }; */}
+        {/*       const count = c.amount; */}
+        {/*       if (count === 0) return null; // éviter les catégories à 0 */}
+        {/*       return ( */}
+        {/*         <View key={c.type} style={[styles.breakdownPill, { backgroundColor: cfg.color }]}> */}
+        {/*           <Text style={styles.breakdownPillText}> */}
+        {/*             {count} */}
+        {/*           </Text> */}
+        {/*           <FontAwesome5 name={cfg.icon as any} size={20} color={Colors.white} /> */}
+        {/*         </View> */}
+        {/*       ); */}
+        {/*     })} */}
+        {/*   </View> */}
+        {/* </View> */}
       </View>
 
       {/* <View style={[styles.mapBox]} /> */}
       <PlayerStats currentXp={currentXp} />
-
 
       {/* Dernières collectes */}
       <LastCollects trashes={weeklyTrashes} />
@@ -77,7 +77,6 @@ export default function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
-
   breakdownWrapper: {
     flexDirection: "row",
     flexWrap: "wrap",

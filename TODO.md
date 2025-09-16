@@ -12,21 +12,20 @@
 [X] Sortir les couleurs en constantes
 [X] Sortir les categories en const 
 [ ] Componentiser
+ [ ] Titles / Headers 
 
 [ ] Convertir les Int en Date 
 
-[ ] Peut etre pas display tous les trash et peut etre pas le get tous (faire un count pour la somme)
-
 [ ] Pouvoir ajouter sans photos ( a voir )
 
-
-[X] Gestion des autorisations 
+[ ] Partage des stats
+[ ] Filter par location (ville / region / pays )
+[ ] Stat par jour / semaine / mois
+[ ] Breakdown par categories
 
 
 [ ] Publication sur Play Store
-
 [ ] Beta Tests
-
 
 ### Step 1 - Gamification
 

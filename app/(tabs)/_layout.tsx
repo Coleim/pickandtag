@@ -5,8 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function TabsLayout() {
   return (
-    <SafeAreaView style={{ flex: 1 }} edges={['left', 'right', 'bottom']}>
-      {/* TODO:  Remove when more than 1 tab */}
+    <SafeAreaView style={{ flex: 1 }} edges={['left', 'right']}>
       <Tabs
         screenOptions={({ route }) => ({
           tabBarIcon: ({ color, size }) => {
@@ -23,14 +22,13 @@ export default function TabsLayout() {
           tabBarActiveTintColor: Colors.primary,
           tabBarInactiveTintColor: "gray",
           headerShown: false,
-          tabBarStyle: { display: "none" },
         })}
       >
         <Tabs.Screen name="index" />
         {/* <Tabs.Screen name="map" /> */}
         {/* <Tabs.Screen name="groups" /> */}
         {/* <Tabs.Screen name="leaderboard" /> */}
-        {/* <Tabs.Screen name="profile" /> */}
+        <Tabs.Screen name="profile" />
       </Tabs>
     </SafeAreaView>
   );

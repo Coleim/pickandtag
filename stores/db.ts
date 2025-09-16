@@ -6,9 +6,17 @@ import * as SQLite from 'expo-sqlite';
 export const db = SQLite.openDatabaseSync("pickntag.db");
 
 
-async function initDb() {
-  try {
-    await db.execAsync(`
+class Database {
+  private isInitialized: Promise<void>;
+  private db: SQLite.SQLiteDatabase;
+
+  constructor() {
+    this.db = SQLite.openDatabaseSync("pickntag.db");
+    this.isInitialized = this.initDb();
+  }
+  private async initDb() {
+    try {
+      await this.db.execAsync(`
     CREATE TABLE IF NOT EXISTS trashes (
       id TEXT,
       category TEXT,
@@ -26,7 +34,7 @@ async function initDb() {
       PRIMARY KEY(id) 
    );
   `);
-    await db.execAsync(`
+      await this.db.execAsync(`
       CREATE TABLE IF NOT EXISTS players (
         id TEXT,
         xp INTEGER NOT NULL DEFAULT 0,
@@ -36,57 +44,60 @@ async function initDb() {
     `);
 
 
-    // await db.execAsync('DELETE FROM players')
-    // await db.execAsync('DELETE FROM trashes')
+      // await this.db.execAsync('DELETE FROM players')
+      // await this.db.execAsync('DELETE FROM trashes')
 
-    const row: { count: number } | null = await db.getFirstAsync(`SELECT COUNT(*) as count FROM players`);
-    if (row?.count === 0) {
-      const id = randomUUID();
-      await db.runAsync(
-        `INSERT INTO players(id, xp, trash_collected, updated_at) VALUES(?, 0, 0, CURRENT_TIMESTAMP)`,
-        id
-      );
-      console.log("Player inserted with id:", id);
-    } else {
-      console.log("Players table is not empty, skipping insert.");
+      const row: { count: number } | null = await this.db.getFirstAsync(`SELECT COUNT(*) as count FROM players`);
+      if (row?.count === 0) {
+        const id = randomUUID();
+        await this.db.runAsync(
+          `INSERT INTO players(id, xp, trash_collected, updated_at) VALUES(?, 0, 0, CURRENT_TIMESTAMP)`,
+          id
+        );
+        console.log("Player inserted with id:", id);
+      } else {
+        console.log("Players table is not empty, skipping insert.");
+      }
+    } catch (err) {
+      console.error("err: ", err)
     }
-  } catch (err) {
-    console.error("err: ", err)
   }
-}
-initDb();
 
-export function getTrashes(): Promise<Trash[]> {
-  return db.getAllAsync('SELECT * FROM trashes');
-}
-
-export function getPlayer(): Promise<Player | null> {
-  return db.getFirstAsync('SELECT * FROM players');
-}
-
-export async function insertTrash(trash: Trash) {
-  const query = 'INSERT INTO trashes VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)';
-  try {
-    const result = await db.runAsync(query, trash.id, trash.category, trash.latitude, trash.longitude,
-      trash.city, trash.country, trash.region, trash.subregion, trash.imageBase64, trash.syncStatus, trash.createdAt.getTime(), trash.updatedAt.getTime(), trash.lastSyncedAt.getTime());
-  } catch (error) {
-    console.error("error : ", error)
+  async getTrashes(): Promise<Trash[]> {
+    await this.isInitialized;
+    return this.db.getAllAsync('SELECT * FROM trashes');
   }
-}
 
-
-export async function addTrashToPlayer(gainedXP: number) {
-  try {
-    await db.runAsync(
-      `UPDATE players SET xp = xp + ?, trash_collected = trash_collected + 1, updated_at = CURRENT_TIMESTAMP`,
-      [gainedXP]
-    );
-  } catch (error) {
-    console.error(error)
+  async getPlayer(): Promise<Player | null> {
+    await this.isInitialized;
+    return db.getFirstAsync('SELECT * FROM players');
   }
+
+  async insertTrash(trash: Trash) {
+    await this.isInitialized;
+    const query = 'INSERT INTO trashes VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)';
+    try {
+      await this.db.runAsync(query, trash.id, trash.category, trash.latitude, trash.longitude,
+        trash.city, trash.country, trash.region, trash.subregion, trash.imageBase64, trash.syncStatus, trash.createdAt.getTime(), trash.updatedAt.getTime(), trash.lastSyncedAt.getTime());
+    } catch (error) {
+      console.error("error : ", error)
+    }
+  }
+
+  async addTrashToPlayer(gainedXP: number) {
+    await this.isInitialized;
+    try {
+      await this.db.runAsync(
+        `UPDATE players SET xp = xp + ?, trash_collected = trash_collected + 1, updated_at = CURRENT_TIMESTAMP`,
+        [gainedXP]
+      );
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
 }
 
 
 
-
-
+export const database = new Database();

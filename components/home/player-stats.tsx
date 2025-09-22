@@ -6,7 +6,7 @@ import { ShareTwitter } from "./share-twitter";
 import XPSection from "./xp-section";
 
 export default function PlayerStats({ currentXp }: { currentXp: number }) {
-
+  // REVIEW: getLevelForXP is pure; consider memoizing if currentXp updates frequently.
   const { current, next } = getLevelForXP(currentXp);
 
   const badges = [
@@ -17,8 +17,10 @@ export default function PlayerStats({ currentXp }: { currentXp: number }) {
 
   return (
     <View style={styles.container}>
+      {/* REVIEW: Extract a small LevelBadge/Title component to keep XPSection focused. */}
       <XPSection level={current.level} xp={currentXp} xpForNext={next?.xpRequired} title={current.title} />
       {/* <BadgesSection badges={badges} /> */}
+      {/* REVIEW: ShareTwitter triggers network intent; consider guarding for web and adding analytics event. */}
       <ShareTwitter xp={currentXp} />
     </View>
   );

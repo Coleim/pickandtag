@@ -8,7 +8,7 @@ import { ActivityIndicator, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function TabsLayout() {
-
+  // REVIEW: Consider memoizing derived values or using selector to avoid rerenders when unrelated store fields change.
   const { hasTrashes, isInit } = useStore(playerStore);
 
   if (!isInit) {
@@ -45,6 +45,7 @@ export default function TabsLayout() {
           tabBarActiveTintColor: Colors.primary,
           tabBarInactiveTintColor: Colors.inactive,
           headerShown: false,
+          // REVIEW: Consider setting tabBarStyle/background and safe-area handling on Android for gesture insets.
         })}
       >
         <Tabs.Screen name="index" options={{ title: "Accueil" }} />

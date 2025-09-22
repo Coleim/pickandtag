@@ -28,6 +28,7 @@ let initPromise: Promise<void> | null = null;
 export function initializeTrashStore() {
   if (!initPromise) {
     initPromise = (async () => {
+      // REVIEW: Consider adding try/catch around DB calls to set a recoverable error state.
       const [hasTrashes, dailyTrashes, weeklyTrashes, monthlyTrashes, allTrashes, player] = await Promise.all([
         database.hasTrashes(),
         database.getTrashesAfter(getToday()),
@@ -66,6 +67,7 @@ export function initializeTrashStore() {
 }
 
 initializeTrashStore();
+// REVIEW: Side-effectful initialization at import time can complicate testing and SSR. Consider explicit bootstrap in app root.
 
 function getToday(): Date {
   const today = new Date();
@@ -99,10 +101,11 @@ export async function addTrash(trash: Trash) {
     return {
       ...prev,
       hasTrashes: true,
-      allTrashes: [...playerStore.state.allTrashes, trash],
-      monthlyTrashes: [...playerStore.state.monthlyTrashes.filter((t: any) => t.createdAt >= getThisMonth()), trash],
-      weeklyTrashes: [...playerStore.state.weeklyTrashes.filter((t: any) => t.createdAt >= getThisWeek()), trash],
-      dailyTrashes: [...playerStore.state.dailyTrashes.filter((t: any) => t.createdAt >= getToday()), trash],
+      // REVIEW: Prefer using prev (functional setState arg) consistently to avoid reading a stale snapshot from playerStore.state.
+      allTrashes: [...prev.allTrashes, trash],
+      monthlyTrashes: [...prev.monthlyTrashes.filter((t: any) => t.createdAt >= getThisMonth()), trash],
+      weeklyTrashes: [...prev.weeklyTrashes.filter((t: any) => t.createdAt >= getThisWeek()), trash],
+      dailyTrashes: [...prev.dailyTrashes.filter((t: any) => t.createdAt >= getToday()), trash],
       currentXp: newXP,
     };
   });

@@ -13,6 +13,7 @@ import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 export default function HomeScreen() {
   const router = useRouter();
   const { isInit, currentXp, weeklyTrashes } = useStore(playerStore);
+  // REVIEW: Consider using a selector to subscribe only to needed slices to reduce rerenders.
   const totalGlobal = weeklyTrashes.length;
 
   const categoryBreakdown = useMemo(() => {
@@ -21,7 +22,7 @@ export default function HomeScreen() {
       map[trash.category] = (map[trash.category] ?? 0) + 1;
     }
     return Object.entries(map).map(([type, amount]) => ({ type, amount }));
-
+    // REVIEW: If categories set is stable, memoize with shallow equals; heavy lists may benefit from useMemo + useMemoizedFn.
   }, [weeklyTrashes]);
 
   if (!isInit) {
@@ -34,6 +35,7 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.container}>
+      {/* REVIEW: Componentize header (StatsHeader) to reuse on other screens and keep this file lean. */}
       <View style={styles.headerWrapper}>
         <View style={styles.header}>
           <Text style={styles.headerTitle}>Cette semaine, tu as collecté</Text>
@@ -46,10 +48,13 @@ export default function HomeScreen() {
         <PlayerStats currentXp={currentXp} />
 
         {/* Dernières collectes */}
+        {/* REVIEW: Virtualize long lists; if weeklyTrashes can grow, use FlatList with keyExtractor. */}
         <LastCollects trashes={weeklyTrashes} />
         {/* Floating Add Button */}
       </View >
+      {/* REVIEW: Extract a Reusable FAB (e.g., AddTrashFab) with prewired navigation/haptics. */}
       <Fab onPress={() => router.navigate("/collect/new-trash")} />
+      {/* REVIEW: Consider haptic feedback on press for better UX (expo-haptics). */}
     </View>
   );
 }

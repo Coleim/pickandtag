@@ -17,4 +17,6 @@ export const Colors = {
   otherCategory: "#795548"
 };
 
+// REVIEW: Keep a single source of truth for spacing/typography as well (e.g., theme), and consider dark mode variants.
+
 

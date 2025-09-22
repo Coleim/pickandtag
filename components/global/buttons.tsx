@@ -21,6 +21,7 @@ export function Button({ title, loadingTitle, loading = false, onPress, iconName
       />
       }
       <Text style={isPrimary ? buttonStyles.primaryText : buttonStyles.secondaryText}>{loading ? loadingTitle : title}</Text>
+      {/* REVIEW: loadingTitle can be null; provide a sensible default to avoid empty text. */}
     </TouchableOpacity>
   )
 }
@@ -41,5 +42,7 @@ export function Fab({ title, onPress }: FabProps) {
     </TouchableOpacity>
   )
 }
+
+// REVIEW: Consider extracting an AddTrashFab that embeds navigation/haptics to reduce repetition across screens.
 
 

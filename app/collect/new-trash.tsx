@@ -16,12 +16,14 @@ export default function NewTrash() {
   const router = useRouter();
 
   const [locationInfo, setLocationInfo] = useState<LocationInfo>({ latitude: '', longitude: '', city: '', region: '', subregion: '', country: '' });
+  // REVIEW: Consider initializing with undefineds and formatting lazily to keep numeric types for lat/lon.
   const [base64Picture, setBase64Picture] = useState<string>('');
 
   useEffect(() => {
     async function getCurrentLocation() {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
+        // REVIEW: Surface a user-visible message/toast when permission is denied.
         return;
       }
       let currentLocation = await Location.getLastKnownPositionAsync({});
@@ -73,6 +75,9 @@ export default function NewTrash() {
       } else {
         router.back();
       }
+    })
+    .catch(() => {
+      // REVIEW: Consider error handling and user feedback (Toast/Alert) on DB failure.
     });
   }
 

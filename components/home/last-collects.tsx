@@ -1,7 +1,7 @@
 import { TrashCategories } from "@/constants/TrashCategories";
 import { Trash } from "@/types/trash";
 import { useMemo } from "react";
-import { FlatList, StyleSheet, Text } from "react-native";
+import { FlatList, StyleSheet, Text, View } from "react-native";
 import CollectItem from "./collect-items";
 
 export function LastCollects({ trashes }: { trashes: Trash[] }) {
@@ -18,15 +18,17 @@ export function LastCollects({ trashes }: { trashes: Trash[] }) {
   }
 
   return (
-    <>
+    <View style={{ flex: 1 }}>
       <Text style={styles.sectionTitle}>Dernières collectes</Text>
       <FlatList
+        showsVerticalScrollIndicator={false}
+        style={{ flex: 1 }}
         data={sortedTrashes}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <CollectItem item={item} categories={TrashCategories} />
         )} />
-    </>
+    </View>
 
   );
 }

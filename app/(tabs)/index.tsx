@@ -55,7 +55,7 @@ export default function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
-  content: { paddingHorizontal: 8 },
+  content: { paddingHorizontal: 8, flex: 1 },
   breakdownWrapper: {
     flexDirection: "row",
     flexWrap: "wrap",

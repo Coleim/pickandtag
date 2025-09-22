@@ -3,6 +3,7 @@ export const Colors = {
   accent: "#66BB6A",         // Vert clair
   secondary: "#0288D1",      // Bleu océan
   // background: "#FFF",
+  inactive: "#9E9E9E",
   background: "#FFF3E0",
   text: "#37474F",           // Gris neutre
   white: "#FFFFFF",

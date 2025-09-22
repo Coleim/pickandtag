@@ -19,7 +19,6 @@ export default function TabsLayout() {
     );
   }
 
-
   if (!hasTrashes) {
     return (
       <SafeAreaView style={{ flex: 1 }} edges={['left', 'right', 'bottom', 'top']}>
@@ -27,7 +26,6 @@ export default function TabsLayout() {
       </SafeAreaView>
     );
   }
-
 
   return (
     <SafeAreaView style={{ flex: 1 }} edges={['left', 'right']}>
@@ -45,15 +43,15 @@ export default function TabsLayout() {
             return <Ionicons name={iconName} size={size} color={color} />;
           },
           tabBarActiveTintColor: Colors.primary,
-          tabBarInactiveTintColor: "gray",
+          tabBarInactiveTintColor: Colors.inactive,
           headerShown: false,
         })}
       >
-        <Tabs.Screen name="index" />
+        <Tabs.Screen name="index" options={{ title: "Accueil" }} />
         {/* <Tabs.Screen name="map" /> */}
         {/* <Tabs.Screen name="groups" /> */}
         {/* <Tabs.Screen name="leaderboard" /> */}
-        <Tabs.Screen name="profile" />
+        <Tabs.Screen name="profile" options={{ title: "Mon Parcours" }} />
       </Tabs>
     </SafeAreaView>
   );

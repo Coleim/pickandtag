@@ -28,10 +28,12 @@ let initPromise: Promise<void> | null = null;
 export function initializeTrashStore() {
   if (!initPromise) {
     initPromise = (async () => {
-      const [hasTrashes, dailyTrashes, weeklyTrashes, player] = await Promise.all([
+      const [hasTrashes, dailyTrashes, weeklyTrashes, monthlyTrashes, allTrashes, player] = await Promise.all([
         database.hasTrashes(),
         database.getTrashesAfter(getToday()),
         database.getTrashesAfter(getThisWeek()),
+        database.getTrashesAfter(getThisMonth()),
+        database.getTrashes(),
         database.getPlayer()
       ]);
 
@@ -39,6 +41,14 @@ export function initializeTrashStore() {
         ...state,
         isInit: true,
         hasTrashes: hasTrashes,
+        allTrashes: allTrashes.map((t: any) => ({
+          ...t,
+          createdAt: new Date(t.createdAt), // here we just convert from db timestamp to a real date
+        })),
+        monthlyTrashes: monthlyTrashes.map((t: any) => ({
+          ...t,
+          createdAt: new Date(t.createdAt), // here we just convert from db timestamp to a real date
+        })),
         weeklyTrashes: weeklyTrashes.map((t: any) => ({
           ...t,
           createdAt: new Date(t.createdAt), // here we just convert from db timestamp to a real date
@@ -77,25 +87,6 @@ function getThisMonth(): Date {
   return now;
 }
 
-export async function updateMonthlyTrashes() {
-  await initializeTrashStore();
-  const monthlyTrashes = await database.getTrashesAfter(getThisMonth());
-  playerStore.setState((state) => ({
-    ...state,
-    monthlyTrashes: monthlyTrashes
-  }))
-}
-
-export async function updateAllTrashes() {
-  await initializeTrashStore();
-  const allTrashes = await database.getTrashes();
-  playerStore.setState(state => ({
-    ...state,
-    allTrashes: allTrashes
-  }))
-}
-
-
 export async function addTrash(trash: Trash) {
   await initializeTrashStore();
   await database.insertTrash(trash);
@@ -108,6 +99,7 @@ export async function addTrash(trash: Trash) {
     return {
       ...prev,
       hasTrashes: true,
+      allTrashes: [...playerStore.state.allTrashes, trash],
       monthlyTrashes: [...playerStore.state.monthlyTrashes.filter((t: any) => t.createdAt >= getThisMonth()), trash],
       weeklyTrashes: [...playerStore.state.weeklyTrashes.filter((t: any) => t.createdAt >= getThisWeek()), trash],
       dailyTrashes: [...playerStore.state.dailyTrashes.filter((t: any) => t.createdAt >= getToday()), trash],

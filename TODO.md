@@ -9,11 +9,13 @@
 
 #### Jour 1
 
-- [X]  Mettre a jour le store
-- [X]  faire le chargement de tous les dechets
-- [ ]  refaire les query pour plutot juste prendre les stats (plutot que tout) ⇒ sum
-- [X]  Afficher le nombre de dechets en Joli
+- [X] Mettre a jour le store
+- [X] faire le chargement de tous les dechets
+- [X] Afficher le nombre de dechets en Joli
 - [ ] Rajouter la colonne "event_id"
+- [ ] Injecter des fausses data hisrtorique
+- [ ] Refaire les query pour plutot juste prendre les stats (plutot que tout) ⇒ sum
+
 
 #### Jour 2 
 

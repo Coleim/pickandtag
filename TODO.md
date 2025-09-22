@@ -28,9 +28,11 @@
 - [ ] Rajouter le device ID pour identification
 
 
+#### 
+
 ### Collecte groupees
 
-Creer une collectt
+Creer une collecte
 
 Terminer une collecte
 
@@ -75,8 +77,12 @@ In Main Screen, show “Currently in collect: Park Clean-up (ends in 2h)”
 [ ] Pouvoir ajouter sans photos ( a voir )
 [ ] Partage des stats
 
+[ ] Faire code review par IA (claude + cursor)
+[ ] Faire un readme correct
+
 [ ] Publication sur Play Store
 [ ] Beta Tests
+
 
 
 

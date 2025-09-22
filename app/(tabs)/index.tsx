@@ -1,6 +1,5 @@
 import { Fab } from "@/components/global/buttons";
 import { LastCollects } from "@/components/home/last-collects";
-import Onboarding from "@/components/home/onboarding";
 import PlayerStats from "@/components/home/player-stats";
 import TrashBreakdown from "@/components/stats/trashes-breakdown";
 import { Colors } from "@/constants/Colors";
@@ -13,7 +12,7 @@ import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 
 export default function HomeScreen() {
   const router = useRouter();
-  const { isInit, currentXp, weeklyTrashes, trashes } = useStore(playerStore);
+  const { isInit, currentXp, weeklyTrashes } = useStore(playerStore);
   const totalGlobal = weeklyTrashes.length;
 
   const categoryBreakdown = useMemo(() => {
@@ -28,55 +27,35 @@ export default function HomeScreen() {
   if (!isInit) {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <Text>Please Wait</Text>
-        <Text>Init: {isInit ? "true" : "false"}</Text>
-        <Text>Trashes: {trashes.length}</Text>
         <ActivityIndicator size="large" />
       </View>
     );
   }
 
-  if (trashes.length === 0) {
-    return <Onboarding />;
-  }
-
   return (
     <View style={styles.container}>
       <View style={styles.headerWrapper}>
-        <TrashBreakdown totalGlobal={totalGlobal} categoryBreakdown={categoryBreakdown} />
-        {/* <View style={styles.header}> */}
-        {/*   <Text style={styles.headerTitle}>Cette semaine, tu as collecté</Text> */}
-        {/*   <Text style={styles.headerCount}>{totalGlobal.toLocaleString()} déchet{totalGlobal > 1 ? 's' : ''} !</Text> */}
-        {/*   <View style={styles.breakdownWrapper}> */}
-        {/*     {categoryBreakdown.map((c) => { */}
-        {/*       const cfg = TrashCategories[c.type] || { color: "#aaa", icon: "trash" }; */}
-        {/*       const count = c.amount; */}
-        {/*       if (count === 0) return null; // éviter les catégories à 0 */}
-        {/*       return ( */}
-        {/*         <View key={c.type} style={[styles.breakdownPill, { backgroundColor: cfg.color }]}> */}
-        {/*           <Text style={styles.breakdownPillText}> */}
-        {/*             {count} */}
-        {/*           </Text> */}
-        {/*           <FontAwesome5 name={cfg.icon as any} size={20} color={Colors.white} /> */}
-        {/*         </View> */}
-        {/*       ); */}
-        {/*     })} */}
-        {/*   </View> */}
-        {/* </View> */}
+        <View style={styles.header}>
+          <Text style={styles.headerTitle}>Cette semaine, tu as collecté</Text>
+          <Text style={styles.headerCount}>{totalGlobal.toLocaleString()} déchet{totalGlobal > 1 ? 's' : ''} !</Text>
+          <TrashBreakdown totalGlobal={totalGlobal} categoryBreakdown={categoryBreakdown} />
+        </View>
       </View>
 
-      {/* <View style={[styles.mapBox]} /> */}
-      <PlayerStats currentXp={currentXp} />
+      <View style={styles.content}>
+        <PlayerStats currentXp={currentXp} />
 
-      {/* Dernières collectes */}
-      <LastCollects trashes={weeklyTrashes} />
-      {/* Floating Add Button */}
+        {/* Dernières collectes */}
+        <LastCollects trashes={weeklyTrashes} />
+        {/* Floating Add Button */}
+      </View >
       <Fab onPress={() => router.navigate("/collect/new-trash")} />
-    </View >
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  content: { paddingHorizontal: 8 },
   breakdownWrapper: {
     flexDirection: "row",
     flexWrap: "wrap",
@@ -100,7 +79,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     textAlign: "center",
   },
-  container: { flex: 1, backgroundColor: "#FAFAFA" },
+  container: { flex: 1, backgroundColor: Colors.background },
 
   headerWrapper: {
     alignItems: "center",

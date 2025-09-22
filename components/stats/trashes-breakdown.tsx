@@ -7,26 +7,21 @@ import { StyleSheet, Text, View } from "react-native";
 export default function TrashBreakdown({ totalGlobal, categoryBreakdown }: { totalGlobal: number, categoryBreakdown: { type: string, amount: number }[] }) {
 
   return (
-    <View style={styles.header}>
-      <Text style={styles.headerTitle}>Cette semaine, tu as collecté</Text>
-      <Text style={styles.headerCount}>{totalGlobal.toLocaleString()} déchet{totalGlobal > 1 ? 's' : ''} !</Text>
-      <View style={styles.breakdownWrapper}>
-        {categoryBreakdown.map((c) => {
-          const cfg = TrashCategories[c.type] || { color: "#aaa", icon: "trash" };
-          const count = c.amount;
-          if (count === 0) return null; // éviter les catégories à 0
-          return (
-            <View key={c.type} style={[styles.breakdownPill, { backgroundColor: cfg.color }]}>
-              <Text style={styles.breakdownPillText}>
-                {count}
-              </Text>
-              <FontAwesome5 name={cfg.icon as any} size={20} color={Colors.white} />
-            </View>
-          );
-        })}
-      </View>
+    <View style={styles.breakdownWrapper}>
+      {categoryBreakdown.map((c) => {
+        const cfg = TrashCategories[c.type] || { color: "#aaa", icon: "trash" };
+        const count = c.amount;
+        if (count === 0) return null; // éviter les catégories à 0
+        return (
+          <View key={c.type} style={[styles.breakdownPill, { backgroundColor: cfg.color }]}>
+            <Text style={styles.breakdownPillText}>
+              {count}
+            </Text>
+            <FontAwesome5 name={cfg.icon as any} size={20} color={Colors.white} />
+          </View>
+        );
+      })}
     </View>
-
   );
 
 }

@@ -1,3 +1,4 @@
+import { Colors } from "@/constants/Colors";
 import { getLevelForXP } from "@/constants/levels";
 import React from "react";
 import { StyleSheet, View } from "react-native";
@@ -26,9 +27,8 @@ export default function PlayerStats({ currentXp }: { currentXp: number }) {
 const styles = StyleSheet.create({
   container: {
     padding: 16,
-    backgroundColor: "#fff",
+    backgroundColor: Colors.white,
     borderRadius: 12,
-    marginVertical: 8,
     elevation: 2,
   },
 });

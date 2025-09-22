@@ -63,6 +63,21 @@ class Database {
     }
   }
 
+  async hasTrashes(): Promise<boolean> {
+    await this.isInitialized;
+    const row = await this.db.getFirstAsync(
+      `SELECT 1 FROM trashes LIMIT 1`
+    );
+    console.log(" row:  ", row)
+    return !!row;
+  }
+
+  async getTrashesAfter(date: Date): Promise<Trash[]> {
+    await this.isInitialized;
+    const timestamp = date.getTime();
+    return db.getAllAsync(`SELECT * FROM trashes WHERE createdAt >= ?`, [timestamp]);
+  }
+
   async getTrashes(): Promise<Trash[]> {
     await this.isInitialized;
     return this.db.getAllAsync('SELECT * FROM trashes');

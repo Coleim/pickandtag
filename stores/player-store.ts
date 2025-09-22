@@ -5,15 +5,21 @@ import { database } from './db';
 
 type PlayerState = {
   isInit: boolean;
-  trashes: Trash[];
+  hasTrashes: boolean;
+  allTrashes: Trash[];
+  monthlyTrashes: Trash[];
   weeklyTrashes: Trash[];
+  dailyTrashes: Trash[];
   currentXp: number;
 };
 
 export const playerStore = new Store<PlayerState>({
   isInit: false,
-  trashes: [],
+  hasTrashes: false,
+  allTrashes: [],
+  monthlyTrashes: [],
   weeklyTrashes: [],
+  dailyTrashes: [],
   currentXp: 0,
 });
 
@@ -22,20 +28,27 @@ let initPromise: Promise<void> | null = null;
 export function initializeTrashStore() {
   if (!initPromise) {
     initPromise = (async () => {
-      const [trashes, player] = await Promise.all([
-        database.getTrashes(),
+      const [hasTrashes, dailyTrashes, weeklyTrashes, player] = await Promise.all([
+        database.hasTrashes(),
+        database.getTrashesAfter(getToday()),
+        database.getTrashesAfter(getThisWeek()),
         database.getPlayer()
       ]);
 
-      playerStore.setState({
+      playerStore.setState((state) => ({
+        ...state,
         isInit: true,
-        trashes: trashes.map((t: any) => ({
+        hasTrashes: hasTrashes,
+        weeklyTrashes: weeklyTrashes.map((t: any) => ({
           ...t,
           createdAt: new Date(t.createdAt), // here we just convert from db timestamp to a real date
         })),
-        weeklyTrashes: trashes.filter((t: any) => new Date(t.createdAt) > getLastWeekDates()).map(t => ({ ...t, createdAt: new Date(t.createdAt) })),
+        dailyTrashes: dailyTrashes.map((t: any) => ({
+          ...t,
+          createdAt: new Date(t.createdAt), // here we just convert from db timestamp to a real date
+        })),
         currentXp: player?.xp ?? 0,
-      });
+      }));
 
     })();
   }
@@ -44,13 +57,42 @@ export function initializeTrashStore() {
 
 initializeTrashStore();
 
+function getToday(): Date {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  return today;
+}
 
-function getLastWeekDates(): Date {
+function getThisWeek(): Date {
   const lastMonday = new Date();
   const day = lastMonday.getDay();
   lastMonday.setDate(lastMonday.getDate() - day - 6);
   lastMonday.setHours(0, 0, 0, 0);
   return lastMonday;
+}
+function getThisMonth(): Date {
+  const now = new Date();
+  now.setDate(1);
+  now.setHours(0, 0, 0, 0);
+  return now;
+}
+
+export async function updateMonthlyTrashes() {
+  await initializeTrashStore();
+  const monthlyTrashes = await database.getTrashesAfter(getThisMonth());
+  playerStore.setState((state) => ({
+    ...state,
+    monthlyTrashes: monthlyTrashes
+  }))
+}
+
+export async function updateAllTrashes() {
+  await initializeTrashStore();
+  const allTrashes = await database.getTrashes();
+  playerStore.setState(state => ({
+    ...state,
+    allTrashes: allTrashes
+  }))
 }
 
 
@@ -65,8 +107,10 @@ export async function addTrash(trash: Trash) {
     const newXP = prev.currentXp + gainedXP;
     return {
       ...prev,
-      trashes: [...playerStore.state.trashes, trash],
-      weeklyTrashes: [...playerStore.state.weeklyTrashes.filter((t: any) => t.createdAt > getLastWeekDates()), trash],
+      hasTrashes: true,
+      monthlyTrashes: [...playerStore.state.monthlyTrashes.filter((t: any) => t.createdAt >= getThisMonth()), trash],
+      weeklyTrashes: [...playerStore.state.weeklyTrashes.filter((t: any) => t.createdAt >= getThisWeek()), trash],
+      dailyTrashes: [...playerStore.state.dailyTrashes.filter((t: any) => t.createdAt >= getToday()), trash],
       currentXp: newXP,
     };
   });

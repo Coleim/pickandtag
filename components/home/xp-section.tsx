@@ -1,6 +1,7 @@
 import { Colors } from "@/constants/Colors";
+import { FontAwesome5 } from "@expo/vector-icons";
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 type XPProps = {
   level: number;
@@ -11,22 +12,25 @@ type XPProps = {
 
 export default function XPSection({ level, xp, xpForNext, title }: XPProps) {
 
-
   const progress = xpForNext ? Math.min(xp / xpForNext, 1) : xp;
 
   return (
     <View style={styles.section}>
       <Text style={styles.title}>Niveau {level} - {title}</Text>
-      {/* Progress bar maison */}
       <View style={styles.progressBackground}>
         <View style={[styles.progressFill, { flex: progress }]} />
         <View style={{ flex: 1 - progress }} />
       </View>
+      <View style={styles.xpText}>
 
+        <Text style={styles.text}>
+          XP : {xp} / {xpForNext ?? xp}
+        </Text>
+        <TouchableOpacity >
+          <FontAwesome5 name="jedi" size={20} />
+        </TouchableOpacity>
+      </View>
 
-      <Text style={styles.text}>
-        XP : {xp} / {xpForNext ?? xp}
-      </Text>
     </View>
   );
 }
@@ -55,6 +59,10 @@ const styles = StyleSheet.create({
   level: {
     fontWeight: "bold",
     fontSize: 15,
+  },
+  xpText: {
+    flexDirection: 'row',
+    justifyContent: 'space-between'
   },
   text: {
     fontSize: 14,

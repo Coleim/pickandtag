@@ -1,87 +1,88 @@
 import PlayerStats from "@/components/home/player-stats";
 import TrashBreakdown from "@/components/stats/trashes-breakdown";
 import { Colors } from "@/constants/Colors";
-import { getLevelForXP } from "@/constants/levels";
-import { playerStore, updateAllTrashes, updateMonthlyTrashes } from "@/stores/player-store";
+import { playerStore } from "@/stores/player-store";
+import { TrashCount } from "@/types/trash";
 import { useStore } from "@tanstack/react-store";
 import { useEffect, useMemo, useState } from "react";
-import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 export default function ProfileScreen() {
 
-  const { currentXp, dailyTrashes, weeklyTrashes, monthlyTrashes, allTrashes } = useStore(playerStore);
-  const { current, next } = getLevelForXP(currentXp);
+  const currentXp = useStore(playerStore, playerStore => playerStore.currentXp);
+  const trashCount = useStore(playerStore, playerStore => playerStore.trashCount);
   const [selected, setSelected] = useState("Jour");
-  const totalGlobal = weeklyTrashes.length;
-  const [loadingTrashes, setLoadingTrashes] = useState(false);
+  const [selectedTrashCount, setSelectTrashCount] = useState(0);
+  const [previousPeriodTrashCount, setPreviousPeriodTrashCount] = useState(0);
+  const [lastPeriodText, setLastPeriodText] = useState<string | undefined>(selected);
 
+  const options = ["Jour", "Cette Semaine", "Ce Mois", "Total"];
 
-  const options = ["Jour", "Semaine", "Mois", "Total"];
-
-
-  const selectedTrashes = useMemo(() => {
+  const selectedOption: { trash: TrashCount[], previousTrash?: TrashCount[], text?: string } = useMemo(() => {
     switch (selected) {
       case "Jour":
-        return dailyTrashes;
-      case "Semaine":
-        return weeklyTrashes;
-      case "Mois":
-        return monthlyTrashes;
+        return {
+          trash: trashCount?.daily ?? [],
+          previousTrash: trashCount?.yesterday ?? [],
+          text: "hier"
+        };
+      case "Cette Semaine":
+        return {
+          trash: trashCount?.weekly ?? [],
+          previousTrash: trashCount?.lastWeek ?? [],
+          text: "la semaine dernière"
+        }
+      case "Ce Mois":
+        return {
+          trash: trashCount?.monthly ?? [],
+          previousTrash: trashCount?.lastMonth ?? [],
+          text: "le mois dernier"
+        }
       case "Total":
-        return allTrashes;
+        return {
+          trash: trashCount?.total ?? [],
+        }
       default:
-        return [];
+        return {
+          trash: [],
+        }
     }
-  }, [selected, dailyTrashes, weeklyTrashes, monthlyTrashes]);
+  }, [selected, trashCount]);
+
+  useEffect(() => {
+    const total = selectedOption.trash.reduce((acc, val) => acc + val.count, 0);
+    const previousTotal = selectedOption.previousTrash?.reduce((acc, val) => acc + val.count, 0);
+    setSelectTrashCount(total);
+    setPreviousPeriodTrashCount(previousTotal ?? 0);
+    setLastPeriodText(selectedOption.text)
+  }, [selectedOption]);
 
   //TODO: Find a way to export it in common
   const categoryBreakdown = useMemo(() => {
     const map: Record<string, number> = {};
-    for (let trash of selectedTrashes) {
-      map[trash.category] = (map[trash.category] ?? 0) + 1;
+    for (let trash of selectedOption.trash ?? []) {
+      map[trash.category] = (map[trash.category] ?? 0) + trash.count;
     }
     return Object.entries(map).map(([type, amount]) => ({ type, amount }));
 
-  }, [selectedTrashes]);
-
-
-  useEffect(() => {
-    const loadTrashes = async () => {
-      setLoadingTrashes(true);
-      if (selected === "Mois" && monthlyTrashes.length === 0) {
-        await updateMonthlyTrashes();
-      }
-      if (selected === "Total" && allTrashes.length === 0) {
-        await updateAllTrashes();
-      }
-      setLoadingTrashes(false);
-    }
-
-    loadTrashes();
-  }, [selected, monthlyTrashes]);
-
+  }, [selectedOption]);
 
   return (
     <View style={styles.container}>
       <View style={styles.headerWrapper}>
         <View style={styles.header}>
-          <Text style={styles.headerTitle}>Profile</Text>
+          <Text style={styles.headerTitle}>Mon Parcours</Text>
         </View>
       </View>
       <View style={styles.content}>
         <PlayerStats currentXp={currentXp} />
 
-        {loadingTrashes ? (
-          <ActivityIndicator size="small" color={Colors.primary} />
-        ) : (
-          <>
-            <View style={styles.totalTrashesCountContainer}>
-              <Text style={styles.trashCountNumber}>{selectedTrashes.length}</Text>
-              <Text style={styles.trashText}>Déchet{selectedTrashes.length > 1 ? 's' : ''}</Text>
-            </View>
-            <TrashBreakdown totalGlobal={totalGlobal} categoryBreakdown={categoryBreakdown} />
-          </>
-        )}
+        <View style={styles.totalTrashesCountContainer}>
+          <Text style={styles.trashCountNumber}>{selectedTrashCount}</Text>
+          <Text style={styles.trashText}>Déchet{selectedTrashCount > 1 ? 's' : ''}</Text>
+          <Text style={styles.previousTrashCount}>{selectedOption.previousTrash ? `${previousPeriodTrashCount} collectés ${lastPeriodText}` : ' '}</Text>
+        </View>
+        <TrashBreakdown categoryBreakdown={categoryBreakdown} />
 
         <View style={{ marginTop: 40, marginHorizontal: "auto" }}>
           {/* TODO: Sortir en composant */}
@@ -117,8 +118,7 @@ const styles = StyleSheet.create({
   },
   totalTrashesCountContainer: {
     marginHorizontal: 'auto',
-    marginVertical: 30,
-    marginBottom: 40
+    marginVertical: 20,
   },
   trashCountNumber: {
     color: Colors.primary,
@@ -131,6 +131,14 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 30,
     textAlign: 'center'
+  },
+  previousTrashesCountContainer: {
+    marginHorizontal: "auto",
+    marginBottom: 35
+  },
+  previousTrashCount: {
+    color: Colors.secondary,
+    fontSize: 17,
   },
   pickerButtonRow: {
     flexDirection: "row",

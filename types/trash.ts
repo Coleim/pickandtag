@@ -1,6 +1,7 @@
 
 export type Trash = {
   id: string;
+  event_id?: string;
   category: string;
   latitude: string;
   longitude: string;
@@ -16,4 +17,7 @@ export type Trash = {
 };
 
 
-
+export type TrashCount = {
+  category?: string;
+  count: number;
+}

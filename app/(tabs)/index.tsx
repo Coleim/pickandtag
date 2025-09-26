@@ -13,6 +13,7 @@ import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 export default function HomeScreen() {
   const router = useRouter();
   const { isInit, currentXp, weeklyTrashes } = useStore(playerStore);
+  const bestWeek = useStore(playerStore, store => store.trashCount?.bestWeek);
   // REVIEW: Consider using a selector to subscribe only to needed slices to reduce rerenders.
   const totalGlobal = weeklyTrashes.length;
 
@@ -40,7 +41,8 @@ export default function HomeScreen() {
         <View style={styles.header}>
           <Text style={styles.headerTitle}>Cette semaine, tu as collecté</Text>
           <Text style={styles.headerCount}>{totalGlobal.toLocaleString()} déchet{totalGlobal > 1 ? 's' : ''} !</Text>
-          <TrashBreakdown totalGlobal={totalGlobal} categoryBreakdown={categoryBreakdown} />
+          <Text style={styles.bestScoreText}>Meilleur score : {bestWeek?.count ?? 0} déchets en une semaine</Text>
+          <TrashBreakdown categoryBreakdown={categoryBreakdown} />
         </View>
       </View>
 
@@ -104,7 +106,7 @@ const styles = StyleSheet.create({
   headerTitle: { fontSize: 18, color: "#fff", marginTop: 8, marginBottom: 4, textAlign: "center" },
   headerCount: { fontSize: 28, fontWeight: "700", color: "#fff", textAlign: "center" },
   colorDot: { width: 12, height: 12, borderRadius: 6, marginRight: 6 },
-
+  bestScoreText: { color: Colors.secondary },
   mapBox: {
     height: 150,
     margin: 16,

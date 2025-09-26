@@ -1,7 +1,6 @@
 import { Colors } from "@/constants/Colors";
-import { FontAwesome5 } from "@expo/vector-icons";
 import React from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
 type XPProps = {
   level: number;
@@ -26,9 +25,9 @@ export default function XPSection({ level, xp, xpForNext, title }: XPProps) {
         <Text style={styles.text}>
           XP : {xp} / {xpForNext ?? xp}
         </Text>
-        <TouchableOpacity >
-          <FontAwesome5 name="jedi" size={20} />
-        </TouchableOpacity>
+        {/* <TouchableOpacity > */}
+        {/*   <FontAwesome5 name="jedi" size={20} /> */}
+        {/* </TouchableOpacity> */}
       </View>
 
     </View>

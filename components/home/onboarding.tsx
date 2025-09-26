@@ -25,7 +25,7 @@ export default function Onboarding() {
             style={styles.image}
             resizeMode="contain"
           />
-          <Text style={styles.text}>Aide Garbo et ramasse un déchet</Text>
+          <Text style={styles.text}>Aide Tritou et ramasse un déchet</Text>
           <View style={styles.spacer}></View>
         </View>
 
@@ -58,7 +58,7 @@ export default function Onboarding() {
             style={styles.image}
             resizeMode="contain"
           />
-          <Text style={styles.text}>Garbo est fier de toi. À toi de jouer !</Text>
+          <Text style={styles.text}>Tritou est fier de toi. À toi de jouer !</Text>
           <Button title="Commencer à collecter" onPress={() => router.navigate("/collect/new-trash")} isPrimary />
         </View>
       </Swiper>

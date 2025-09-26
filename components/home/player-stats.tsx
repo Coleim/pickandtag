@@ -2,7 +2,6 @@ import { Colors } from "@/constants/Colors";
 import { getLevelForXP } from "@/constants/levels";
 import React from "react";
 import { StyleSheet, View } from "react-native";
-import { ShareTwitter } from "./share-twitter";
 import XPSection from "./xp-section";
 
 export default function PlayerStats({ currentXp }: { currentXp: number }) {
@@ -21,7 +20,7 @@ export default function PlayerStats({ currentXp }: { currentXp: number }) {
       <XPSection level={current.level} xp={currentXp} xpForNext={next?.xpRequired} title={current.title} />
       {/* <BadgesSection badges={badges} /> */}
       {/* REVIEW: ShareTwitter triggers network intent; consider guarding for web and adding analytics event. */}
-      <ShareTwitter xp={currentXp} />
+      {/* <ShareTwitter xp={currentXp} /> */}
     </View>
   );
 }

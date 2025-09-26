@@ -12,7 +12,7 @@ export default function RootLayout() {
     <SafeAreaProvider>
       {!ready ? (
         <RootGate onReady={() => setReady(true)} />
-        {/* REVIEW: Extract an AppInitGate that also waits for store/DB initialization and hides splash. */}
+        /* REVIEW: Extract an AppInitGate that also waits for store/DB initialization and hides splash. */
       ) : (
         <Stack screenOptions={{ headerShown: false }}>
           <Stack.Screen name="(tabs)" />

@@ -4,7 +4,7 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import { StyleSheet, Text, View } from "react-native";
 
 
-export default function TrashBreakdown({ totalGlobal, categoryBreakdown }: { totalGlobal: number, categoryBreakdown: { type: string, amount: number }[] }) {
+export default function TrashBreakdown({ categoryBreakdown }: { categoryBreakdown: { type: string, amount: number }[] }) {
 
   return (
     <View style={styles.breakdownWrapper}>

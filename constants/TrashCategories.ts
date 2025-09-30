@@ -1,4 +1,5 @@
 import { CategoryConfig } from "@/types/categoryConfig";
+import { TrashCount } from "@/types/trash";
 import { Colors } from "./Colors";
 
 // Categories mises à jour
@@ -11,7 +12,13 @@ export const TrashCategories: CategoryConfig = {
   Autre: { color: Colors.otherCategory, icon: "trash", label: "Autre", points: 5 },
 };
 
-
-
-
+export function getCategoryBreakdown(trashes: TrashCount[]) {
+  const map: Record<string, number> = {};
+  for (let trash of trashes) {
+    if (trash.category) {
+      map[trash.category] = (map[trash.category] ?? 0) + trash.count;
+    }
+  }
+  return Object.entries(map).map(([type, amount]) => ({ type, amount }));
+}
 

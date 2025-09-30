@@ -21,3 +21,5 @@ export type TrashCount = {
   category?: string;
   count: number;
 }
+
+

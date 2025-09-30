@@ -1,0 +1,10 @@
+{
+  "day": "Jour",
+  "this_week": "Cette Semaine",
+  "this_month": "Ce Mois",
+  "total": "Total",
+  "yesterday": "Hier",
+  "today": "Aujourd’hui",
+  "trashes_collected": "{count} collectés {period}"
+}
+

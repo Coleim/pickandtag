@@ -1,31 +1,25 @@
+import { LastCollects } from "@/components/collect/last-collects";
 import { Fab } from "@/components/global/buttons";
-import { LastCollects } from "@/components/home/last-collects";
 import PlayerStats from "@/components/home/player-stats";
 import TrashBreakdown from "@/components/stats/trashes-breakdown";
 import { Colors } from "@/constants/Colors";
+import { useCategoryBreakdown } from "@/hooks/categoryBreakdown";
 import { playerStore } from "@/stores/player-store";
 import { useStore } from "@tanstack/react-store";
 import { useRouter } from "expo-router";
-import React, { useMemo } from "react";
+import React from "react";
 import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 
 
 export default function HomeScreen() {
   const router = useRouter();
-  const { isInit, currentXp, weeklyTrashes } = useStore(playerStore);
+  const isInit = useStore(playerStore, store => store.isInit);
+  const currentXp = useStore(playerStore, store => store.currentXp);
+  const weeklyTrashes = useStore(playerStore, store => store.weeklyTrashes);
   const bestWeek = useStore(playerStore, store => store.trashCount?.bestWeek);
-  // REVIEW: Consider using a selector to subscribe only to needed slices to reduce rerenders.
+  const weeklyCount = useStore(playerStore, store => store.trashCount?.weekly);
   const totalGlobal = weeklyTrashes.length;
-
-  const categoryBreakdown = useMemo(() => {
-    const map: Record<string, number> = {};
-    for (let trash of weeklyTrashes) {
-      map[trash.category] = (map[trash.category] ?? 0) + 1;
-    }
-    return Object.entries(map).map(([type, amount]) => ({ type, amount }));
-    // REVIEW: If categories set is stable, memoize with shallow equals; heavy lists may benefit from useMemo + useMemoizedFn.
-  }, [weeklyTrashes]);
-
+  const categoryBreakdown = useCategoryBreakdown(weeklyCount ?? []);
   if (!isInit) {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
@@ -48,15 +42,9 @@ export default function HomeScreen() {
 
       <View style={styles.content}>
         <PlayerStats currentXp={currentXp} />
-
-        {/* Dernières collectes */}
-        {/* REVIEW: Virtualize long lists; if weeklyTrashes can grow, use FlatList with keyExtractor. */}
         <LastCollects trashes={weeklyTrashes} />
-        {/* Floating Add Button */}
       </View >
-      {/* REVIEW: Extract a Reusable FAB (e.g., AddTrashFab) with prewired navigation/haptics. */}
       <Fab onPress={() => router.navigate("/collect/new-trash")} />
-      {/* REVIEW: Consider haptic feedback on press for better UX (expo-haptics). */}
     </View>
   );
 }
@@ -103,31 +91,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 
-  headerTitle: { fontSize: 18, color: "#fff", marginTop: 8, marginBottom: 4, textAlign: "center" },
-  headerCount: { fontSize: 28, fontWeight: "700", color: "#fff", textAlign: "center" },
-  colorDot: { width: 12, height: 12, borderRadius: 6, marginRight: 6 },
+  headerTitle: { fontSize: 18, color: Colors.text, marginTop: 8, marginBottom: 4, textAlign: "center" },
+  headerCount: { fontSize: 28, fontWeight: "700", color: Colors.text, textAlign: "center" },
   bestScoreText: { color: Colors.secondary },
-  mapBox: {
-    height: 150,
-    margin: 16,
-    borderRadius: 16,
-    overflow: "hidden",
-    backgroundColor: "#FAFAFA",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  mapButton: {
-    position: "absolute",
-    bottom: 12,
-    right: 12,
-    backgroundColor: Colors.primary,
-    borderRadius: 20,
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  mapButtonText: { color: "#fff", marginLeft: 6 },
-
 });
 

@@ -14,10 +14,10 @@ type CollectItemProps = {
 
 // Composant memoisé
 const CollectItem = memo(({ item, categories }: CollectItemProps) => {
-  const cfg = categories[item.category] || { color: "#aaa", icon: "trash" };
+  const cfg = categories[item.category];
   const date = item.createdAt instanceof Date ? item.createdAt : new Date(item.createdAt);
 
-  function formatFriendlyDate(date: Date): string {
+  function formatFriendlyDate(date: Date, locale = Intl.DateTimeFormat().resolvedOptions().locale): string {
     const now = new Date();
     const diffMs = now.getTime() - date.getTime();
     const diffSec = Math.floor(diffMs / 1000);
@@ -33,7 +33,7 @@ const CollectItem = memo(({ item, categories }: CollectItemProps) => {
     if (diffDay === 1) return "Hier";
     if (diffDay <= 7) return `il y a ${diffDay} jours`;
 
-    return date.toLocaleDateString("fr-FR", {
+    return date.toLocaleDateString(locale, {
       day: "2-digit",
       month: "short",
       year: "numeric",

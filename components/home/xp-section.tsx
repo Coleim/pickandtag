@@ -3,25 +3,19 @@ import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 
 type XPProps = {
-  level: number;
   xp: number;
   xpForNext?: number | undefined;
-  title: string;
 };
 
-export default function XPSection({ level, xp, xpForNext, title }: XPProps) {
-
+export default function XPSection({ xp, xpForNext }: XPProps) {
   const progress = xpForNext ? Math.min(xp / xpForNext, 1) : xp;
-
   return (
-    <View style={styles.section}>
-      <Text style={styles.title}>Niveau {level} - {title}</Text>
+    <View >
       <View style={styles.progressBackground}>
         <View style={[styles.progressFill, { flex: progress }]} />
         <View style={{ flex: 1 - progress }} />
       </View>
       <View style={styles.xpText}>
-
         <Text style={styles.text}>
           XP : {xp} / {xpForNext ?? xp}
         </Text>
@@ -35,14 +29,7 @@ export default function XPSection({ level, xp, xpForNext, title }: XPProps) {
 }
 
 const styles = StyleSheet.create({
-  section: {
-    marginBottom: 20,
-  },
-  title: {
-    fontWeight: "bold",
-    fontSize: 16,
-    marginBottom: 8,
-  },
+
   progressBackground: {
     flexDirection: "row",
     height: 10,
@@ -54,10 +41,6 @@ const styles = StyleSheet.create({
   progressFill: {
     backgroundColor: Colors.accent,
     borderRadius: 5,
-  },
-  level: {
-    fontWeight: "bold",
-    fontSize: 15,
   },
   xpText: {
     flexDirection: 'row',

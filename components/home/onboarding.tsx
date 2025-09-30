@@ -1,4 +1,5 @@
 import { Button } from "@/components/global/buttons";
+import { Colors } from "@/constants/Colors";
 import { useRouter } from "expo-router";
 import React from "react";
 import { Dimensions, Image, StyleSheet, Text, View } from "react-native";
@@ -15,8 +16,8 @@ export default function Onboarding() {
       <Swiper
         loop={false}
         showsPagination={true}
-        activeDotColor="#4CAF50"
-        dotColor="#ccc"
+        activeDotColor={Colors.accent}
+        dotColor={Colors.inactive}
       >
         {/* Étape 1 */}
         <View style={styles.slide}>
@@ -82,24 +83,12 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 18,
     textAlign: "center",
-    color: "#333",
+    color: Colors.text,
     marginBottom: 20,
   },
   spacer: {
     marginTop: 30,
     paddingVertical: 12,
-  },
-  button: {
-    marginTop: 20,
-    backgroundColor: "#4CAF50",
-    paddingVertical: 12,
-    paddingHorizontal: 30,
-    borderRadius: 25,
-  },
-  buttonText: {
-    fontSize: 16,
-    color: "#fff",
-    fontWeight: "bold",
-  },
+  }
 });
 

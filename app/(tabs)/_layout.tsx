@@ -8,8 +8,8 @@ import { ActivityIndicator, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function TabsLayout() {
-  // REVIEW: Consider memoizing derived values or using selector to avoid rerenders when unrelated store fields change.
-  const { hasTrashes, isInit } = useStore(playerStore);
+  const hasTrashes = useStore(playerStore, store => store.hasTrashes);
+  const isInit = useStore(playerStore, store => store.isInit);
 
   if (!isInit) {
     return (
@@ -42,10 +42,9 @@ export default function TabsLayout() {
 
             return <Ionicons name={iconName} size={size} color={color} />;
           },
-          tabBarActiveTintColor: Colors.primary,
+          tabBarActiveTintColor: Colors.accent,
           tabBarInactiveTintColor: Colors.inactive,
           headerShown: false,
-          // REVIEW: Consider setting tabBarStyle/background and safe-area handling on Android for gesture insets.
         })}
       >
         <Tabs.Screen name="index" options={{ title: "Accueil" }} />

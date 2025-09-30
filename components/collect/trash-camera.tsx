@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
   },
   overlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: "rgba(0,0,0,0.3)", // léger grisé
+    backgroundColor: Colors.disabled,
     alignItems: "center",
     justifyContent: "center",
   },

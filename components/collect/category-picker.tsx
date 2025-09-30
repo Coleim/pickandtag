@@ -6,7 +6,7 @@ import React, { useRef } from "react";
 import { Animated, Dimensions, StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native";
 
 
-export function CategoryPicker({ selected, onChange }: { selected: string; onChange: (value: string) => void; }) {
+export function CategoryPicker({ selected, onChange }: { selected: string | undefined; onChange: (value: string | undefined) => void; }) {
 
   const scaleAnim = useRef<{ [key: string]: Animated.Value }>({}).current;
 
@@ -14,7 +14,6 @@ export function CategoryPicker({ selected, onChange }: { selected: string; onCha
   Object.keys(TrashCategories).forEach((key) => {
     if (!scaleAnim[key]) scaleAnim[key] = new Animated.Value(1);
   })
-
 
   const handlePress = (key: string) => {
     // Animation de press
@@ -36,20 +35,20 @@ export function CategoryPicker({ selected, onChange }: { selected: string; onCha
                 styles.pill,
                 {
                   backgroundColor: isSelected ? value.color : Colors.white,
-                  borderColor: isSelected ? value.color : "#ccc",
+                  borderColor: isSelected ? value.color : Colors.disabled,
                   transform: [{ scale: scaleAnim[key] }],
                 },
               ]}
             >
 
               <FontAwesome5 name={value.icon as any} size={20}
-                color={isSelected ? "#fff" : value.color}
+                color={isSelected ? Colors.white : value.color}
                 style={{ marginRight: 6 }}
               />
               <Text
                 style={[
                   styles.pillText,
-                  { color: isSelected ? "#fff" : value.color },
+                  { color: isSelected ? Colors.white : value.color },
                 ]}
               >
                 {value.label}

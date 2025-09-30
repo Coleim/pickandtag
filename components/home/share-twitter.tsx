@@ -2,6 +2,7 @@
 import * as Linking from 'expo-linking';
 import { Text, TouchableOpacity } from "react-native";
 
+/* REVIEW: ShareTwitter triggers network intent; consider guarding for web and adding analytics event. */
 export function ShareTwitter({ xp }: { xp: number }) {
 
   function shareOnTwitter() {

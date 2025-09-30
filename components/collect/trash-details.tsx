@@ -7,8 +7,7 @@ import { CategoryPicker } from "./category-picker";
 
 
 export function TrashDetails({ base64Picture, city, country, onAddTrash }: { base64Picture: string, city: string | null, country: string | null, onAddTrash: (category: string, addAnother: boolean) => void }) {
-  const [category, setCategory] = useState("Plastique");
-  // REVIEW: Default category may bias data; consider requiring explicit user choice before enabling submit.
+  const [category, setCategory] = useState<string | undefined>();
 
   return (
     <View style={detailsStyles.container}>
@@ -24,13 +23,10 @@ export function TrashDetails({ base64Picture, city, country, onAddTrash }: { bas
         <NoteText text={`Ce déchet a été ramassé à ${city}, ${country}`} />
       }
       <SubTitle text={"Quel type de déchet ?"} />
-      {/* REVIEW: Extract CategorySelect block (label + picker + validation) for reuse. */}
       <CategoryPicker selected={category} onChange={setCategory} />
-      {/* Submit Button */}
       <View style={{ marginTop: 24, gap: 10 }}>
-        <Button onPress={() => onAddTrash(category, false)} title="Collecter" isPrimary />
-        <Button onPress={() => onAddTrash(category, true)} title="Collecter et Ajouter un autre" />
-        {/* REVIEW: Disable buttons until category selected and image loaded; add haptic feedback. */}
+        <Button disabled={!category} onPress={() => onAddTrash(category!, false)} title="Collecter" isPrimary />
+        <Button disabled={!category} onPress={() => onAddTrash(category!, true)} title="Collecter et Ajouter un autre" />
       </View>
 
     </View>

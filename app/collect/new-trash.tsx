@@ -16,7 +16,6 @@ export default function NewTrash() {
   const router = useRouter();
 
   const [locationInfo, setLocationInfo] = useState<LocationInfo>({ latitude: '', longitude: '', city: '', region: '', subregion: '', country: '' });
-  // REVIEW: Consider initializing with undefineds and formatting lazily to keep numeric types for lat/lon.
   const [base64Picture, setBase64Picture] = useState<string>('');
 
   useEffect(() => {
@@ -76,9 +75,9 @@ export default function NewTrash() {
         router.back();
       }
     })
-    .catch(() => {
-      // REVIEW: Consider error handling and user feedback (Toast/Alert) on DB failure.
-    });
+      .catch(() => {
+        // REVIEW: Consider error handling and user feedback (Toast/Alert) on DB failure.
+      });
   }
 
   function getHeaderTitle() {

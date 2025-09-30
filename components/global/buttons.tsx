@@ -9,19 +9,17 @@ type ButtonProps = {
   loading?: boolean,
   onPress: () => void,
   iconName?: string | null,
-  isPrimary?: boolean
+  isPrimary?: boolean,
+  disabled?: boolean
 };
 
 
-export function Button({ title, loadingTitle, loading = false, onPress, iconName, isPrimary = false }: ButtonProps) {
+export function Button({ title, loadingTitle, loading = false, onPress, iconName, isPrimary = false, disabled = false }: ButtonProps) {
   return (
-    <TouchableOpacity disabled={loading} onPress={onPress} style={isPrimary ? buttonStyles.primary : buttonStyles.secondary}>
-      {iconName && <FontAwesome5 name={iconName} size={20}
-        color={Colors.white}
-      />
-      }
-      <Text style={isPrimary ? buttonStyles.primaryText : buttonStyles.secondaryText}>{loading ? loadingTitle : title}</Text>
-      {/* REVIEW: loadingTitle can be null; provide a sensible default to avoid empty text. */}
+    <TouchableOpacity disabled={loading || disabled} onPress={onPress}
+      style={[isPrimary ? buttonStyles.primary : buttonStyles.secondary, (loading || disabled) && buttonStyles.disabled]}>
+      {iconName && <FontAwesome5 name={iconName} size={20} color={Colors.white} />}
+      <Text style={isPrimary ? buttonStyles.primaryText : buttonStyles.secondaryText}>{loading ? loadingTitle ?? "Loading" : title}</Text>
     </TouchableOpacity>
   )
 }
@@ -43,6 +41,5 @@ export function Fab({ title, onPress }: FabProps) {
   )
 }
 
-// REVIEW: Consider extracting an AddTrashFab that embeds navigation/haptics to reduce repetition across screens.
 
 

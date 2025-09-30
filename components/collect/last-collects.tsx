@@ -12,7 +12,6 @@ export function LastCollects({ trashes }: { trashes: Trash[] }) {
   )
 
   function sortTrashes(trashes: Trash[]): Trash[] {
-    // REVIEW: Avoid in-place sort; clone first to keep prop immutable.
     return [...trashes].sort((a: Trash, b: Trash) => {
       return b.createdAt.getTime() - a.createdAt.getTime();
     })
@@ -29,7 +28,6 @@ export function LastCollects({ trashes }: { trashes: Trash[] }) {
         renderItem={({ item }) => (
           <CollectItem item={item} categories={TrashCategories} />
         )} />
-      {/* REVIEW: Consider ListEmptyComponent for empty states and contentContainerStyle padding for last item spacing. */}
     </View>
 
   );

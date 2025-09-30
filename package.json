@@ -47,7 +47,8 @@
     "react-native-screens": "~4.16.0",
     "react-native-swiper": "^1.6.0",
     "react-native-web": "^0.21.0",
-    "react-native-webview": "13.15.0"
+    "react-native-webview": "13.15.0",
+    "expo-localization": "~17.0.7"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

@@ -1,6 +1,8 @@
 import PlayerStats from "@/components/home/player-stats";
 import TrashBreakdown from "@/components/stats/trashes-breakdown";
 import { Colors } from "@/constants/Colors";
+import { useCategoryBreakdown } from "@/hooks/categoryBreakdown";
+import { translate } from "@/locales";
 import { playerStore } from "@/stores/player-store";
 import { TrashCount } from "@/types/trash";
 import { useStore } from "@tanstack/react-store";
@@ -11,34 +13,34 @@ export default function ProfileScreen() {
 
   const currentXp = useStore(playerStore, playerStore => playerStore.currentXp);
   const trashCount = useStore(playerStore, playerStore => playerStore.trashCount);
-  const [selected, setSelected] = useState("Jour");
+  const [selected, setSelected] = useState("day");
   const [selectedTrashCount, setSelectTrashCount] = useState(0);
   const [previousPeriodTrashCount, setPreviousPeriodTrashCount] = useState(0);
   const [lastPeriodText, setLastPeriodText] = useState<string | undefined>(selected);
 
-  const options = ["Jour", "Cette Semaine", "Ce Mois", "Total"];
+  const optionsKeys = ["day", "this_week", "this_month", "total"];
 
   const selectedOption: { trash: TrashCount[], previousTrash?: TrashCount[], text?: string } = useMemo(() => {
     switch (selected) {
-      case "Jour":
+      case "day":
         return {
           trash: trashCount?.daily ?? [],
           previousTrash: trashCount?.yesterday ?? [],
           text: "hier"
         };
-      case "Cette Semaine":
+      case "this_week":
         return {
           trash: trashCount?.weekly ?? [],
           previousTrash: trashCount?.lastWeek ?? [],
           text: "la semaine dernière"
         }
-      case "Ce Mois":
+      case "this_month":
         return {
           trash: trashCount?.monthly ?? [],
           previousTrash: trashCount?.lastMonth ?? [],
           text: "le mois dernier"
         }
-      case "Total":
+      case "total":
         return {
           trash: trashCount?.total ?? [],
         }
@@ -57,15 +59,7 @@ export default function ProfileScreen() {
     setLastPeriodText(selectedOption.text)
   }, [selectedOption]);
 
-  //TODO: Find a way to export it in common
-  const categoryBreakdown = useMemo(() => {
-    const map: Record<string, number> = {};
-    for (let trash of selectedOption.trash ?? []) {
-      map[trash.category] = (map[trash.category] ?? 0) + trash.count;
-    }
-    return Object.entries(map).map(([type, amount]) => ({ type, amount }));
-
-  }, [selectedOption]);
+  const categoryBreakdown = useCategoryBreakdown(selectedOption.trash ?? []);
 
   return (
     <View style={styles.container}>
@@ -84,12 +78,12 @@ export default function ProfileScreen() {
         </View>
         <TrashBreakdown categoryBreakdown={categoryBreakdown} />
 
-        <View style={{ marginTop: 40, marginHorizontal: "auto" }}>
+        <View style={styles.pickerContainer}>
           {/* TODO: Sortir en composant */}
           <View style={styles.pickerButtonRow}>
-            {options.map((option, index) => {
+            {optionsKeys.map((option, index) => {
               const isFirst = index === 0;
-              const isLast = index === options.length - 1;
+              const isLast = index === optionsKeys.length - 1;
               const isSelected = selected === option;
               return (
                 <TouchableOpacity key={option}
@@ -98,7 +92,7 @@ export default function ProfileScreen() {
                   isSelected && styles.pickerSelected,
                   isFirst && styles.pickerFirstSegment,
                   isLast && styles.pickerLastSegment]}>
-                  <Text style={[styles.pickerButtonText, isSelected && styles.selectedText]}>{option}</Text>
+                  <Text style={[styles.pickerButtonText, isSelected && styles.selectedText]}>{translate(option)}</Text>
                 </TouchableOpacity>
               )
             })}
@@ -108,6 +102,7 @@ export default function ProfileScreen() {
     </View >
   );
 }
+
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: Colors.background },
@@ -121,20 +116,16 @@ const styles = StyleSheet.create({
     marginVertical: 20,
   },
   trashCountNumber: {
-    color: Colors.primary,
+    color: Colors.accent,
     fontSize: 80,
     fontWeight: 'bold',
     textAlign: 'center'
   },
   trashText: {
-    color: Colors.primary,
+    color: Colors.accent,
     fontWeight: 'bold',
     fontSize: 30,
     textAlign: 'center'
-  },
-  previousTrashesCountContainer: {
-    marginHorizontal: "auto",
-    marginBottom: 35
   },
   previousTrashCount: {
     color: Colors.secondary,
@@ -150,6 +141,10 @@ const styles = StyleSheet.create({
   },
   pickerButtonText: {
     color: Colors.text
+  },
+  pickerContainer: {
+    marginTop: 40,
+    marginHorizontal: "auto",
   },
   pickerFirstSegment: {
     borderTopLeftRadius: 4,
@@ -174,6 +169,6 @@ const styles = StyleSheet.create({
     width: "100%",
     alignItems: "center",
   },
-  headerTitle: { fontSize: 18, color: "#fff", marginTop: 8, marginBottom: 4, textAlign: "center" },
+  headerTitle: { fontSize: 18, color: Colors.text, marginTop: 8, marginBottom: 4, textAlign: "center" },
 });
 

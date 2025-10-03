@@ -75,7 +75,7 @@ export default function NewTrash() {
         router.back();
       }
     })
-      .catch(() => {
+      .catch((err) => {
         // REVIEW: Consider error handling and user feedback (Toast/Alert) on DB failure.
       });
   }

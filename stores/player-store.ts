@@ -61,7 +61,7 @@ export function initializeTrashStore() {
         })),
         trashCount: {
           total: totalTrashCount,
-          bestWeek: bestWeek ?? null,
+          bestWeek: bestWeek ?? { count: 0 },
           monthly: monthlyTrashCount,
           weekly: weeklyTrashCount,
           daily: dailyTrashCount,

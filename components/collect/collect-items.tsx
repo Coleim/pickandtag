@@ -44,7 +44,7 @@ const CollectItem = memo(({ item, categories }: CollectItemProps) => {
     <View style={styles.collectItem}>
       <FontAwesome5 name={cfg.icon as any} size={20} color={cfg.color} />
       <Text style={styles.collectText}>
-        {item.category}•{formatFriendlyDate(date)} à {item.city}
+        {item.category}•{formatFriendlyDate(date)} {item.city && ` à ${item.city}`}
       </Text>
       <Text style={styles.xpText}>+{TrashCategories[item.category].points}xp</Text>
     </View>

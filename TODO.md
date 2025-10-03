@@ -2,7 +2,7 @@
 
 
 - [X] Fixer le scroll
-
+- [ ] Derniere collectes vides => Afficher "Pas de dechets cette semaine"
 
 
 ### Profile

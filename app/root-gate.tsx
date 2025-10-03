@@ -4,6 +4,9 @@ import React, { useEffect, useState } from "react";
 import { ActivityIndicator, View } from "react-native";
 import PermissionsScreen from "./permissions-screen";
 
+import { SafeAreaView } from "react-native-safe-area-context";
+
+
 export default function RootGate({ onReady }: { onReady: () => void }) {
   const [loading, setLoading] = useState(true);
   const [showWelcome, setShowWelcome] = useState(false);
@@ -17,13 +20,11 @@ export default function RootGate({ onReady }: { onReady: () => void }) {
   useEffect(() => {
     const init = async () => {
       const perms = await checkPermissions();
-
       if (!perms) {
         setShowWelcome(true);
       } else {
         onReady();
       }
-
       setLoading(false);
     };
     init();
@@ -39,7 +40,9 @@ export default function RootGate({ onReady }: { onReady: () => void }) {
 
   if (showWelcome) {
     return (
-      <PermissionsScreen onReady={onReady} />
+      <SafeAreaView style={{ flex: 1 }} edges={['left', 'right', 'bottom']}>
+        < PermissionsScreen onReady={onReady} />
+      </SafeAreaView>
     );
   }
 

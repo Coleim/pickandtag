@@ -1,0 +1,54 @@
+import { Colors } from "@/shared/constants/colors";
+import { TrashCategories } from "@/shared/constants/trash-categories";
+import { FontAwesome5 } from "@expo/vector-icons";
+import { StyleSheet, Text, View } from "react-native";
+
+
+export default function TrashBreakdown({ categoryBreakdown }: { categoryBreakdown: { type: string, amount: number }[] }) {
+
+  return (
+    <View style={styles.breakdownWrapper}>
+      {categoryBreakdown.map((c) => {
+        const cfg = TrashCategories[c.type] || { color: "#aaa", icon: "trash" };
+        const count = c.amount;
+        if (count === 0) return null;
+        return (
+          <View key={c.type} style={[styles.breakdownPill, { backgroundColor: cfg.color }]}>
+            <Text style={styles.breakdownPillText}>
+              {count}
+            </Text>
+            <FontAwesome5 name={cfg.icon as any} size={20} color={Colors.white} />
+          </View>
+        );
+      })}
+    </View>
+  );
+
+}
+
+const styles = StyleSheet.create({
+  breakdownWrapper: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "center",
+    marginTop: 12,
+    gap: 8,
+  },
+  breakdownPill: {
+    width: 50,
+    height: 50,
+    borderRadius: 15,
+    // borderWidth: 1,
+    justifyContent: "flex-start",
+    alignItems: 'center',
+    // borderColor: Colors.secondary,
+  },
+  breakdownPillText: {
+
+    color: Colors.white,
+    fontWeight: "600",
+    fontSize: 14,
+    textAlign: "center",
+  },
+});
+

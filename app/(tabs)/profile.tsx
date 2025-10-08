@@ -1,10 +1,10 @@
-import PlayerStats from "@/components/home/player-stats";
-import TrashBreakdown from "@/components/stats/trashes-breakdown";
-import { Colors } from "@/constants/Colors";
-import { useCategoryBreakdown } from "@/hooks/categoryBreakdown";
+import PlayerStats from "@/features/player/components/player-stats";
+import TrashBreakdown from "@/features/trash/components/trashes-breakdown";
+import { Colors } from "@/shared/constants/colors";
+import { useCategoryBreakdown } from "@/features/trash/hooks/categoryBreakdown";
 import { translate } from "@/locales";
-import { playerStore } from "@/stores/player-store";
-import { TrashCount } from "@/types/trash";
+import { playerStore } from "@/shared/stores/player-store";
+import { TrashCount } from "@/shared/types/trash";
 import { useStore } from "@tanstack/react-store";
 import { useEffect, useMemo, useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";

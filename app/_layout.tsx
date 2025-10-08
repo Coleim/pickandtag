@@ -17,7 +17,7 @@ export default function RootLayout() {
         <Stack screenOptions={{ headerShown: false }}>
           <Stack.Screen name="(tabs)" />
           <Stack.Screen
-            name="collect/new-trash"
+            name="collect/new-collect"
             options={{ presentation: "modal", headerShown: false }}
           />
         </Stack>

@@ -1,6 +1,6 @@
 import Onboarding from "@/components/home/onboarding";
-import { Colors } from "@/constants/Colors";
-import { playerStore } from "@/stores/player-store";
+import { Colors } from "@/shared/constants/colors";
+import { playerStore } from "@/shared/stores/player-store";
 import { Ionicons } from "@expo/vector-icons";
 import { useStore } from "@tanstack/react-store";
 import { Tabs } from "expo-router";

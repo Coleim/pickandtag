@@ -1,4 +1,4 @@
-import { Button, Fab } from "@/components/global/buttons";
+import { Button, Fab } from "@/shared/components/ui/buttons";
 import { Camera } from "expo-camera";
 import * as Location from "expo-location";
 import React, { useState } from "react";

@@ -1,10 +1,10 @@
-import { LastCollects } from "@/components/collect/last-collects";
-import { Fab } from "@/components/global/buttons";
-import PlayerStats from "@/components/home/player-stats";
-import TrashBreakdown from "@/components/stats/trashes-breakdown";
-import { Colors } from "@/constants/Colors";
-import { useCategoryBreakdown } from "@/hooks/categoryBreakdown";
-import { playerStore } from "@/stores/player-store";
+import { LastCollects } from "@/features/trash/components/last-collects";
+import { Fab } from "@/shared/components/ui/buttons";
+import PlayerStats from "@/features/player/components/player-stats";
+import TrashBreakdown from "@/features/trash/components/trashes-breakdown";
+import { Colors } from "@/shared/constants/colors";
+import { useCategoryBreakdown } from "@/features/trash/hooks/categoryBreakdown";
+import { playerStore } from "@/shared/stores/player-store";
 import { useStore } from "@tanstack/react-store";
 import { useRouter } from "expo-router";
 import React from "react";
@@ -44,7 +44,7 @@ export default function HomeScreen() {
         <PlayerStats currentXp={currentXp} />
         <LastCollects trashes={weeklyTrashes} />
       </View >
-      <Fab onPress={() => router.navigate("/collect/new-trash")} />
+      <Fab onPress={() => router.navigate("/collect/new-collect")} />
     </View>
   );
 }

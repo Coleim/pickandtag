@@ -1,0 +1,1 @@
+export { NewCollectScreen as default } from "@/features/collect/screens/new-collect-screen"

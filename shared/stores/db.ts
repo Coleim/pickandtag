@@ -80,7 +80,7 @@ class Database {
     await this.isInitialized;
     console.log(" > getTrashesAfter ")
     const timestamp = date.getTime();
-    return db.getAllAsync(`SELECT * FROM trashes WHERE createdAt >= ? ORDER BY createdAt`, [timestamp]);
+    return db.getAllAsync(`SELECT id, category, city, createdAt FROM trashes WHERE createdAt >= ? ORDER BY createdAt`, [timestamp]);
   }
 
   async getTrashesByCategoriesAfter(date: Date): Promise<TrashCount[]> {

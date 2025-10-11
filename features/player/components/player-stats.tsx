@@ -2,7 +2,7 @@ import { Colors } from "@/shared/constants/colors";
 import { getLevelForXP } from "@/shared/constants/levels";
 import React, { useMemo } from "react";
 import { StyleSheet, Text, View } from "react-native";
-import XPSection from "../../../components/home/xp-section";
+import XPSection from "./xp-section";
 
 export default function PlayerStats({ currentXp }: { currentXp: number }) {
   const { current, next } = useMemo(() => getLevelForXP(currentXp), [currentXp]);

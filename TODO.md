@@ -7,56 +7,19 @@
 
 ### Profile
 
-#### Jour 1
-
-- [X] Mettre a jour le store
-- [X] faire le chargement de tous les dechets
-- [X] Afficher le nombre de dechets en Joli
-- [X] Rajouter la colonne "event_id"
-- [X] Injecter des fausses data hisrtorique
-- [X] Refaire les query pour plutot juste prendre les stats (plutot que tout) ⇒ sum
-- [X] Revoir la couleur verte primaire
-- [ ] Renommer Garbo en Gasbii
-- Recyclo
-- Cycla
-- **** Tritou 
-- Poubly
-- Ecotri
-- Biotri
-- Trikachu
-
-
-#### Jour 2 
-
-- [ ]  filtrer par region ??
-- [ ]  toujours sort les categories par nombre le plus grand (cf la requete sql)
-
-#### Jour 3
-
-- [ ] Generer un nom de joueur aleatoirement et l'afficher
+- [ ] Display Name : Si not auth - Generer un nom de joueur aleatoirement et l'afficher
 - [ ] Rajouter le device ID pour identification
+- [ ] UUID si auth 
+- [ ] isauth column
 
 
-# 🛣️ Roadmap Pick And Tag (Phase 1 Collecte Groupée & Account-Agnostic)
-
-### **Phase 1 - MVP and publication and testing**
-
-- [X]  ✅ Collecte / tag du déchet
-- [X]  ✅ Stats par jour / semaine / mois / total
-- [X]  Stats update
-Afficher les stat de hier/semaine derniere/mois dernier
-- [ ] Meilleur score : 120 déchets en une semaine
-A Verifier 
-- [X]  Changer le nom de Garbo
-- [ ]  Delivery Play Store
-- [ ]  Gather testers
-- [ ]  Small “fixes”
 
 ### **Phase 1.1 – MVP + Collecte Groupée**
 
 🎯 Objectif : rendre l’app **utile, sociale, et engageante dès le départ**
 
 - [ ]  🔑 Création de compte **optionnelle** (account-agnostic)
+- [ ]  Gestion du profil (display name, uuid, mail, sauver en base ? )
 - [ ]  🔑 **Créer une collecte groupée** → **nécessite un compte** (organisateur, gestion des événements, stats et badges)
 - [ ]  ✅ **Participer à une collecte groupée** → **account-agnostic** (pas besoin de compte pour rejoindre et taguer)
 - [ ]  **Collecte groupée** (événements locaux, participation visible)

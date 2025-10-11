@@ -1,5 +1,5 @@
-import { CategoryConfig } from "@/shared/types/categoryConfig";
-import { TrashCount } from "@/shared/types/trash";
+import { CategoryConfig } from "@/types/categoryConfig";
+import { TrashCount } from "@/types/trash";
 import { Colors } from "./colors";
 
 // Categories mises à jour

@@ -1,6 +1,5 @@
 import { Button } from "@/shared/components/ui/buttons";
-
-import { BodyText } from "@/components/global/titles";
+import { BodyText } from "@/shared/components/ui/titles";
 import { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { TrashCamera } from "./trash-camera";

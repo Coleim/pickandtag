@@ -1,4 +1,4 @@
-import { titlesStyles } from "@/shared/constants/TitlesStyles";
+import { titlesStyles } from "@/shared/constants/titles-styles";
 import { Text } from "react-native";
 
 export function Title({ text }: { text: string }) {

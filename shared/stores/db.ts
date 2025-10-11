@@ -1,6 +1,6 @@
-import { Player } from "@/shared/types/player";
-import { Trash, TrashCount } from "@/shared/types/trash";
-import { TrashCategory } from "@/shared/types/trashCategory";
+import { Player } from "@/types/player";
+import { Trash, TrashCount } from "@/types/trash";
+import { TrashCategory } from "@/types/trashCategory";
 import { randomUUID } from "expo-crypto";
 import * as SQLite from 'expo-sqlite';
 
@@ -78,12 +78,14 @@ class Database {
 
   async getTrashesAfter(date: Date): Promise<Trash[]> {
     await this.isInitialized;
+    console.log(" > getTrashesAfter ")
     const timestamp = date.getTime();
     return db.getAllAsync(`SELECT * FROM trashes WHERE createdAt >= ? ORDER BY createdAt`, [timestamp]);
   }
 
   async getTrashesByCategoriesAfter(date: Date): Promise<TrashCount[]> {
     await this.isInitialized;
+    console.log(" > getTrashesByCategoriesAfter ")
     const timestamp = date.getTime();
     return db.getAllAsync(`SELECT category, count(id) as count FROM trashes WHERE createdAt >= ? GROUP BY category ORDER BY count DESC`, [timestamp]);
   }
@@ -93,22 +95,27 @@ class Database {
     const fromTs = range.from.getTime();
     const toTs = range.to.getTime();
 
+    console.log(" > getTrashesByCategoriesBetween ")
     return db.getAllAsync(`SELECT category, count(id) as count FROM trashes WHERE createdAt >= ? AND createdAt < ? GROUP BY category ORDER BY count DESC`, [fromTs, toTs]);
   }
 
 
   async getTrashesByCategories(): Promise<TrashCount[]> {
     await this.isInitialized;
+    console.log(" > getTrashesByCategories ")
     return db.getAllAsync(`SELECT category, count(id) as count FROM trashes GROUP BY category ORDER BY count DESC`);
   }
 
   async getPlayer(): Promise<Player | null> {
     await this.isInitialized;
+    console.log(" > getPlayer ")
     return db.getFirstAsync('SELECT * FROM players');
   }
 
   async getBestWeek(): Promise<TrashCount | null> {
     await this.isInitialized;
+
+    console.log(" > getBestWeek ")
     return db.getFirstAsync(
       `SELECT 
         MIN(createdAt) as weekStart,

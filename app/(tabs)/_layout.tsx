@@ -1,4 +1,3 @@
-import Onboarding from "@/components/home/onboarding";
 import { Colors } from "@/shared/constants/colors";
 import { playerStore } from "@/shared/stores/player-store";
 import { Ionicons } from "@expo/vector-icons";
@@ -6,6 +5,7 @@ import { useStore } from "@tanstack/react-store";
 import { Tabs } from "expo-router";
 import { ActivityIndicator, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Onboarding from "../onboarding/onboarding";
 
 export default function TabsLayout() {
   const hasTrashes = useStore(playerStore, store => store.hasTrashes);

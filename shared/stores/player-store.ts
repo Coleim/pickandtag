@@ -1,5 +1,5 @@
 import { TrashCategories } from '@/shared/constants/trash-categories';
-import { Trash, TrashCount } from '@/shared/types/trash';
+import { Trash, TrashCount } from '@/types/trash';
 import { Store } from '@tanstack/react-store';
 import { database } from './db';
 
@@ -33,45 +33,52 @@ let initPromise: Promise<void> | null = null;
 export function initializeTrashStore() {
   if (!initPromise) {
     initPromise = (async () => {
-      // REVIEW: Consider adding try/catch around DB calls to set a recoverable error state.
-      const [hasTrashes, bestWeek, dailyTrashCount, weeklyTrashCount, monthlyTrashCount, totalTrashCount,
-        yesterdayTrashCount, lastWeekTrashCount, lastMonthTrashCount,
-        weeklyTrashes, player] = await Promise.all([
-          database.hasTrashes(),
-          database.getBestWeek(),
-          database.getTrashesByCategoriesAfter(getToday()),
-          database.getTrashesByCategoriesAfter(getThisWeek()),
-          database.getTrashesByCategoriesAfter(getThisMonth()),
-          database.getTrashesByCategories(),
-          database.getTrashesByCategoriesBetween(getYesterdayRange()),
-          database.getTrashesByCategoriesBetween(getLastWeek()),
-          database.getTrashesByCategoriesBetween(getLastMonth()),
-          database.getTrashesAfter(getThisWeek()),
-          database.getPlayer()
-        ]);
 
-      console.log(" bw: ", bestWeek)
-      playerStore.setState((state) => ({
-        ...state,
-        isInit: true,
-        hasTrashes: hasTrashes,
-        weeklyTrashes: weeklyTrashes.map((t: any) => ({
-          ...t,
-          createdAt: new Date(t.createdAt), // here we just convert from db timestamp to a real date
-        })),
-        trashCount: {
-          total: totalTrashCount,
-          bestWeek: bestWeek ?? { count: 0 },
-          monthly: monthlyTrashCount,
-          weekly: weeklyTrashCount,
-          daily: dailyTrashCount,
-          yesterday: yesterdayTrashCount,
-          lastWeek: lastWeekTrashCount,
-          lastMonth: lastMonthTrashCount
-        },
-        currentXp: player?.xp ?? 0,
-      }));
+      try {
 
+        // REVIEW: Consider adding try/catch around DB calls to set a recoverable error state.
+        const [hasTrashes, bestWeek, dailyTrashCount, weeklyTrashCount, monthlyTrashCount, totalTrashCount,
+          yesterdayTrashCount, lastWeekTrashCount, lastMonthTrashCount,
+          weeklyTrashes, player] = await Promise.all([
+            database.hasTrashes(),
+            database.getBestWeek(),
+            database.getTrashesByCategoriesAfter(getToday()),
+            database.getTrashesByCategoriesAfter(getThisWeek()),
+            database.getTrashesByCategoriesAfter(getThisMonth()),
+            database.getTrashesByCategories(),
+            database.getTrashesByCategoriesBetween(getYesterdayRange()),
+            database.getTrashesByCategoriesBetween(getLastWeek()),
+            database.getTrashesByCategoriesBetween(getLastMonth()),
+            database.getTrashesAfter(getThisWeek()),
+            database.getPlayer()
+          ]);
+
+
+        console.log(" bw: ", bestWeek)
+        playerStore.setState((state) => ({
+          ...state,
+          isInit: true,
+          hasTrashes: hasTrashes,
+          weeklyTrashes: weeklyTrashes.map((t: any) => ({
+            ...t,
+            createdAt: new Date(t.createdAt), // here we just convert from db timestamp to a real date
+          })),
+          trashCount: {
+            total: totalTrashCount,
+            bestWeek: bestWeek ?? { count: 0 },
+            monthly: monthlyTrashCount,
+            weekly: weeklyTrashCount,
+            daily: dailyTrashCount,
+            yesterday: yesterdayTrashCount,
+            lastWeek: lastWeekTrashCount,
+            lastMonth: lastMonthTrashCount
+          },
+          currentXp: player?.xp ?? 0,
+        }));
+
+      } catch (error) {
+        console.log("Error ", error)
+      }
     })();
   }
   return initPromise;

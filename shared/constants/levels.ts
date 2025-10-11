@@ -1,6 +1,6 @@
 
 
-import { Level } from "@/shared/types/level";
+import { Level } from "@/types/level";
 
 
 export const levels: Level[] = [

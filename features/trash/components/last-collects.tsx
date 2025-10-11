@@ -1,5 +1,5 @@
 import { TrashCategories } from "@/shared/constants/trash-categories";
-import { Trash } from "@/shared/types/trash";
+import { Trash } from "@/types/trash";
 import { useMemo } from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
 import CollectedItem from "./collected-items";

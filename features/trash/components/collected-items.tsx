@@ -1,7 +1,7 @@
 import { Colors } from "@/shared/constants/colors";
 import { TrashCategories } from "@/shared/constants/trash-categories";
-import { CategoryConfig } from "@/shared/types/categoryConfig";
-import { Trash } from "@/shared/types/trash";
+import { CategoryConfig } from "@/types/categoryConfig";
+import { Trash } from "@/types/trash";
 import { FontAwesome5 } from "@expo/vector-icons";
 import React, { memo } from "react";
 import { StyleSheet, Text, View } from "react-native";

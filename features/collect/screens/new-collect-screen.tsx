@@ -1,9 +1,7 @@
-import { TrashDetails } from "@/components/collect/trash-details";
-import TrashPhotoCapture from "@/components/collect/trash-photo-capture";
 import { Colors } from "@/shared/constants/colors";
 import { addTrash } from "@/shared/stores/player-store";
-import { LocationInfo } from "@/shared/types/locationInfo";
-import { Trash } from "@/shared/types/trash";
+import { LocationInfo } from "@/types/locationInfo";
+import { Trash } from "@/types/trash";
 import { MaterialIcons } from "@expo/vector-icons";
 import { randomUUID } from 'expo-crypto';
 import * as Location from 'expo-location';
@@ -11,8 +9,10 @@ import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { TrashDetails } from "../components/trash-details";
+import TrashPhotoCapture from "../components/trash-photo-capture";
 
-export default function NewCollectScreen() {
+export function NewCollectScreen() {
   const router = useRouter();
 
   const [locationInfo, setLocationInfo] = useState<LocationInfo>({ latitude: '', longitude: '', city: '', region: '', subregion: '', country: '' });
@@ -70,7 +70,7 @@ export default function NewCollectScreen() {
   function handleTrashAdded(category: string, addAnother: boolean) {
     addTrash(createTrash(category)).then(() => {
       if (addAnother) {
-        router.replace('/collect/new-trash');
+        router.replace('/collect/new-collect');
       } else {
         router.back();
       }

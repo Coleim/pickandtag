@@ -25,12 +25,14 @@ export function TrashCamera({
         try {
           const photo = await cameraRef.current.takePictureAsync({
             base64: true,
-            quality: 0.5,
+            quality: 0.8,
             skipProcessing: true,
           });
           if (photo.base64) {
             onPhotoTaken(photo.base64);
           }
+        } catch (error) {
+          console.error('iiii Failed to capture image:', error);
         } finally {
           // petit délai pour éviter clignotement trop brutal
           setTimeout(() => setLoading(false), 500);
@@ -90,7 +92,6 @@ const styles = StyleSheet.create({
   },
   overlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: Colors.disabled,
     alignItems: "center",
     justifyContent: "center",
   },

@@ -1,9 +1,9 @@
-import { LastCollects } from "@/features/trash/components/last-collects";
-import { Fab } from "@/shared/components/ui/buttons";
 import PlayerStats from "@/features/player/components/player-stats";
+import { LastCollects } from "@/features/trash/components/last-collects";
 import TrashBreakdown from "@/features/trash/components/trashes-breakdown";
-import { Colors } from "@/shared/constants/colors";
 import { useCategoryBreakdown } from "@/features/trash/hooks/categoryBreakdown";
+import { Fab } from "@/shared/components/ui/buttons";
+import { Colors } from "@/shared/constants/colors";
 import { playerStore } from "@/shared/stores/player-store";
 import { useStore } from "@tanstack/react-store";
 import { useRouter } from "expo-router";
@@ -18,7 +18,7 @@ export default function HomeScreen() {
   const weeklyTrashes = useStore(playerStore, store => store.weeklyTrashes);
   const bestWeek = useStore(playerStore, store => store.trashCount?.bestWeek);
   const weeklyCount = useStore(playerStore, store => store.trashCount?.weekly);
-  const totalGlobal = weeklyTrashes.length;
+  const totalGlobal = weeklyCount?.reduce((acc, val) => acc + val.count, 0) || 0;
   const categoryBreakdown = useCategoryBreakdown(weeklyCount ?? []);
   if (!isInit) {
     return (
@@ -26,6 +26,10 @@ export default function HomeScreen() {
         <ActivityIndicator size="large" />
       </View>
     );
+  }
+
+  function handleTrashClicked(trashId: string) {
+    router.navigate(`/trash/view-trash?trashId=${trashId}`);
   }
 
   return (
@@ -42,7 +46,7 @@ export default function HomeScreen() {
 
       <View style={styles.content}>
         <PlayerStats currentXp={currentXp} />
-        <LastCollects trashes={weeklyTrashes} />
+        <LastCollects trashes={weeklyTrashes} onTrashClicked={handleTrashClicked} />
       </View >
       <Fab onPress={() => router.navigate("/collect/new-collect")} />
     </View>

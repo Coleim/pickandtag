@@ -6,7 +6,7 @@ import { Image, StyleSheet, View } from "react-native";
 import { CategoryPicker } from "./category-picker";
 
 
-export function TrashDetails({ base64Picture, city, country, onAddTrash }: { base64Picture: string, city: string | null, country: string | null, onAddTrash: (category: string, addAnother: boolean) => void }) {
+export function TrashEntry({ base64Picture, city, country, onAddTrash }: { base64Picture: string, city: string | null, country: string | null, onAddTrash: (category: string, addAnother: boolean) => void }) {
   const [category, setCategory] = useState<string | undefined>();
 
   return (

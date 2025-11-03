@@ -1,8 +1,7 @@
-import { Colors } from "@/shared/constants/colors";
+import { CategoryPill } from "@/shared/components/ui/category-pill";
 import { TrashCategories } from "@/shared/constants/trash-categories";
-import { FontAwesome5 } from "@expo/vector-icons";
 import React, { useRef } from "react";
-import { Animated, Dimensions, StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native";
+import { Animated, Dimensions, StyleSheet, TouchableWithoutFeedback, View } from "react-native";
 
 
 export function CategoryPicker({ selected, onChange }: { selected: string | undefined; onChange: (value: string | undefined) => void; }) {
@@ -29,30 +28,7 @@ export function CategoryPicker({ selected, onChange }: { selected: string | unde
         const isSelected = selected === key;
         return (
           <TouchableWithoutFeedback key={key} onPress={() => handlePress(key)}>
-            <Animated.View
-              style={[
-                styles.pill,
-                {
-                  backgroundColor: isSelected ? value.color : Colors.white,
-                  borderColor: isSelected ? value.color : Colors.disabled,
-                  transform: [{ scale: scaleAnim[key] }],
-                },
-              ]}
-            >
-
-              <FontAwesome5 name={value.icon as any} size={20}
-                color={isSelected ? Colors.white : value.color}
-                style={{ marginRight: 6 }}
-              />
-              <Text
-                style={[
-                  styles.pillText,
-                  { color: isSelected ? Colors.white : value.color },
-                ]}
-              >
-                {value.label}
-              </Text>
-            </Animated.View>
+            <CategoryPill isSelected={isSelected} value={value} scale={scaleAnim[key]} />
           </TouchableWithoutFeedback>
         );
       })}

@@ -1,7 +1,7 @@
 import { TrashCategories } from '@/shared/constants/trash-categories';
+import { database } from '@/shared/database/db';
 import { Trash, TrashCount } from '@/types/trash';
 import { Store } from '@tanstack/react-store';
-import { database } from './db';
 
 type PlayerState = {
   isInit: boolean;
@@ -36,8 +36,20 @@ export function initializeTrashStore() {
 
       try {
 
+        const start = Date.now();
+
+        const t1 = Date.now();
+        await database.hasTrashes();
+        console.log('1️⃣ hasTrashes:', Date.now() - t1, 'ms');
+        const t2 = Date.now();
+        await database.hasTrashes();
+        console.log('2 hasTrashes:', Date.now() - t2, 'ms');
+
+
+
         // REVIEW: Consider adding try/catch around DB calls to set a recoverable error state.
-        const [hasTrashes, bestWeek, dailyTrashCount, weeklyTrashCount, monthlyTrashCount, totalTrashCount,
+        const [hasTrashes, bestWeek,
+          dailyTrashCount, weeklyTrashCount, monthlyTrashCount, totalTrashCount,
           yesterdayTrashCount, lastWeekTrashCount, lastMonthTrashCount,
           weeklyTrashes, player] = await Promise.all([
             database.hasTrashes(),
@@ -49,12 +61,13 @@ export function initializeTrashStore() {
             database.getTrashesByCategoriesBetween(getYesterdayRange()),
             database.getTrashesByCategoriesBetween(getLastWeek()),
             database.getTrashesByCategoriesBetween(getLastMonth()),
-            database.getTrashesAfter(getThisWeek()),
+            database.getLastNTrashes(20),
             database.getPlayer()
           ]);
 
 
-        console.log(" bw: ", bestWeek)
+        console.log('⏱️ TOTAL:', Date.now() - start, 'ms');
+
         playerStore.setState((state) => ({
           ...state,
           isInit: true,
@@ -75,6 +88,7 @@ export function initializeTrashStore() {
           },
           currentXp: player?.xp ?? 0,
         }));
+
 
       } catch (error) {
         console.log("Error ", error)
@@ -190,4 +204,54 @@ export async function addTrash(trash: Trash) {
   });
 }
 
+export async function deleteTrash(trash: Trash) {
+  await initializeTrashStore();
 
+  // 1️⃣ Delete from DB
+  await database.deleteTrashById(trash.id);
+
+  // 2️⃣ Subtract XP
+  const lostXP = TrashCategories[trash.category].points;
+  await database.addTrashToPlayer(-lostXP);
+
+  // 3️⃣ Update store
+  playerStore.setState((prev) => {
+    const newXP = Math.max(prev.currentXp - lostXP, 0);
+
+    const updateCount = (counts: TrashCount[] = [], category: string): TrashCount[] => {
+      return counts
+        .map(e => (e.category === category ? { ...e, count: Math.max(e.count - 1, 0) } : e))
+        .filter(e => e.count > 0);
+    };
+
+    const prevCounts = prev.trashCount ?? {
+      total: [],
+      bestWeek: { count: 0 },
+      monthly: [],
+      weekly: [],
+      daily: [],
+      yesterday: [],
+      lastWeek: [],
+      lastMonth: []
+    };
+
+    const updatedWeeklyTrashes = prev.weeklyTrashes.filter((t: Trash) => t.id !== trash.id);
+    const bestWeekCount = Math.max(prevCounts.bestWeek?.count ?? 0, updatedWeeklyTrashes.length);
+
+    return {
+      ...prev,
+      weeklyTrashes: updatedWeeklyTrashes,
+      trashCount: {
+        total: updateCount(prev.trashCount?.total, trash.category),
+        monthly: trash.createdAt >= getThisMonth() ? updateCount(prev.trashCount?.monthly, trash.category) : prev.trashCount?.monthly ?? [],
+        weekly: trash.createdAt >= getThisWeek() ? updateCount(prev.trashCount?.weekly, trash.category) : prev.trashCount?.weekly ?? [],
+        daily: trash.createdAt >= getToday() ? updateCount(prev.trashCount?.daily, trash.category) : prev.trashCount?.daily ?? [],
+        bestWeek: { count: bestWeekCount },
+        yesterday: prev.trashCount?.yesterday ?? [],
+        lastWeek: prev.trashCount?.lastWeek ?? [],
+        lastMonth: prev.trashCount?.lastMonth ?? [],
+      },
+      currentXp: newXP,
+    };
+  });
+}

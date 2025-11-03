@@ -1,10 +1,9 @@
-import { TrashCategories } from "@/shared/constants/trash-categories";
 import { Trash } from "@/types/trash";
 import { useMemo } from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
 import CollectedItem from "./collected-items";
 
-export function LastCollects({ trashes }: { trashes: Trash[] }) {
+export function LastCollects({ trashes, onTrashClicked }: { trashes: Trash[], onTrashClicked: (trashId: string) => void }) {
 
   const sortedTrashes: Trash[] = useMemo(
     () => sortTrashes(trashes),
@@ -26,7 +25,7 @@ export function LastCollects({ trashes }: { trashes: Trash[] }) {
         data={sortedTrashes}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <CollectedItem item={item} categories={TrashCategories} />
+          <CollectedItem item={item} onPress={() => onTrashClicked(item.id)} />
         )} />
     </View>
 

@@ -23,6 +23,7 @@
 export const Colors = {
   primary: "#88c76e",        // Vert doux principal
   accent: "#4CAF50",         // Vert plus saturé pour actions fortes
+  error: "#E57373",
 
   secondary: "#37474F",      // Gris anthracite → lisible sur vert clair
   inactive: "#9E9E9E",       // Gris neutre (inchangé)

@@ -1,8 +1,36 @@
 ### Bugs
 
 
-- [X] Fixer le scroll
-- [ ] Derniere collectes vides => Afficher "Pas de dechets cette semaine"
+
+- [X] Derniere collectes vides => Afficher les N derniers
+- [ ] Dans le profil, laisser le placeholder pour les types de déchet meme si y'en a pas
+
+- [X] Voir dechet (photo)
+- [ ] Supprimer dechet (erreur)
+
+- [ ] Changer la db → comment faire les updates ? Gerer differentes versions - https://chatgpt.com/c/68ea6304-408c-832a-be8e-d27582c5e52d
+verifier que ca sauve bien les images
+
+- [ ] Compresser les images - https://chatgpt.com/c/68ea6135-d3d8-832b-a567-8bde298a731e
+- [ ] Changer l’endroit ou on stocke les images
+
+
+- [ ] Regarder le loader pourquoi il est long 
+- [ ] Charger les weekly list en differe avec un loader sur la liste ?? 
+
+- [ ] Monitorer les perfs de chaque query db
+
+
+
+- [ ] Mettre la taille (plus ou moins de 2.5cm)
+- [ ] Plus d'exp si plus gros
+- [ ] Revoir l'exp avec la collecte d'aujourd'hui: 50 personnes. 12000
+
+
+- [ ] rajouter une categorie cigarette.
+- [ ] gps en direct pas lastknown loc. + afficher message d'erreur ( a la place de la loc) si pas trouve
+
+- [ ] Si dimanche on est pas nouvelle semaine.
 
 
 ### Profile
@@ -11,6 +39,8 @@
 - [ ] Rajouter le device ID pour identification
 - [ ] UUID si auth 
 - [ ] isauth column
+
+- [ ] Auth RLS a configurer
 
 
 
@@ -27,6 +57,10 @@
 - [ ]  🔑 Partage social simple
 - [ ]  ⭐ **XP & Levels** : si compte créé, gain d’XP et titres associés
 - [ ]  Extraire langage (fr)
+
+- [ ] Penser aux collectes ou on a juste un sachet et 1 pince ⇒ mesurer / tagger le sac apres coup
+Au poid / au volume
+
 
 ### **Phase 2 – Engagement**
 

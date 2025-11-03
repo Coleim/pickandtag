@@ -1,20 +1,19 @@
 import { Colors } from "@/shared/constants/colors";
 import { TrashCategories } from "@/shared/constants/trash-categories";
-import { CategoryConfig } from "@/types/categoryConfig";
 import { Trash } from "@/types/trash";
 import { FontAwesome5 } from "@expo/vector-icons";
 import React, { memo } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity } from "react-native";
 
 // Props du composant
 type CollectItemProps = {
   item: Trash;
-  categories: CategoryConfig
+  onPress: () => void
 };
 
 // Composant memoisé
-const CollectedItem = memo(({ item, categories }: CollectItemProps) => {
-  const cfg = categories[item.category];
+const CollectedItem = memo(({ item, onPress }: CollectItemProps) => {
+  const cfg = TrashCategories[item.category];
   const date = item.createdAt instanceof Date ? item.createdAt : new Date(item.createdAt);
 
   function formatFriendlyDate(date: Date, locale = Intl.DateTimeFormat().resolvedOptions().locale): string {
@@ -41,13 +40,13 @@ const CollectedItem = memo(({ item, categories }: CollectItemProps) => {
   }
 
   return (
-    <View style={styles.collectItem}>
+    <TouchableOpacity style={styles.collectItem} onPress={onPress}>
       <FontAwesome5 name={cfg.icon as any} size={20} color={cfg.color} />
       <Text style={styles.collectText}>
         {item.category}•{formatFriendlyDate(date)}{item.city && ` à ${item.city}`}
       </Text>
       <Text style={styles.xpText}>+{TrashCategories[item.category].points}xp</Text>
-    </View>
+    </TouchableOpacity>
   );
 });
 

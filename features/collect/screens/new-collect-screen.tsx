@@ -6,10 +6,10 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { randomUUID } from 'expo-crypto';
 import * as Location from 'expo-location';
 import { useRouter } from "expo-router";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { TrashDetails } from "../components/trash-details";
+import { TrashEntry } from "../components/trash-entry";
 import TrashPhotoCapture from "../components/trash-photo-capture";
 
 export function NewCollectScreen() {
@@ -17,37 +17,77 @@ export function NewCollectScreen() {
 
   const [locationInfo, setLocationInfo] = useState<LocationInfo>({ latitude: '', longitude: '', city: '', region: '', subregion: '', country: '' });
   const [base64Picture, setBase64Picture] = useState<string>('');
+  const [locationError, setLocationError] = useState<boolean>(false);
+
 
   useEffect(() => {
     async function getCurrentLocation() {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
-        // REVIEW: Surface a user-visible message/toast when permission is denied.
         return;
       }
-      let currentLocation = await Location.getLastKnownPositionAsync({});
+
+      let currentLocation: Location.LocationObject | null = null;
+
+      try {
+        // Try to get current position with 2 second timeout
+        currentLocation = await Promise.race([
+          Location.getCurrentPositionAsync({
+            accuracy: Location.Accuracy.Balanced,
+          }),
+          new Promise<Location.LocationObject>((_, reject) =>
+            setTimeout(() => reject(new Error('Timeout')), 2000)
+          )
+        ]);
+      } catch (error) {
+        console.log('Failed to get current position, falling back to last known:', error);
+        setLocationError(true);
+        // Fallback to last known position
+        try {
+          currentLocation = await Location.getLastKnownPositionAsync({});
+          console.log("what ? ")
+          console.log("current loc : ", currentLocation)
+        } catch (fallbackError) {
+          console.log('No location available:', fallbackError);
+          setLocationError(true);
+          return;
+        }
+      }
 
       if (currentLocation) {
-        setLocationInfo(prev => ({ ...prev, latitude: currentLocation.coords.latitude.toFixed(4), longitude: currentLocation.coords.longitude.toFixed(4) }));
+        setLocationError(false);
+        setLocationInfo(prev => ({
+          ...prev,
+          latitude: currentLocation.coords.latitude.toFixed(4),
+          longitude: currentLocation.coords.longitude.toFixed(4)
+        }));
+
         // Reverse geocode
-        let reverseGeocode = await Location.reverseGeocodeAsync({
-          latitude: currentLocation.coords.latitude,
-          longitude: currentLocation.coords.longitude,
-        });
-        if (reverseGeocode.length > 0) {
-          const place = reverseGeocode[0];
-          setLocationInfo(prev => ({
-            ...prev,
-            subregion: place.subregion ?? '',
-            region: place.region ?? '',
-            city: place.city ?? '',
-            country: place.country || ''
-          }));
+        try {
+          let reverseGeocode = await Location.reverseGeocodeAsync({
+            latitude: currentLocation.coords.latitude,
+            longitude: currentLocation.coords.longitude,
+          });
+
+          if (reverseGeocode.length > 0) {
+            const place = reverseGeocode[0];
+            setLocationInfo(prev => ({
+              ...prev,
+              subregion: place.subregion ?? '',
+              region: place.region ?? '',
+              city: place.city ?? '',
+              country: place.country || ''
+            }));
+          }
+        } catch (geocodeError) {
+          console.log('Reverse geocoding failed:', geocodeError);
+          // Continue without city/region info
         }
       }
     }
     getCurrentLocation();
   }, []);
+
 
   function createTrash(category: string): Trash {
     return {
@@ -86,6 +126,12 @@ export function NewCollectScreen() {
   }
 
 
+  const handlePhotoCaptured = useCallback((base64: string) => {
+    setBase64Picture(base64);
+  }, []);
+
+
+
   return (
     <SafeAreaView style={{ flex: 1 }} edges={['left', 'right', 'bottom']}>
       <View style={styles.container}>
@@ -95,9 +141,14 @@ export function NewCollectScreen() {
           </TouchableOpacity>
           <Text style={styles.headerTitle}>{getHeaderTitle()}</Text>
         </View>
+        {locationError && (
+          <Text style={{ color: 'red', padding: 10, textAlign: 'center' }}>
+            Unable to get location. Please enable location services.
+          </Text>
+        )}
         {base64Picture ?
-          <TrashDetails base64Picture={base64Picture} city={locationInfo.city} country={locationInfo.country} onAddTrash={handleTrashAdded} /> :
-          <TrashPhotoCapture onPhotoCaptured={(base64: string) => setBase64Picture(base64)} />
+          <TrashEntry base64Picture={base64Picture} city={locationInfo.city} country={locationInfo.country} onAddTrash={handleTrashAdded} /> :
+          <TrashPhotoCapture onPhotoCaptured={handlePhotoCaptured} />
         }
       </View>
     </SafeAreaView>

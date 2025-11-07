@@ -20,6 +20,8 @@ export function ViewTrashScreen() {
       if (!id) return;
       const trashData = await database.getTrashById(id);
 
+      console.log(trashData)
+
       setTrash(trashData);
       setLoading(false);
     };

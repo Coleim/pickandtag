@@ -6,8 +6,6 @@ import { Animated, StyleSheet, Text } from "react-native";
 
 
 export function CategoryPill({ isSelected, value, scale }: { isSelected: boolean; value: CategoryConfigDetails; scale?: Animated.Value }) {
-
-
   return (
     <Animated.View
       style={[

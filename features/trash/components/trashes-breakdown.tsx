@@ -33,6 +33,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginTop: 12,
     gap: 8,
+    minHeight: 58,
   },
   breakdownPill: {
     width: 50,

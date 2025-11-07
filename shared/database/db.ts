@@ -2,12 +2,12 @@ import { Player } from "@/types/player";
 import { Trash, TrashCount } from "@/types/trash";
 import * as SQLite from 'expo-sqlite';
 import { init_database_schema } from "./migrations/1_init";
+import { images_urls_v2 } from "./migrations/2_images_urls";
 
 export const db = SQLite.openDatabaseSync("pickntag.db");
 
-const build_database = [init_database_schema];
-
-// const build_database = [init_database_schema, images_urls_v2];
+// const build_database = [init_database_schema];
+const build_database = [init_database_schema, images_urls_v2];
 
 class Database {
   private isInitialized: Promise<void>;
@@ -100,10 +100,10 @@ class Database {
 
   async insertTrash(trash: Trash) {
     await this.isInitialized;
-    const query = 'INSERT INTO trashes VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
+    const query = 'INSERT INTO trashes (id, event_id, category, latitude, longitude, city, country, region, subregion, imageUrl, syncStatus, createdAt, updatedAt, lastSyncedAt) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
     try {
       await this.db.runAsync(query, trash.id, trash.event_id ?? null, trash.category, trash.latitude, trash.longitude,
-        trash.city, trash.country, trash.region, trash.subregion, trash.imageBase64, trash.syncStatus, trash.createdAt.getTime(), trash.updatedAt.getTime(), trash.lastSyncedAt.getTime());
+        trash.city, trash.country, trash.region, trash.subregion, trash.imageUrl, trash.syncStatus, trash.createdAt.getTime(), trash.updatedAt.getTime(), trash.lastSyncedAt.getTime());
     } catch (error) {
       console.error("error : ", error)
     }
@@ -140,7 +140,7 @@ class Database {
       subregion: row.subregion,
       region: row.region,
       country: row.country,
-      imageBase64: row.imageb64 ?? undefined,
+      imageUrl: row.imageUrl ?? undefined,
       syncStatus: row.syncStatus as Trash['syncStatus'],
       createdAt: new Date(row.createdAt),
       updatedAt: new Date(row.updatedAt),

@@ -16,7 +16,7 @@ export function NewCollectScreen() {
   const router = useRouter();
 
   const [locationInfo, setLocationInfo] = useState<LocationInfo>({ latitude: '', longitude: '', city: '', region: '', subregion: '', country: '' });
-  const [base64Picture, setBase64Picture] = useState<string>('');
+  const [urlPicture, setUrlPicture] = useState<string>('');
   const [locationError, setLocationError] = useState<boolean>(false);
 
 
@@ -45,8 +45,6 @@ export function NewCollectScreen() {
         // Fallback to last known position
         try {
           currentLocation = await Location.getLastKnownPositionAsync({});
-          console.log("what ? ")
-          console.log("current loc : ", currentLocation)
         } catch (fallbackError) {
           console.log('No location available:', fallbackError);
           setLocationError(true);
@@ -99,7 +97,7 @@ export function NewCollectScreen() {
       region: locationInfo.region,
       subregion: locationInfo.subregion,
       country: locationInfo.country,
-      imageBase64: base64Picture,
+      imageUrl: urlPicture,
       createdAt: new Date(),
       updatedAt: new Date(),
       lastSyncedAt: new Date(),
@@ -121,13 +119,13 @@ export function NewCollectScreen() {
   }
 
   function getHeaderTitle() {
-    if (!base64Picture) return "Ajouter un déchet";
+    if (!urlPicture) return "Ajouter un déchet";
     return "Détails du déchet";
   }
 
 
-  const handlePhotoCaptured = useCallback((base64: string) => {
-    setBase64Picture(base64);
+  const handlePhotoCaptured = useCallback((imageUrl: string) => {
+    setUrlPicture(imageUrl);
   }, []);
 
 
@@ -146,8 +144,8 @@ export function NewCollectScreen() {
             Unable to get location. Please enable location services.
           </Text>
         )}
-        {base64Picture ?
-          <TrashEntry base64Picture={base64Picture} city={locationInfo.city} country={locationInfo.country} onAddTrash={handleTrashAdded} /> :
+        {urlPicture ?
+          <TrashEntry urlPicture={urlPicture} city={locationInfo.city} country={locationInfo.country} onAddTrash={handleTrashAdded} /> :
           <TrashPhotoCapture onPhotoCaptured={handlePhotoCaptured} />
         }
       </View>

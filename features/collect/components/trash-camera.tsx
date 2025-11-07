@@ -1,8 +1,11 @@
 import { Button } from "@/shared/components/ui/buttons";
 import { Colors } from "@/shared/constants/colors";
 import { CameraView, useCameraPermissions } from "expo-camera";
+import { File, Paths } from 'expo-file-system';
+import { ImageManipulator, SaveFormat } from 'expo-image-manipulator';
 import { useEffect, useRef, useState } from "react";
 import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
+
 
 export function TrashCamera({
   takingPhoto,
@@ -24,15 +27,15 @@ export function TrashCamera({
         setLoading(true);
         try {
           const photo = await cameraRef.current.takePictureAsync({
-            base64: true,
             quality: 0.8,
             skipProcessing: true,
           });
-          if (photo.base64) {
-            onPhotoTaken(photo.base64);
+          const savedImagePath = await processAndSaveImage(photo.uri);
+          if (savedImagePath) {
+            onPhotoTaken(savedImagePath);
           }
         } catch (error) {
-          console.error('iiii Failed to capture image:', error);
+          console.error('Failed to capture image:', error);
         } finally {
           // petit délai pour éviter clignotement trop brutal
           setTimeout(() => setLoading(false), 500);
@@ -41,6 +44,33 @@ export function TrashCamera({
       snap();
     }
   }, [takingPhoto, onPhotoTaken, permission]);
+
+  async function processAndSaveImage(photoUri: string): Promise<string | null> {
+
+    try {
+      // Use the same API as your migration code
+      const context = ImageManipulator.manipulate(photoUri);
+      context.resize({ width: 800 });
+      const image = await context.renderAsync();
+      const result = await image.saveAsync({
+        format: SaveFormat.PNG,
+        compress: 0.5
+      });
+
+      // Generate unique filename
+      const filename = `trash_image_${Date.now()}.png`;
+
+      // Copy to cache directory
+      const sourceFile = new File(result.uri);
+      const destinationFile = new File(Paths.cache, filename);
+      sourceFile.copy(destinationFile);
+      console.log('Image saved to:', destinationFile.uri);
+      return destinationFile.uri;
+    } catch (error) {
+      console.error('Error processing image:', error);
+      return null;
+    }
+  }
 
   if (!permission) {
     return <View />;

@@ -9,7 +9,7 @@ export type Trash = {
   subregion: string;
   region: string;
   country: string;
-  imageBase64?: string;
+  imageUrl?: string;
   syncStatus: 'dirty' | 'syncing' | 'synced' | 'failed' | 'pending_delete' | 'deleted' | 'conflict';
   createdAt: Date;
   updatedAt: Date;

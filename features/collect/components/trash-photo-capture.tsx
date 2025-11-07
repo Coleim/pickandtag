@@ -8,9 +8,9 @@ export default function TrashPhotoCapture({ onPhotoCaptured }: { onPhotoCaptured
 
   const [takingPhoto, setTakingPhoto] = useState(false);
 
-  const handlePhotoTaken = useCallback((base64: string) => {
+  const handlePhotoTaken = useCallback((imageUrl: string) => {
     setTakingPhoto(false);
-    onPhotoCaptured(base64);
+    onPhotoCaptured(imageUrl);
   }, [onPhotoCaptured]);
 
 

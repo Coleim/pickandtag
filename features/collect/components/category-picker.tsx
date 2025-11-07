@@ -1,7 +1,7 @@
 import { CategoryPill } from "@/shared/components/ui/category-pill";
 import { TrashCategories } from "@/shared/constants/trash-categories";
 import React, { useRef } from "react";
-import { Animated, Dimensions, StyleSheet, TouchableWithoutFeedback, View } from "react-native";
+import { Animated, Dimensions, Pressable, StyleSheet, View } from "react-native";
 
 
 export function CategoryPicker({ selected, onChange }: { selected: string | undefined; onChange: (value: string | undefined) => void; }) {
@@ -27,9 +27,9 @@ export function CategoryPicker({ selected, onChange }: { selected: string | unde
       {Object.entries(TrashCategories).map(([key, value]) => {
         const isSelected = selected === key;
         return (
-          <TouchableWithoutFeedback key={key} onPress={() => handlePress(key)}>
+          <Pressable key={key} onPress={() => handlePress(key)}>
             <CategoryPill isSelected={isSelected} value={value} scale={scaleAnim[key]} />
-          </TouchableWithoutFeedback>
+          </Pressable>
         );
       })}
     </View>

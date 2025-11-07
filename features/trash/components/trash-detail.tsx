@@ -57,6 +57,7 @@ export default function TrashDetail({ trash, onDelete, onBack }: TrashDetailProp
     }).format(date);
   };
 
+
   return (
     <View style={styles.container}>
       {/* Bouton Supprimer */}
@@ -66,12 +67,12 @@ export default function TrashDetail({ trash, onDelete, onBack }: TrashDetailProp
       </TouchableOpacity>
 
       {/* Image */}
-      {trash.imageBase64 ? (
+      {trash.imageUrl ? (
         <View style={styles.imageContainer}>
           <Image
             style={styles.image}
             resizeMode="cover"
-            source={{ uri: 'data:image/png;base64,' + trash.imageBase64 }}
+            source={{ uri: trash.imageUrl! }}
           />
         </View>
       ) : (

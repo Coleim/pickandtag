@@ -6,14 +6,13 @@ import { translate } from "@/locales";
 import { Colors } from "@/shared/constants/colors";
 import { playerStore } from "@/shared/stores/player-store";
 import { TrashCount } from "@/types/trash";
-import { FontAwesome5 } from "@expo/vector-icons";
 import { Session } from '@supabase/supabase-js';
 import { useStore } from "@tanstack/react-store";
 import { makeRedirectUri } from "expo-auth-session";
 import * as QueryParams from "expo-auth-session/build/QueryParams";
 import * as WebBrowser from "expo-web-browser";
 import { useEffect, useMemo, useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 
 export default function ProfileScreen() {
 
@@ -69,16 +68,7 @@ export default function ProfileScreen() {
 
   }, [])
 
-  // const redirectTo = makeRedirectUri({ useProxy: true });
-  // const redirectTo = makeRedirectUri({
-  //   // pour Expo Go, tu dois spécifier `scheme` et `useProxy` n’est plus là
-  //   scheme: 'exp',
-  //   path: 'auth/callback', // optionnel, si tu veux personnaliser
-  // });
-
   WebBrowser.maybeCompleteAuthSession();
-
-
   const redirectTo = makeRedirectUri({
     // path: "auth/callback",
   });
@@ -188,17 +178,17 @@ export default function ProfileScreen() {
       <View style={styles.headerWrapper}>
         <View style={styles.header}>
           <Text style={styles.headerTitle}>Mon Profil
-            {session && session.user ? session.user.id : "NOT TAUTH"}
+            {/* {session && session.user ? session.user.id : "NOT TAUTH"} */}
           </Text>
 
-          {session && session.user && <TouchableOpacity onPress={() => signOut()} >
+          {session && session.user && <Pressable onPress={() => signOut()} >
             <Text> Log out </Text>
-          </TouchableOpacity>}
+          </Pressable>}
 
 
-          <TouchableOpacity onPress={() => handleOAuth('google')} >
-            <FontAwesome5 name="user-circle" size={20} />
-          </TouchableOpacity>
+          {/* <Pressable onPress={() => handleOAuth('google')} > */}
+          {/*   <FontAwesome5 name="user-circle" size={20} /> */}
+          {/* </Pressable> */}
         </View>
       </View>
       <View style={styles.content}>
@@ -219,14 +209,14 @@ export default function ProfileScreen() {
               const isLast = index === optionsKeys.length - 1;
               const isSelected = selected === option;
               return (
-                <TouchableOpacity key={option}
+                <Pressable key={option}
                   onPress={() => setSelected(option)}
                   style={[styles.pickerButton,
                   isSelected && styles.pickerSelected,
                   isFirst && styles.pickerFirstSegment,
                   isLast && styles.pickerLastSegment]}>
                   <Text style={[styles.pickerButtonText, isSelected && styles.selectedText]}>{translate(option)}</Text>
-                </TouchableOpacity>
+                </Pressable>
               )
             })}
           </View>

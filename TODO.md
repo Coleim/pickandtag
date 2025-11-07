@@ -3,23 +3,21 @@
 
 
 - [X] Derniere collectes vides => Afficher les N derniers
-- [ ] Dans le profil, laisser le placeholder pour les types de déchet meme si y'en a pas
 
 - [X] Voir dechet (photo)
-- [ ] Supprimer dechet (erreur)
+- [X] Supprimer dechet (erreur)
+- [X]  stocker l’url de l’image en base dans la nouvelle colonne + supprimer b64
+- [x]  verifier que ca sauve bien les images
+- [x]  Mise a jour de l’affichage en prenant l’image sur le disque
+- [x]  Compresser les images a la collecte - https://chatgpt.com/c/68ea6135-d3d8-832b-a567-8bde298a731e
+- [x]  Changer l’endroit ou on stocke les images
+- [x] Dans le profil, laisser le placeholder pour les types de déchet meme si y'en a pas
 
-- [ ] Changer la db → comment faire les updates ? Gerer differentes versions - https://chatgpt.com/c/68ea6304-408c-832a-be8e-d27582c5e52d
-verifier que ca sauve bien les images
-
-- [ ] Compresser les images - https://chatgpt.com/c/68ea6135-d3d8-832b-a567-8bde298a731e
-- [ ] Changer l’endroit ou on stocke les images
-
+- [ ] Quand on stocke un dechet, le store se "remet a 0" avec juste ce dechet dans la liste
+- [ ] Monitorer les perfs de chaque query db
 
 - [ ] Regarder le loader pourquoi il est long 
 - [ ] Charger les weekly list en differe avec un loader sur la liste ?? 
-
-- [ ] Monitorer les perfs de chaque query db
-
 
 
 - [ ] Mettre la taille (plus ou moins de 2.5cm)
@@ -32,6 +30,33 @@ verifier que ca sauve bien les images
 
 - [ ] Si dimanche on est pas nouvelle semaine.
 
+### **Phase 1.1 – Compte et stats**
+
+🎯 Objectif : rendre l’app **utile, sociale, et engageante dès le départ**
+
+- [x]  Reorg par feature based
+- [ ]  🔑 Création de compte (**optionnelle)** (account-agnostic)
+    - [ ]  Faire joli la creation / connexion (via Google Only at the moment)
+    - [ ]  comment “rester connecter” (ne pas se connecter a chaque launch de l’app)
+- [ ]  🔑 Gestion du profil
+    - [ ]  display name ?
+- [ ]  🔑 Synchro online
+- [ ]  Affichage de son profil / d’un profil en ligne (public)
+- [ ]  🔑 Partage social simple (partage du lien du profil “web”)
+- [ ]  Leaderboard simple
+- [ ]  Web Page avec Stats simple ( a definir )
+- [ ]  ⭐ Voir les trash par **location simple** (liste + stats par ville/région)
+- [ ]  App Stats simple ( a definir )
+
+### **Phase 2 – Collecte Groupée / Event**
+
+- Creation d’events
+- Recherche d’events
+- 🔑 **Créer une collecte groupée** → **nécessite un compte** (organisateur, gestion des événements, stats et badges)
+- [ ]  ✅ **Participer à une collecte groupée** → **account-agnostic** (pas besoin de compte pour rejoindre et taguer)
+- [ ]  **Collecte groupée** (événements locaux, participation visible)
+
+
 
 ### Profile
 
@@ -41,57 +66,6 @@ verifier que ca sauve bien les images
 - [ ] isauth column
 
 - [ ] Auth RLS a configurer
-
-
-
-### **Phase 1.1 – MVP + Collecte Groupée**
-
-🎯 Objectif : rendre l’app **utile, sociale, et engageante dès le départ**
-
-- [ ]  🔑 Création de compte **optionnelle** (account-agnostic)
-- [ ]  Gestion du profil (display name, uuid, mail, sauver en base ? )
-- [ ]  🔑 **Créer une collecte groupée** → **nécessite un compte** (organisateur, gestion des événements, stats et badges)
-- [ ]  ✅ **Participer à une collecte groupée** → **account-agnostic** (pas besoin de compte pour rejoindre et taguer)
-- [ ]  **Collecte groupée** (événements locaux, participation visible)
-- [ ]  🔑 Synchro online si compte créé (offline-first)
-- [ ]  🔑 Partage social simple
-- [ ]  ⭐ **XP & Levels** : si compte créé, gain d’XP et titres associés
-- [ ]  Extraire langage (fr)
-
-- [ ] Penser aux collectes ou on a juste un sachet et 1 pince ⇒ mesurer / tagger le sac apres coup
-Au poid / au volume
-
-
-### **Phase 2 – Engagement**
-
-🎯 Objectif : motiver la rétention et la progression
-
-- Collecte groupée avec compte ⇒
-- ⭐ Badges liés aux niveaux et aux actions
-- ⭐ Notifications légères (level up, badges)
-- ⭐ Voir les trash par **location simple** (liste + stats par ville/région)
-
-### **Phase 3 – Expansion**
-
-🎯 Objectif : challenge collectif & communauté
-
-- 🌍 Leaderboard online (joueurs, équipes, villes) → level + XP visible
-- 🌍 Local leaderboard (voir le top X + ton classement)
-- 🌍 Trash Maps (heatmap / clusters / filtres par catégorie)
-- 🌍 Multi-langues (FR/EN)
-- 🌍 Éco-messages / fun facts → parfois avec XP bonus
-
-### **Phase 4 – Différenciation / Viralité**
-
-🎯 Objectif : rendre l’app **unique et mémorable**
-
-- 🐾 Mascotte Tamagotchi Game → XP débloque interactions / évolutions
-    - achat de costumes / accessoires
-- 🐾 Partenariats (écoles, ONG, collectivités, entreprises) → défis sponsorisés avec XP/badges
-- 🐾 Optional : Merch / shop virtuel lié à XP ou niveaux
-- ⭐ Streaks / Events quotidiens → XP bonus
-
-
 
 
 #### 
@@ -142,6 +116,7 @@ In Main Screen, show “Currently in collect: Park Clean-up (ends in 2h)”
  [ ] Titles / Headers 
 [ ] Pouvoir ajouter sans photos ( a voir )
 [ ] Partage des stats
+[ ] TouchableOpacity => Pressable
 
 [ ] Faire code review par IA (claude + cursor)
 [ ] Faire un readme correct

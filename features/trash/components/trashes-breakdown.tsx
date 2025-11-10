@@ -11,9 +11,9 @@ export default function TrashBreakdown({ categoryBreakdown }: { categoryBreakdow
       {categoryBreakdown.map((c) => {
         const cfg = TrashCategories[c.type] || { color: "#aaa", icon: "trash" };
         const count = c.amount;
-        if (count === 0) return null;
+        {/* if (count === 0) return null; */ }
         return (
-          <View key={c.type} style={[styles.breakdownPill, { backgroundColor: cfg.color }]}>
+          <View key={c.type} style={[styles.breakdownPill, { backgroundColor: count === 0 ? '#cccccc' : cfg.color }]}>
             <Text style={styles.breakdownPillText}>
               {count}
             </Text>

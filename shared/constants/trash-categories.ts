@@ -13,7 +13,10 @@ export const TrashCategories: CategoryConfig = {
 };
 
 export function getCategoryBreakdown(trashes: TrashCount[]) {
-  const map: Record<string, number> = {};
+  const map: Record<string, number> = Object.keys(TrashCategories).reduce((acc, category) => {
+    acc[category] = 0;
+    return acc;
+  }, {} as Record<string, number>);
   for (let trash of trashes) {
     if (trash.category) {
       map[trash.category] = (map[trash.category] ?? 0) + trash.count;

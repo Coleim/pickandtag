@@ -11,6 +11,7 @@
 - [x] Dans le profil, laisser le placeholder pour les types de déchet meme si y'en a pas
 - [x] Quand on stocke un dechet, le store se "remet a 0" avec juste ce dechet dans la liste
 ----------------------------------
+- [x] Revoir l'exp avec la collecte d'aujourd'hui: 50 personnes. 12000
 - [ ] Monitorer les perfs de chaque query db
 - [ ] Si dimanche on est pas nouvelle semaine.
 
@@ -18,13 +19,12 @@
 - [ ] Regarder le loader pourquoi il est long 
 - [ ] Mettre la taille (plus ou moins de 2.5cm)
 - [ ] Plus d'exp si plus gros
-- [ ] Revoir l'exp avec la collecte d'aujourd'hui: 50 personnes. 12000
 - [ ] rajouter une categorie cigarette.
 - [ ] gps en direct pas lastknown loc. + afficher message d'erreur ( a la place de la loc) si pas trouve
 
 ### **Phase 1.1 – Compte et stats**
 
-🎯 Objectif : rendre l’app **utile, sociale, et engageante dès le départ**
+Objectif : rendre l’app **utile, sociale, et engageante dès le départ**
 
 - [x]  Reorg par feature based
 - [ ]  🔑 Création de compte (**optionnelle)** (account-agnostic)

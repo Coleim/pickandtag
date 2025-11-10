@@ -1,9 +1,6 @@
 ### Bugs
 
-
-
 - [X] Derniere collectes vides => Afficher les N derniers
-
 - [X] Voir dechet (photo)
 - [X] Supprimer dechet (erreur)
 - [X]  stocker l’url de l’image en base dans la nouvelle colonne + supprimer b64
@@ -12,23 +9,18 @@
 - [x]  Compresser les images a la collecte - https://chatgpt.com/c/68ea6135-d3d8-832b-a567-8bde298a731e
 - [x]  Changer l’endroit ou on stocke les images
 - [x] Dans le profil, laisser le placeholder pour les types de déchet meme si y'en a pas
-
-- [ ] Quand on stocke un dechet, le store se "remet a 0" avec juste ce dechet dans la liste
+- [x] Quand on stocke un dechet, le store se "remet a 0" avec juste ce dechet dans la liste
+----------------------------------
 - [ ] Monitorer les perfs de chaque query db
+- [ ] Si dimanche on est pas nouvelle semaine.
 
-- [ ] Regarder le loader pourquoi il est long 
 - [ ] Charger les weekly list en differe avec un loader sur la liste ?? 
-
-
+- [ ] Regarder le loader pourquoi il est long 
 - [ ] Mettre la taille (plus ou moins de 2.5cm)
 - [ ] Plus d'exp si plus gros
 - [ ] Revoir l'exp avec la collecte d'aujourd'hui: 50 personnes. 12000
-
-
 - [ ] rajouter une categorie cigarette.
 - [ ] gps en direct pas lastknown loc. + afficher message d'erreur ( a la place de la loc) si pas trouve
-
-- [ ] Si dimanche on est pas nouvelle semaine.
 
 ### **Phase 1.1 – Compte et stats**
 

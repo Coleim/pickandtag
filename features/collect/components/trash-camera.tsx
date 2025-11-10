@@ -62,7 +62,7 @@ export function TrashCamera({
 
       // Copy to cache directory
       const sourceFile = new File(result.uri);
-      const destinationFile = new File(Paths.cache, filename);
+      const destinationFile = new File(Paths.document, filename);
       sourceFile.copy(destinationFile);
       console.log('Image saved to:', destinationFile.uri);
       return destinationFile.uri;

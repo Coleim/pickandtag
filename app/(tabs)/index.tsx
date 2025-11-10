@@ -15,7 +15,7 @@ export default function HomeScreen() {
   const router = useRouter();
   const isInit = useStore(playerStore, store => store.isInit);
   const currentXp = useStore(playerStore, store => store.currentXp);
-  const weeklyTrashes = useStore(playerStore, store => store.weeklyTrashes);
+  const lastNTrashes = useStore(playerStore, store => store.lastNTrashes);
   const bestWeek = useStore(playerStore, store => store.trashCount?.bestWeek);
   const weeklyCount = useStore(playerStore, store => store.trashCount?.weekly);
   const totalGlobal = weeklyCount?.reduce((acc, val) => acc + val.count, 0) || 0;
@@ -39,14 +39,14 @@ export default function HomeScreen() {
         <View style={styles.header}>
           <Text style={styles.headerTitle}>Cette semaine, tu as collecté</Text>
           <Text style={styles.headerCount}>{totalGlobal.toLocaleString()} déchet{totalGlobal > 1 ? 's' : ''} !</Text>
-          <Text style={styles.bestScoreText}>Meilleur score : {bestWeek?.count ?? 0} déchets en une semaine</Text>
+          <Text style={styles.bestScoreText}>Meilleur score : {bestWeek} déchets en une semaine</Text>
           <TrashBreakdown categoryBreakdown={categoryBreakdown} />
         </View>
       </View>
 
       <View style={styles.content}>
         <PlayerStats currentXp={currentXp} />
-        <LastCollects trashes={weeklyTrashes} onTrashClicked={handleTrashClicked} />
+        <LastCollects trashes={lastNTrashes} onTrashClicked={handleTrashClicked} />
       </View >
       <Fab onPress={() => router.navigate("/collect/new-collect")} />
     </View>

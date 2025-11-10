@@ -68,6 +68,7 @@ class Database {
   }
 
   async getTrashesByCategoriesBetween(range: { from: Date, to: Date }): Promise<TrashCount[]> {
+    console.log("get by : ", range)
     await this.isInitialized;
     const fromTs = range.from.getTime();
     const toTs = range.to.getTime();
@@ -82,12 +83,16 @@ class Database {
 
   async getPlayer(): Promise<Player | null> {
     await this.isInitialized;
-    return this.db.getFirstAsync('SELECT * FROM players');
+    const start = Date.now();
+    const player: Player | null = await this.db.getFirstAsync('SELECT * FROM players');
+    console.log('[DB] getPlayer:', Date.now() - start, 'ms');
+    return player;
   }
 
-  async getBestWeek(): Promise<TrashCount | null> {
+  async getBestWeekCount(): Promise<number> {
     await this.isInitialized;
-    return this.db.getFirstAsync(
+    const start = Date.now();
+    const result: { count: number } | null = await this.db.getFirstAsync(
       `SELECT 
         MIN(createdAt) as weekStart,
         COUNT(id) as count
@@ -95,7 +100,10 @@ class Database {
         GROUP BY strftime('%Y-%W', datetime(createdAt / 1000, 'unixepoch'))
         ORDER BY count DESC
         LIMIT 1`
-    );
+    )
+    console.log('[DB] getBestWeekCount:', Date.now() - start, 'ms');
+    return result?.count ?? 0;
+
   }
 
   async insertTrash(trash: Trash) {

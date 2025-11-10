@@ -8,7 +8,8 @@ type PlayerState = {
   hasTrashes: boolean;
   trashCount: {
     total: TrashCount[];
-    bestWeek: TrashCount | null;
+    bestWeek: number,
+    thisWeek: number,
     monthly: TrashCount[];
     weekly: TrashCount[];
     daily: TrashCount[];
@@ -16,7 +17,7 @@ type PlayerState = {
     lastWeek: TrashCount[],
     lastMonth: TrashCount[]
   } | null,
-  weeklyTrashes: Trash[];
+  lastNTrashes: Trash[];
   currentXp: number;
 };
 
@@ -24,7 +25,7 @@ export const playerStore = new Store<PlayerState>({
   isInit: false,
   hasTrashes: false,
   trashCount: null,
-  weeklyTrashes: [],
+  lastNTrashes: [],
   currentXp: 0,
 });
 
@@ -38,22 +39,13 @@ export function initializeTrashStore() {
 
         const start = Date.now();
 
-        const t1 = Date.now();
-        await database.hasTrashes();
-        console.log('1️⃣ hasTrashes:', Date.now() - t1, 'ms');
-        const t2 = Date.now();
-        await database.hasTrashes();
-        console.log('2 hasTrashes:', Date.now() - t2, 'ms');
-
-
-
         // REVIEW: Consider adding try/catch around DB calls to set a recoverable error state.
-        const [hasTrashes, bestWeek,
+        const [hasTrashes, bestWeekCount,
           dailyTrashCount, weeklyTrashCount, monthlyTrashCount, totalTrashCount,
           yesterdayTrashCount, lastWeekTrashCount, lastMonthTrashCount,
-          weeklyTrashes, player] = await Promise.all([
+          lastNTrashes, player] = await Promise.all([
             database.hasTrashes(),
-            database.getBestWeek(),
+            database.getBestWeekCount(),
             database.getTrashesByCategoriesAfter(getToday()),
             database.getTrashesByCategoriesAfter(getThisWeek()),
             database.getTrashesByCategoriesAfter(getThisMonth()),
@@ -66,19 +58,20 @@ export function initializeTrashStore() {
           ]);
 
 
-        console.log('⏱️ TOTAL:', Date.now() - start, 'ms');
+        console.log('⏱️ TOTAL DB:', Date.now() - start, 'ms');
 
         playerStore.setState((state) => ({
           ...state,
           isInit: true,
           hasTrashes: hasTrashes,
-          weeklyTrashes: weeklyTrashes.map((t: any) => ({
+          lastNTrashes: lastNTrashes.map((t: any) => ({
             ...t,
             createdAt: new Date(t.createdAt), // here we just convert from db timestamp to a real date
           })),
           trashCount: {
             total: totalTrashCount,
-            bestWeek: bestWeek ?? { count: 0 },
+            bestWeek: bestWeekCount,
+            thisWeek: weeklyTrashCount.reduce((acc, val) => acc + val.count, 0),
             monthly: monthlyTrashCount,
             weekly: weeklyTrashCount,
             daily: dailyTrashCount,
@@ -174,7 +167,8 @@ export async function addTrash(trash: Trash) {
 
     const prevCounts = prev.trashCount ?? {
       total: [],
-      bestWeek: { count: 0 },
+      bestWeek: 0,
+      thisWeek: 0,
       monthly: [],
       weekly: [],
       daily: [],
@@ -183,18 +177,17 @@ export async function addTrash(trash: Trash) {
       lastMonth: []
     };
 
-    prevCounts.bestWeek!.count = Math.max(prev.weeklyTrashes.length + 1, prevCounts.bestWeek?.count ?? 0)
-
     return {
       ...prev,
       hasTrashes: true,
-      weeklyTrashes: [...prev.weeklyTrashes.filter((t: Trash) => t.createdAt >= getThisWeek()), trash],
+      lastNTrashes: [trash, ...prev.lastNTrashes.slice(0, prev.lastNTrashes.length - 1)],
       trashCount: {
         total: updateCount(prev.trashCount?.total, trash.category),
         monthly: trash.createdAt >= getThisMonth() ? updateCount(prev.trashCount?.monthly, trash.category) : prev.trashCount?.monthly ?? [],
         weekly: trash.createdAt >= getThisWeek() ? updateCount(prev.trashCount?.weekly, trash.category) : prev.trashCount?.weekly ?? [],
         daily: trash.createdAt >= getToday() ? updateCount(prev.trashCount?.daily, trash.category) : prev.trashCount?.daily ?? [],
-        bestWeek: prevCounts.bestWeek,
+        bestWeek: Math.max(prevCounts.bestWeek, prevCounts.thisWeek + 1),
+        thisWeek: prevCounts.thisWeek + 1,
         yesterday: prevCounts.yesterday,
         lastWeek: prevCounts.lastWeek,
         lastMonth: prevCounts.lastMonth
@@ -214,44 +207,43 @@ export async function deleteTrash(trash: Trash) {
   const lostXP = TrashCategories[trash.category].points;
   await database.addTrashToPlayer(-lostXP);
 
+  const [bestWeekCount,
+    dailyTrashCount, weeklyTrashCount, monthlyTrashCount, totalTrashCount,
+    yesterdayTrashCount, lastWeekTrashCount, lastMonthTrashCount,
+    lastNTrashes] = await Promise.all([
+      database.getBestWeekCount(),
+      database.getTrashesByCategoriesAfter(getToday()),
+      database.getTrashesByCategoriesAfter(getThisWeek()),
+      database.getTrashesByCategoriesAfter(getThisMonth()),
+      database.getTrashesByCategories(),
+      database.getTrashesByCategoriesBetween(getYesterdayRange()),
+      database.getTrashesByCategoriesBetween(getLastWeek()),
+      database.getTrashesByCategoriesBetween(getLastMonth()),
+      database.getLastNTrashes(20),
+    ]);
+
   // 3️⃣ Update store
   playerStore.setState((prev) => {
     const newXP = Math.max(prev.currentXp - lostXP, 0);
 
-    const updateCount = (counts: TrashCount[] = [], category: string): TrashCount[] => {
-      return counts
-        .map(e => (e.category === category ? { ...e, count: Math.max(e.count - 1, 0) } : e))
-        .filter(e => e.count > 0);
-    };
-
-    const prevCounts = prev.trashCount ?? {
-      total: [],
-      bestWeek: { count: 0 },
-      monthly: [],
-      weekly: [],
-      daily: [],
-      yesterday: [],
-      lastWeek: [],
-      lastMonth: []
-    };
-
-    const updatedWeeklyTrashes = prev.weeklyTrashes.filter((t: Trash) => t.id !== trash.id);
-    const bestWeekCount = Math.max(prevCounts.bestWeek?.count ?? 0, updatedWeeklyTrashes.length);
-
     return {
       ...prev,
-      weeklyTrashes: updatedWeeklyTrashes,
+      lastNTrashes: lastNTrashes.map((t: any) => ({
+        ...t,
+        createdAt: new Date(t.createdAt), // here we just convert from db timestamp to a real date
+      })),
       trashCount: {
-        total: updateCount(prev.trashCount?.total, trash.category),
-        monthly: trash.createdAt >= getThisMonth() ? updateCount(prev.trashCount?.monthly, trash.category) : prev.trashCount?.monthly ?? [],
-        weekly: trash.createdAt >= getThisWeek() ? updateCount(prev.trashCount?.weekly, trash.category) : prev.trashCount?.weekly ?? [],
-        daily: trash.createdAt >= getToday() ? updateCount(prev.trashCount?.daily, trash.category) : prev.trashCount?.daily ?? [],
-        bestWeek: { count: bestWeekCount },
-        yesterday: prev.trashCount?.yesterday ?? [],
-        lastWeek: prev.trashCount?.lastWeek ?? [],
-        lastMonth: prev.trashCount?.lastMonth ?? [],
-      },
-      currentXp: newXP,
-    };
+        total: totalTrashCount,
+        bestWeek: bestWeekCount,
+        thisWeek: weeklyTrashCount.reduce((acc, val) => acc + val.count, 0),
+        monthly: monthlyTrashCount,
+        weekly: weeklyTrashCount,
+        daily: dailyTrashCount,
+        yesterday: yesterdayTrashCount,
+        lastWeek: lastWeekTrashCount,
+        lastMonth: lastMonthTrashCount
+      }
+    }
   });
 }
+

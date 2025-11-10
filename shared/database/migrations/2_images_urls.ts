@@ -32,7 +32,7 @@ export async function images_urls_v2(db: SQLite.SQLiteDatabase) {
 
       const filename = `image_${Date.now()}.png`;
       const sourceFile = new File(result.uri);
-      const destinationFile = new File(Paths.cache, filename);
+      const destinationFile = new File(Paths.document, filename);
       sourceFile.copy(destinationFile);
       await db.runAsync(`UPDATE trashes SET imageUrl = ? WHERE id = ? `, [destinationFile.uri, trash.id]);
     }

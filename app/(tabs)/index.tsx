@@ -12,6 +12,7 @@ import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 
 
 export default function HomeScreen() {
+  console.log("home Screen")
   const router = useRouter();
   const isInit = useStore(playerStore, store => store.isInit);
   const currentXp = useStore(playerStore, store => store.currentXp);

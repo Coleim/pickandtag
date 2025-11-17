@@ -8,14 +8,14 @@ import { playerStore } from "@/shared/stores/player-store";
 import { TrashCount } from "@/types/trash";
 import { Session } from '@supabase/supabase-js';
 import { useStore } from "@tanstack/react-store";
-import { makeRedirectUri } from "expo-auth-session";
-import * as QueryParams from "expo-auth-session/build/QueryParams";
-import * as WebBrowser from "expo-web-browser";
+import { useRouter } from "expo-router";
 import { useEffect, useMemo, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
+
 export default function ProfileScreen() {
 
+  const router = useRouter();
   const [session, setSession] = useState<Session | null>(null);
   const currentXp = useStore(playerStore, playerStore => playerStore.currentXp);
   const trashCount = useStore(playerStore, playerStore => playerStore.trashCount);
@@ -58,112 +58,6 @@ export default function ProfileScreen() {
   }, [selected, trashCount]);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-    })
-
-    supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session)
-    })
-
-  }, [])
-
-  WebBrowser.maybeCompleteAuthSession();
-  const redirectTo = makeRedirectUri({
-    // path: "auth/callback",
-  });
-
-  const createSessionFromUrl = async (url: string) => {
-    const { params, errorCode } = QueryParams.getQueryParams(url);
-
-    if (errorCode) throw new Error(errorCode);
-    const { access_token, refresh_token } = params;
-
-    if (!access_token) return;
-
-    const { data, error } = await supabase.auth.setSession({
-      access_token,
-      refresh_token,
-    });
-    if (error) throw error;
-    return data.session;
-  };
-
-
-  const signInWithProvider = async (provider: "google" | "linkedin") => {
-    console.log(redirectTo)
-    const { data, error } = await supabase.auth.signInWithOAuth({
-      provider,
-      options: { redirectTo: redirectTo, skipBrowserRedirect: true },
-    });
-    if (error) throw error;
-
-    if (data?.url) {
-      const url = new URL(data.url);
-      const redirectParam = url.searchParams.get('redirect_to');
-      console.log("🔍 redirect_to dans l'URL OAuth:", redirectParam);
-    }
-
-    console.log("Start auth")
-    const res = await WebBrowser.openAuthSessionAsync(
-      data?.url ?? "",
-      redirectTo
-    );
-
-    console.log("========================================");
-    console.log("📱 Type:", res.type);
-    if (res.type === "success") {
-      console.log("✅ URL callback:", res.url);
-    }
-    console.log("========================================");
-
-
-    if (res.type === "success") {
-      const { url } = res;
-      console.log(" OKKKKK ")
-      await createSessionFromUrl(url);
-    }
-
-
-
-  };
-
-
-
-
-  const handleOAuth = async (provider: 'google' | 'linkedin') => {
-    try {
-      // setLoading(true)
-      await signInWithProvider(provider)
-
-      // The browser is opened — when the flow ends, Supabase will redirect back to the app and the hook will update session
-    } catch (err: any) {
-      console.error("Erreur: ", err.message)
-      // Alert.alert('Erreur', err.message ?? String(err))
-    } finally {
-      // setoading(false)
-      console.log("LOGIN OK");
-    }
-  }
-
-  const signOut = async () => {
-    try {
-      const { error } = await supabase.auth.signOut();
-
-      if (error) {
-        console.error("❌ Erreur logout:", error);
-        throw error;
-      }
-
-      console.log("✅ Déconnexion réussie");
-    } catch (error) {
-      console.error("❌ Erreur lors de la déconnexion:", error);
-      throw error;
-    }
-  };
-
-
-  useEffect(() => {
     const total = selectedOption.trash.reduce((acc, val) => acc + val.count, 0);
     const previousTotal = selectedOption.previousTrash?.reduce((acc, val) => acc + val.count, 0);
     setSelectTrashCount(total);
@@ -173,27 +67,29 @@ export default function ProfileScreen() {
 
   const categoryBreakdown = useCategoryBreakdown(selectedOption.trash ?? []);
 
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+    })
+    supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session)
+    })
+  }, [])
+
   return (
     <View style={styles.container}>
       <View style={styles.headerWrapper}>
         <View style={styles.header}>
-          <Text style={styles.headerTitle}>Mon Profil
-            {/* {session && session.user ? session.user.id : "NOT TAUTH"} */}
-          </Text>
+          <Text style={styles.headerTitle}>{session ? 'Bienvenue ' + session.user.user_metadata?.full_name : 'Mon Profil'}</Text>
+          <Pressable onPress={() => router.navigate('/auth/new')}>
+            <Text>{session ? 'Se deconnecter' : "Se connecter"}</Text>
+          </Pressable>
 
-          {session && session.user && <Pressable onPress={() => signOut()} >
-            <Text> Log out </Text>
-          </Pressable>}
-
-
-          {/* <Pressable onPress={() => handleOAuth('google')} > */}
-          {/*   <FontAwesome5 name="user-circle" size={20} /> */}
-          {/* </Pressable> */}
         </View>
       </View>
       <View style={styles.content}>
         <PlayerStats currentXp={currentXp} />
-
         <View style={styles.totalTrashesCountContainer}>
           <Text style={styles.trashCountNumber}>{selectedTrashCount}</Text>
           <Text style={styles.trashText}>Déchet{selectedTrashCount > 1 ? 's' : ''}</Text>

@@ -4,6 +4,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import RootGate from "./root-gate";
 
 export default function RootLayout() {
+  console.log("Root Layout ")
   const [ready, setReady] = useState(false);
   // REVIEW: Consider driving this readiness from a central app-init (e.g., splash, permissions, db) to avoid local state drift.
   // REVIEW: If you use expo-splash-screen, call preventAutoHideAsync/hideAsync to avoid a white flicker before tabs render.
@@ -18,6 +19,10 @@ export default function RootLayout() {
           <Stack.Screen name="(tabs)" />
           <Stack.Screen
             name="collect/new-collect"
+            options={{ presentation: "modal", headerShown: false }}
+          />
+          <Stack.Screen
+            name="auth/new"
             options={{ presentation: "modal", headerShown: false }}
           />
         </Stack>

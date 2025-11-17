@@ -38,7 +38,8 @@ export const Colors = {
   paper: "#1976D2",          // Bleu vif mais pas trop saturé
   glass: "#388E3C",          // Vert bouteille, se démarque du primary
   metal: "#C62828",          // Rouge profond
-  otherCategory: "#6D4C41"   // Brun adouci
+  otherCategory: "#6D4C41",   // Brun adouci
+  cigarette: "#757575",
 };
 
 

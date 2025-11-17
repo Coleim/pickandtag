@@ -1,25 +1,28 @@
-### Bugs
+### Todo
 
-- [X] Derniere collectes vides => Afficher les N derniers
-- [X] Voir dechet (photo)
-- [X] Supprimer dechet (erreur)
-- [X]  stocker l’url de l’image en base dans la nouvelle colonne + supprimer b64
-- [x]  verifier que ca sauve bien les images
-- [x]  Mise a jour de l’affichage en prenant l’image sur le disque
-- [x]  Compresser les images a la collecte - https://chatgpt.com/c/68ea6135-d3d8-832b-a567-8bde298a731e
-- [x]  Changer l’endroit ou on stocke les images
-- [x] Dans le profil, laisser le placeholder pour les types de déchet meme si y'en a pas
-- [x] Quand on stocke un dechet, le store se "remet a 0" avec juste ce dechet dans la liste
-----------------------------------
-- [x] Revoir l'exp avec la collecte d'aujourd'hui: 50 personnes. 12000
+- [x] Creer une page de connexion (modal)
+- [x] Lier l'acces a la page depuis "Mon Profil"
+- [x] rajouter une categorie cigarette.
+--------------------------------------------------------
+- [ ] Le lien 'se connecter' => creer un composant 'link'
+- [ ] Styliser la page 'connection' comme les autres pages 
+- [ ] Avoir un bouton 'retour' ou annuler 
+- [ ] Composant 'connection' et composant 'deconnection'
+
+- [ ] Synchroniser les donnees en offline
+  - [ ] Commencer par le niveau et l'exp
+
+- [ ] Dire ce qu'on fait avec les photos prises (au moment de la prise en photo) => ne pas prendre n'importe quoi
+
+- [ ] Quand l'ecran est pas assez haut, il faut pouvoir scroll (se mettre en fenetre)
+- [ ] Quel comportement du trash breakdown (et du reste) quand largeur diminue
+
 - [ ] Monitorer les perfs de chaque query db
 - [ ] Si dimanche on est pas nouvelle semaine.
-
 - [ ] Charger les weekly list en differe avec un loader sur la liste ?? 
 - [ ] Regarder le loader pourquoi il est long 
 - [ ] Mettre la taille (plus ou moins de 2.5cm)
 - [ ] Plus d'exp si plus gros
-- [ ] rajouter une categorie cigarette.
 - [ ] gps en direct pas lastknown loc. + afficher message d'erreur ( a la place de la loc) si pas trouve
 
 ### **Phase 1.1 – Compte et stats**

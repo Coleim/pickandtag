@@ -17,7 +17,7 @@ export default function TrashBreakdown({ categoryBreakdown }: { categoryBreakdow
             <Text style={styles.breakdownPillText}>
               {count}
             </Text>
-            <FontAwesome5 name={cfg.icon as any} size={20} color={Colors.white} />
+            <FontAwesome5 name={cfg.icon as any} size={15} color={Colors.white} />
           </View>
         );
       })}
@@ -33,22 +33,18 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginTop: 12,
     gap: 8,
-    minHeight: 58,
   },
   breakdownPill: {
-    width: 50,
-    height: 50,
-    borderRadius: 15,
-    // borderWidth: 1,
+    width: 40,
+    height: 40,
+    borderRadius: 10,
     justifyContent: "flex-start",
     alignItems: 'center',
-    // borderColor: Colors.secondary,
   },
   breakdownPillText: {
-
     color: Colors.white,
     fontWeight: "600",
-    fontSize: 14,
+    fontSize: 12,
     textAlign: "center",
   },
 });

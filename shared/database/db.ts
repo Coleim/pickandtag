@@ -3,11 +3,12 @@ import { Trash, TrashCount } from "@/types/trash";
 import * as SQLite from 'expo-sqlite';
 import { init_database_schema } from "./migrations/1_init";
 import { images_urls_v2 } from "./migrations/2_images_urls";
+import { add_player_display_name } from "./migrations/3_player_display_name";
 
 export const db = SQLite.openDatabaseSync("pickntag.db");
 
 // const build_database = [init_database_schema];
-const build_database = [init_database_schema, images_urls_v2];
+const build_database = [init_database_schema, images_urls_v2, add_player_display_name];
 
 class Database {
   private isInitialized: Promise<void>;
@@ -36,10 +37,8 @@ class Database {
       console.log("- We are at version: ", version)
 
       for (let i = version; i < build_database.length; ++i) {
-        console.log(i)
-        console.log(i + 1)
         await build_database[i](this.db);
-        // await this.db.runAsync(`INSERT OR REPLACE INTO meta (key, value) VALUES('db_version', ?)`, (i + 1).toString());
+        await this.db.runAsync(`INSERT OR REPLACE INTO meta (key, value) VALUES('db_version', ?)`, (i + 1).toString());
       }
 
     } catch (err) {
@@ -121,8 +120,21 @@ class Database {
     await this.isInitialized;
     try {
       await this.db.runAsync(
-        `UPDATE players SET xp = xp + ?, trash_collected = trash_collected + 1, updated_at = CURRENT_TIMESTAMP`,
+        `UPDATE players SET xp = xp + ?, updated_at = CURRENT_TIMESTAMP`,
         [gainedXP]
+      );
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+
+  async updatePlayer(xp: number, trash_collected: number, display_name: string) {
+    await this.isInitialized;
+    try {
+      await this.db.runAsync(
+        `UPDATE players SET xp = ?, trash_collected = ?, updated_at = CURRENT_TIMESTAMP`,
+        [xp, trash_collected, display_name]
       );
     } catch (error) {
       console.error(error)

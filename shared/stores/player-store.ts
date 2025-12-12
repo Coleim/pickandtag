@@ -3,7 +3,7 @@ import { database } from '@/shared/database/db';
 import { Trash, TrashCount } from '@/types/trash';
 import { Store } from '@tanstack/react-store';
 
-type PlayerState = {
+export type PlayerState = {
   isInit: boolean;
   hasTrashes: boolean;
   trashCount: {
@@ -19,6 +19,8 @@ type PlayerState = {
   } | null,
   lastNTrashes: Trash[];
   currentXp: number;
+  displayName?: string;
+  updatedAt?: Date;
 };
 
 export const playerStore = new Store<PlayerState>({
@@ -39,7 +41,6 @@ export function initializeTrashStore() {
 
         const start = Date.now();
 
-        // REVIEW: Consider adding try/catch around DB calls to set a recoverable error state.
         const [hasTrashes, bestWeekCount,
           dailyTrashCount, weeklyTrashCount, monthlyTrashCount, totalTrashCount,
           yesterdayTrashCount, lastWeekTrashCount, lastMonthTrashCount,
@@ -80,6 +81,7 @@ export function initializeTrashStore() {
             lastMonth: lastMonthTrashCount
           },
           currentXp: player?.xp ?? 0,
+          updatedAt: player?.updated_at ? new Date(player?.updated_at) : new Date()
         }));
 
 
@@ -193,6 +195,7 @@ export async function addTrash(trash: Trash) {
         lastMonth: prevCounts.lastMonth
       },
       currentXp: newXP,
+      updatedAt: new Date()
     };
   });
 }
@@ -242,7 +245,9 @@ export async function deleteTrash(trash: Trash) {
         yesterday: yesterdayTrashCount,
         lastWeek: lastWeekTrashCount,
         lastMonth: lastMonthTrashCount
-      }
+      },
+      currentXp: newXP,
+      updatedAt: new Date()
     }
   });
 }

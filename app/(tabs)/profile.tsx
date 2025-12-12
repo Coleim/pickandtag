@@ -18,6 +18,7 @@ export default function ProfileScreen() {
   const router = useRouter();
   const [session, setSession] = useState<Session | null>(null);
   const currentXp = useStore(playerStore, playerStore => playerStore.currentXp);
+  const displayName = useStore(playerStore, playerStore => playerStore.displayName)
   const trashCount = useStore(playerStore, playerStore => playerStore.trashCount);
   const [selected, setSelected] = useState("day");
   const [selectedTrashCount, setSelectTrashCount] = useState(0);
@@ -81,7 +82,7 @@ export default function ProfileScreen() {
     <View style={styles.container}>
       <View style={styles.headerWrapper}>
         <View style={styles.header}>
-          <Text style={styles.headerTitle}>{session ? 'Bienvenue ' + session.user.user_metadata?.full_name : 'Mon Profil'}</Text>
+          <Text style={styles.headerTitle}>{session ? 'Bienvenue ' + displayName : 'Mon Profil'}</Text>
           <Pressable onPress={() => router.navigate('/auth/new')}>
             <Text>{session ? 'Se deconnecter' : "Se connecter"}</Text>
           </Pressable>

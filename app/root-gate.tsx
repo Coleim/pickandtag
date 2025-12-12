@@ -1,7 +1,7 @@
 import { Camera } from "expo-camera";
 import * as Location from "expo-location";
 import React, { useEffect, useState } from "react";
-import { Text, View } from "react-native";
+import { ActivityIndicator, View } from "react-native";
 import PermissionsScreen from "./permissions-screen";
 
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -9,7 +9,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function RootGate({ onReady }: { onReady: () => void }) {
 
-  console.log("Root Gate ")
   const [loading, setLoading] = useState(true);
   const [showWelcome, setShowWelcome] = useState(false);
 
@@ -35,8 +34,7 @@ export default function RootGate({ onReady }: { onReady: () => void }) {
   if (loading) {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        {/* <ActivityIndicator size="large" /> */}
-        <Text>HELLO ? </Text>
+        <ActivityIndicator size="large" />
       </View>
     );
   }

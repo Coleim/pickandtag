@@ -1,0 +1,134 @@
+.email-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form-group {
+  position: relative;
+}
+
+.platform-selector {
+  display: flex;
+  gap: 12px;
+  margin: 8px 0;
+}
+
+.platform-label {
+  flex: 1;
+  cursor: pointer;
+}
+
+.platform-label input[type="radio"] {
+  display: none;
+}
+
+.platform-option {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 16px;
+  border: 2px solid var(--disabled);
+  border-radius: 8px;
+  background-color: var(--white);
+  transition: all 0.3s ease;
+  font-weight: 500;
+  text-align: center;
+}
+
+.platform-label input[type="radio"]:checked + .platform-option {
+  border-color: var(--primary);
+  background-color: rgba(136, 199, 110, 0.1);
+  color: var(--primary);
+}
+
+.platform-option:hover {
+  border-color: var(--primary);
+}
+
+.platform-icon {
+  font-size: 18px;
+}
+
+.android {
+  /* Styles spécifiques pour Android si nécessaire */
+}
+
+.ios {
+  /* Styles spécifiques pour iOS si nécessaire */
+}
+
+.error-message {
+  color: #f44336;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+  padding: 8px 12px;
+  background-color: #ffebee;
+  border: 1px solid #ffcdd2;
+  border-radius: 6px;
+}
+
+.spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: var(--white);
+  animation: spin 1s ease-in-out infinite;
+  margin-right: 8px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.inline-warning {
+  display: inline-block;
+  background-color: #fff3cd; /* jaune pâle warning */
+  color: #856404; /* texte brun warning */
+  border: 1px solid #ffeeba;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 13px;
+  line-height: 1.4;
+  margin-top: 10px;
+}
+
+.inline-warning strong {
+  color: #533f03;
+}
+
+/* 
+.form-note {
+  font-size: 12px;
+  color: var(--secondary);
+  text-align: center;
+  margin-top: 8px;
+  line-height: 1.4;
+}
+
+.form-note strong {
+  color: var(--text);
+} */
+
+/* Responsive */
+@media (max-width: 480px) {
+  .platform-selector {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .platform-option {
+    padding: 10px 12px;
+    font-size: 14px;
+  }
+  
+  .platform-icon {
+    font-size: 16px;
+  }
+}

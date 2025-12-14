@@ -4,11 +4,17 @@
   "packageManager": "pnpm@8.x", 
   "workspaces": ["apps/*", "packages/*"],
   "scripts": {
-    "dev:mobile": "pnpm --filter mobile start-dev:wsl",
-    "dev:web": "turbo run dev --filter web",
+    "start:web": "pnpm --filter @pickandtag/web start",
+    "start:mobile": "pnpm --filter mobile start-dev:wsl",
     "build:production": "pnpm --filter mobile eas build -p android --profile production"
   },
+  "dependencies": {
+    "react": "19.1.0",
+    "react-dom": "19.1.0"
+  },
   "devDependencies": {
+    "@types/react": "~19.1.0",
+    "@types/react-dom": "~19.1.0",
     "turbo": "^1.13.0",
     "eslint": "^9.25.0",
     "typescript": "~5.8.3"

@@ -1,0 +1,95 @@
+.marketing-carousel {
+  padding: 48px 0;
+}
+
+.marketing-carousel .carousel-frame {
+  position: relative;
+  overflow: hidden;
+  border-radius: 16px;
+  max-width: 1100px;
+  margin: 0 auto;
+  background: #0f172a08;
+  display: grid;
+  place-items: center;
+}
+
+.marketing-carousel .carousel-track {
+  display: flex;
+  transition: transform 600ms ease;
+  will-change: transform;
+  align-items: center; /* vertically center slides' content */
+}
+
+.marketing-carousel .carousel-slide {
+  min-width: 100%;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(180deg, rgba(15,23,42,0.04), rgba(15,23,42,0.02));
+  aspect-ratio: 1 / 1; /* square area for square images */
+  max-height: 520px;
+}
+
+.marketing-carousel img {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto; /* prevent distortion */
+  height: auto; /* keep square aspect ratio */
+  object-fit: contain; /* safe if dimensions are constrained */
+  object-position: center; /* center inside slide */
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.15);
+}
+
+.marketing-carousel .nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(15, 23, 42, 0.6);
+  color: white;
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: background 200ms ease;
+}
+
+.marketing-carousel .nav:hover {
+  background: rgba(15, 23, 42, 0.8);
+}
+
+.marketing-carousel .nav.prev { left: 12px; }
+.marketing-carousel .nav.next { right: 12px; }
+
+.marketing-carousel .dots {
+  position: absolute;
+  bottom: 10px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.marketing-carousel .dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  border: none;
+  background: rgba(15, 23, 42, 0.3);
+  cursor: pointer;
+}
+
+.marketing-carousel .dot.active {
+  background: rgba(15, 23, 42, 0.85);
+}
+
+@media (max-width: 768px) {
+  .marketing-carousel .carousel-slide {
+    max-height: 360px;
+  }
+}
+
+

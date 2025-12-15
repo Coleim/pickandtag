@@ -2,9 +2,9 @@ import { useEffect, useRef, useState, type TouchEvent } from 'react';
 import './MarketingCarousel.css';
 
 const DEFAULT_IMAGES = [
-  '/assets/app-image-1.png',
-  '/assets/app-image-2.png',
-  '/assets/app-image-3.png',
+  './assets/app-image-1.png',
+  './assets/app-image-2.png',
+  './assets/app-image-3.png',
 ];
 
 function clampIndex(index: number, length: number) {

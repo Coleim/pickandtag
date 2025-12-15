@@ -1,4 +1,3 @@
-import React from 'react';
 import { motion } from 'framer-motion';
 import './LegalPages.css';
 
@@ -18,7 +17,7 @@ const Terms = () => {
           <section>
             <h2>1. Acceptation des conditions</h2>
             <p>
-              En utilisant l'application Pick and Tag, vous acceptez d'être lié par ces conditions d'utilisation. 
+              En utilisant l'application Pick and Tag, vous acceptez d'être lié par ces conditions d'utilisation.
               Si vous n'acceptez pas ces conditions, veuillez ne pas utiliser notre application.
             </p>
           </section>
@@ -62,7 +61,7 @@ const Terms = () => {
           <section>
             <h2>5. Contenu utilisateur</h2>
             <p>
-              Vous conservez les droits sur le contenu que vous publiez. En publiant du contenu, vous nous accordez 
+              Vous conservez les droits sur le contenu que vous publiez. En publiant du contenu, vous nous accordez
               une licence non exclusive pour l'utiliser dans le cadre de nos services.
             </p>
           </section>
@@ -70,7 +69,7 @@ const Terms = () => {
           <section>
             <h2>6. Propriété intellectuelle</h2>
             <p>
-              L'application Pick and Tag et son contenu sont protégés par les droits d'auteur et autres droits de propriété intellectuelle. 
+              L'application Pick and Tag et son contenu sont protégés par les droits d'auteur et autres droits de propriété intellectuelle.
               Vous ne pouvez pas copier, modifier ou distribuer notre contenu sans autorisation.
             </p>
           </section>
@@ -78,7 +77,7 @@ const Terms = () => {
           <section>
             <h2>7. Limitation de responsabilité</h2>
             <p>
-              Pick and Tag est fourni "en l'état". Nous ne garantissons pas que l'application sera exempte d'erreurs ou 
+              Pick and Tag est fourni "en l'état". Nous ne garantissons pas que l'application sera exempte d'erreurs ou
               disponible en permanence. Nous ne serons pas responsables des dommages indirects ou consécutifs.
             </p>
           </section>
@@ -86,7 +85,7 @@ const Terms = () => {
           <section>
             <h2>8. Suspension et résiliation</h2>
             <p>
-              Nous nous réservons le droit de suspendre ou résilier votre compte en cas de violation de ces conditions. 
+              Nous nous réservons le droit de suspendre ou résilier votre compte en cas de violation de ces conditions.
               Vous pouvez également résilier votre compte à tout moment.
             </p>
           </section>
@@ -94,7 +93,7 @@ const Terms = () => {
           <section>
             <h2>9. Modifications des conditions</h2>
             <p>
-              Nous pouvons modifier ces conditions d'utilisation. Les modifications importantes vous seront notifiées 
+              Nous pouvons modifier ces conditions d'utilisation. Les modifications importantes vous seront notifiées
               et votre utilisation continue de l'application constituera une acceptation des nouvelles conditions.
             </p>
           </section>

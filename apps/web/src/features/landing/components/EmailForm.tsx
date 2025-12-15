@@ -1,14 +1,15 @@
-import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import { useState, type FormEvent } from 'react';
 import './EmailForm.css';
 
 const FORMSPREE_ENDPOINT = 'https://formspree.io/f/mwprbapq';
+
 
 const EmailForm = () => {
   const [submitted, setSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
     try {

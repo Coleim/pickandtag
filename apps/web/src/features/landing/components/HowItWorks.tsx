@@ -1,5 +1,4 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import { motion, type Variants } from 'framer-motion';
 import './HowItWorks.css';
 
 const HowItWorks = () => {
@@ -37,7 +36,7 @@ const HowItWorks = () => {
     }
   };
 
-  const itemVariants = {
+  const itemVariants: Variants = {
     hidden: { opacity: 0, y: 30 },
     visible: {
       opacity: 1,
@@ -77,21 +76,21 @@ const HowItWorks = () => {
               key={index}
               className="step"
               variants={itemVariants}
-              whileHover={{ 
+              whileHover={{
                 y: -10,
                 transition: { type: "spring", stiffness: 300 }
               }}
             >
               <div className="step-number">{step.number}</div>
-              
+
               <div className="step-content">
-                <div 
+                <div
                   className="step-icon"
                   style={{ backgroundColor: step.color }}
                 >
                   {step.icon}
                 </div>
-                
+
                 <h3 className="step-title">{step.title}</h3>
                 <p className="step-description">{step.description}</p>
               </div>
@@ -111,19 +110,19 @@ const HowItWorks = () => {
             <h4>Objectifs quotidiens <span className="coming-soon-badge">Bientôt</span></h4>
             <p>Défis personnalisés pour maintenir ta motivation</p>
           </div>
-          
+
           <div className="feature-card">
             <div className="feature-icon">👥</div>
             <h4>Communauté <span className="coming-soon-badge">Bientôt</span></h4>
             <p>Partage tes exploits avec d'autres éco-citoyens</p>
           </div>
-          
+
           <div className="feature-card">
             <div className="feature-icon">📊</div>
             <h4>Statistiques</h4>
             <p>Suis ton impact environnemental en temps réel</p>
           </div>
-          
+
           <div className="feature-card">
             <div className="feature-icon">🏅</div>
             <h4>Badges <span className="coming-soon-badge">Bientôt</span></h4>

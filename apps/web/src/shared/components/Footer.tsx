@@ -1,4 +1,3 @@
-import React from 'react';
 import { motion } from 'framer-motion';
 import './Footer.css';
 
@@ -19,16 +18,16 @@ const Footer = () => {
             <div className="footer-brand">
               <div className="footer-logo">
                 <div className="logo-icon">
-                  <img 
-                    src="assets/tritou-appicon.png" 
-                    alt="Tritou - Mascotte de Pick and Tag"
+                  <img
+                    src="assets/tritou-appicon.png"
+                    alt="Tritou - Mascotte de Pick nd Tag"
                     className="logo-image"
                   />
                 </div>
                 <span className="logo-text">Pick and Tag</span>
               </div>
               <p className="footer-description">
-                Transforme la collecte de déchets en aventure amusante et collaborative. 
+                Transforme la collecte de déchets en aventure amusante et collaborative.
                 Rejoins la communauté des éco-citoyens !
               </p>
             </div>
@@ -67,7 +66,7 @@ const Footer = () => {
             <div className="footer-copyright">
               <p>&copy; {currentYear} Pick and Tag. Tous droits réservés.</p>
             </div>
-            
+
             {/* <div className="footer-social">
               <a href="#" className="social-link" aria-label="Twitter">
                 <span>🐦</span>

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import { useState, type ChangeEvent, type FormEvent } from 'react';
 import './Contact.css';
 
 const Contact = () => {
@@ -13,14 +13,14 @@ const Contact = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [error, setError] = useState('');
 
-  const handleChange = (e) => {
+  const handleChange = (e: ChangeEvent<HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
     });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError('');
     setIsLoading(true);
@@ -82,7 +82,7 @@ const Contact = () => {
                 <div className="success-icon">✅</div>
                 <h3>Message envoyé !</h3>
                 <p>Merci pour votre message. Nous vous répondrons dans les plus brefs délais.</p>
-                <button 
+                <button
                   className="btn btn-secondary"
                   onClick={() => setIsSubmitted(false)}
                 >
@@ -148,7 +148,7 @@ const Contact = () => {
                     onChange={handleChange}
                     required
                     className="input textarea"
-                    rows="5"
+                    rows={5}
                     placeholder="Décrivez votre demande..."
                   />
                 </div>

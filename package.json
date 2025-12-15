@@ -6,10 +6,12 @@
   "scripts": {
     "start:web": "pnpm --filter @pickandtag/web start",
     "start:mobile": "pnpm --filter mobile start-dev:wsl",
-    "build:production": "pnpm --filter mobile eas build -p android --profile production"
+    "build:mobile:production": "pnpm --filter mobile eas build -p android --profile production",
+    "build": "turbo run build"
   },
   "dependencies": {
     "react": "19.1.0",
+    "@supabase/supabase-js": "^2.75.0",
     "react-dom": "19.1.0"
   },
   "devDependencies": {

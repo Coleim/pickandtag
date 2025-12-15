@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type TouchEvent } from 'react';
 import './MarketingCarousel.css';
 
 const DEFAULT_IMAGES = [
@@ -7,7 +7,7 @@ const DEFAULT_IMAGES = [
   '/assets/app-image-3.png',
 ];
 
-function clampIndex(index, length) {
+function clampIndex(index: number, length: number) {
   if (length === 0) return 0;
   if (index < 0) return length - 1;
   if (index >= length) return 0;
@@ -16,8 +16,8 @@ function clampIndex(index, length) {
 
 const MarketingCarousel = ({ images = DEFAULT_IMAGES, intervalMs = 3500 }) => {
   const [activeIndex, setActiveIndex] = useState(0);
-  const timerRef = useRef(null);
-  const touchStartXRef = useRef(null);
+  const timerRef = useRef<number | null>(null);
+  const touchStartXRef = useRef<number | null>(null);
   const isHoveringRef = useRef(false);
 
   useEffect(() => {
@@ -41,7 +41,7 @@ const MarketingCarousel = ({ images = DEFAULT_IMAGES, intervalMs = 3500 }) => {
     }
   };
 
-  const goto = (nextIndex) => {
+  const goto = (nextIndex: number) => {
     setActiveIndex(clampIndex(nextIndex, images.length));
   };
 
@@ -55,12 +55,12 @@ const MarketingCarousel = ({ images = DEFAULT_IMAGES, intervalMs = 3500 }) => {
     startAutoplay();
   };
 
-  const onTouchStart = (e) => {
+  const onTouchStart = (e: TouchEvent<HTMLDivElement>) => {
     touchStartXRef.current = e.touches[0].clientX;
     stopAutoplay();
   };
 
-  const onTouchEnd = (e) => {
+  const onTouchEnd = (e: TouchEvent<HTMLDivElement>) => {
     const startX = touchStartXRef.current;
     if (startX == null) return;
     const endX = e.changedTouches[0].clientX;

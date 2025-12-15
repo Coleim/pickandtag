@@ -1,4 +1,3 @@
-import React from 'react';
 import { motion } from 'framer-motion';
 import './LegalPages.css';
 
@@ -18,14 +17,14 @@ const Cookies = () => {
           <section>
             <h2>1. Qu'est-ce qu'un cookie ?</h2>
             <p>
-              Un cookie est un petit fichier texte stocké sur votre appareil lorsque vous visitez un site web ou utilisez une application. 
+              Un cookie est un petit fichier texte stocké sur votre appareil lorsque vous visitez un site web ou utilisez une application.
               Les cookies nous aident à améliorer votre expérience et à comprendre comment vous utilisez nos services.
             </p>
           </section>
 
           <section>
             <h2>2. Types de cookies utilisés</h2>
-            
+
             <h3>Cookies essentiels</h3>
             <p>
               Ces cookies sont nécessaires au fonctionnement de l'application et ne peuvent pas être désactivés :
@@ -83,7 +82,7 @@ const Cookies = () => {
 
           <section>
             <h2>5. Gestion des cookies</h2>
-            
+
             <h3>Dans l'application</h3>
             <p>
               Vous pouvez gérer vos préférences de cookies dans les paramètres de l'application :
@@ -121,7 +120,7 @@ const Cookies = () => {
           <section>
             <h2>7. Cookies et données personnelles</h2>
             <p>
-              Certains cookies peuvent contenir des données personnelles. Ces données sont traitées conformément à notre 
+              Certains cookies peuvent contenir des données personnelles. Ces données sont traitées conformément à notre
               <a href="/privacy">Politique de Confidentialité</a> et aux réglementations en vigueur (RGPD).
             </p>
           </section>
@@ -129,7 +128,7 @@ const Cookies = () => {
           <section>
             <h2>8. Mise à jour de cette politique</h2>
             <p>
-              Cette politique des cookies peut être mise à jour pour refléter les changements dans nos pratiques ou 
+              Cette politique des cookies peut être mise à jour pour refléter les changements dans nos pratiques ou
               pour d'autres raisons opérationnelles, légales ou réglementaires.
             </p>
           </section>

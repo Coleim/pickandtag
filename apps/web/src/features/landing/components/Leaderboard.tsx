@@ -1,4 +1,3 @@
-import React from 'react';
 import { motion } from 'framer-motion';
 import './Leaderboard.css';
 
@@ -29,11 +28,11 @@ const Leaderboard = () => {
           <div className="coming-soon-card">
             <motion.div
               className="coming-soon-icon"
-              animate={{ 
+              animate={{
                 rotate: [0, 10, -10, 0],
                 scale: [1, 1.1, 1]
               }}
-              transition={{ 
+              transition={{
                 duration: 2,
                 repeat: Infinity,
                 repeatType: "reverse"
@@ -41,13 +40,13 @@ const Leaderboard = () => {
             >
               🏆
             </motion.div>
-            
+
             <h3 className="coming-soon-title">Bientôt disponible !</h3>
             <p className="coming-soon-description">
-              Le classement en temps réel sera disponible dès le lancement de la bêta. 
+              Le classement en temps réel sera disponible dès le lancement de la bêta.
               Prépare-toi à défier tes amis et à grimper dans les rangs !
             </p>
-            
+
             <div className="coming-soon-features">
               <div className="feature-item">
                 <span className="feature-icon">📊</span>
@@ -71,7 +70,7 @@ const Leaderboard = () => {
             >
               <div className="progress-fill"></div>
             </motion.div> */}
-            
+
             {/* <p className="progress-text">Développement en cours... 75%</p> */}
           </div>
         </motion.div>
@@ -90,13 +89,13 @@ const Leaderboard = () => {
               <h4>Statistiques détaillées</h4>
               <p>Analyse ton impact environnemental avec des graphiques et métriques précises</p>
             </div>
-            
+
             <div className="future-card">
               <div className="future-icon">🎮</div>
               <h4>Mini-jeux</h4>
               <p>Des défis ludiques pour rendre la collecte encore plus amusante</p>
             </div>
-            
+
             <div className="future-card">
               <div className="future-icon">🌍</div>
               <h4>Impact global</h4>

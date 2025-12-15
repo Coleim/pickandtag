@@ -12,7 +12,7 @@ import PlayerProfilePage from './features/profile/pages/PlayerProfilePage';
 
 function App() {
   return (
-    <Router>
+    <Router basename='/pickandtag'>
       <div className="App">
         <Routes>
           <Route path="/" element={<HomePage />} />

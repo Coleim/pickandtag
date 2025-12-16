@@ -1,9 +1,12 @@
-// Learn more https://docs.expo.io/guides/customizing-metro
 const { getDefaultConfig } = require('expo/metro-config');
 const path = require('path');
 
 /** @type {import('expo/metro-config').MetroConfig} */
 const config = getDefaultConfig(__dirname);
+
+// Find workspace root
+const projectRoot = __dirname;
+const workspaceRoot = path.resolve(projectRoot, '../..');
 
 // Add wasm asset support
 config.resolver.assetExts.push('wasm');
@@ -18,17 +21,20 @@ config.server.enhanceMiddleware = (middleware) => {
 };
 
 // --------------------
-// Monorepo: include packages/* so Metro can resolve them
-config.watchFolders = [
-  path.resolve(__dirname, '../../packages') // adapte selon la structure: root/apps/mobile
+// Monorepo: Watch workspace root AND packages
+config.watchFolders = [workspaceRoot];
+
+// Let Metro resolve from both local and workspace node_modules
+config.resolver.nodeModulesPaths = [
+  path.resolve(projectRoot, 'node_modules'),
+  path.resolve(workspaceRoot, 'node_modules'),
 ];
 
 // --------------------
-// Optional: if you get duplicate React errors
+// Prevent duplicate React errors
 config.resolver.extraNodeModules = {
-  react: path.resolve(__dirname, 'node_modules/react'),
-  'react-native': path.resolve(__dirname, 'node_modules/react-native'),
+  react: path.resolve(projectRoot, 'node_modules/react'),
+  'react-native': path.resolve(projectRoot, 'node_modules/react-native'),
 };
-
 
 module.exports = config;

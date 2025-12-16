@@ -4,12 +4,12 @@
 - [x] Lier l'acces a la page depuis "Mon Profil"
 - [x] rajouter une categorie cigarette.
 --------------------------------------------------------
-- [ ] Le lien 'se connecter' => creer un composant 'link'
+- [X] Le lien 'se connecter' => creer un composant 'link'
 - [ ] Styliser la page 'connection' comme les autres pages 
 - [ ] Avoir un bouton 'retour' ou annuler 
 - [ ] Composant 'connection' et composant 'deconnection'
 
-- [ ] Synchroniser les donnees en offline
+- [X] Synchroniser les donnees en offline
   - [ ] Commencer par le niveau et l'exp
 
 - [ ] Dire ce qu'on fait avec les photos prises (au moment de la prise en photo) => ne pas prendre n'importe quoi

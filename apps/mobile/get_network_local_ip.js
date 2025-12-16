@@ -1,5 +1,4 @@
 const { exec } = require("child_process");
-require("dotenv").config({ path: "./.env.local" });
 
 // Executar o comando e capturar a saída
 exec(

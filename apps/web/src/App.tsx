@@ -1,5 +1,6 @@
-import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
+import { AppLayout } from './app/AppLayout';
 import HomePage from './features/landing/pages/HomePage';
 import Cookies from './features/legal/pages/Cookies';
 import FAQ from './features/legal/pages/FAQ';
@@ -9,16 +10,30 @@ import Privacy from './features/legal/pages/Privacy';
 import Terms from './features/legal/pages/Terms';
 import PlayerProfilePage from './features/profile/pages/PlayerProfilePage';
 
-
 function App() {
+
+  const getBasename = () => {
+    const hostname = window.location.hostname;
+
+    if (hostname.includes('github.io')) {
+      return '/pickandtag';
+    }
+
+    return '/';
+  };
+
   return (
-    <Router basename='/pickandtag'>
+    <BrowserRouter basename={getBasename()}>
       <div className="App">
         <Routes>
           <Route path="/" element={<HomePage />} />
 
-          {/* <Route path="/dashboard" element={<GameDashboard />} /> */}
-          <Route path="/player/:id" element={<PlayerProfilePage />} />
+          <Route path="/app" element={<AppLayout />}>
+            <Route index element={<PlayerProfilePage />} />
+            {/* <Route path="players" element={<Players />} /> */}
+            {/* <Route path="player-rankings" element={<PlayerRankings />} /> */}
+            {/* <Route path="location-rankings" element={<LocationRankings />} /> */}
+          </Route>
 
 
           <Route path="/privacy" element={<LegalPage><Privacy /></LegalPage>} />
@@ -28,7 +43,7 @@ function App() {
           <Route path="/help" element={<LegalPage><Help /></LegalPage>} />
         </Routes>
       </div>
-    </Router>
+    </BrowserRouter>
   );
 }
 

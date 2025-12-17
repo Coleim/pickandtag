@@ -10,15 +10,21 @@
     "build": "turbo run build"
   },
   "dependencies": {
-    "react": "19.2.0",
-    "react-dom": "19.2.0",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
     "@supabase/supabase-js": "^2.75.0"
   },
   "devDependencies": {
-    "@types/react": "~19.2.0",
-    "@types/react-dom": "~19.2.0",
+    "@types/react": "~19.1.0",
+    "@types/react-dom": "~19.1.0",
     "turbo": "^1.13.0",
     "eslint": "^9.25.0",
     "typescript": "~5.8.3"
+  },
+  "pnpm": {
+    "overrides": {
+      "react": "19.1.0",
+      "react-dom": "19.1.0"
+    }
   }
 }

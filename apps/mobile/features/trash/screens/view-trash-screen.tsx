@@ -1,7 +1,7 @@
-import { Colors } from "@/shared/constants/colors";
 import { database } from "@/shared/database/db";
 import { deleteTrash } from "@/shared/stores/player-store";
 import { Trash } from "@/types/trash";
+import { Colors } from "@pickandtag/domain";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { ActivityIndicator, StyleSheet, Text, View } from "react-native";

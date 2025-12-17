@@ -1,6 +1,6 @@
 import { buttonStyles } from "@/shared/constants/button-styles";
-import { Colors } from "@/shared/constants/colors";
 import { FontAwesome5 } from "@expo/vector-icons";
+import { Colors } from "@pickandtag/domain";
 import { Pressable, Text } from "react-native";
 
 type ButtonProps = {

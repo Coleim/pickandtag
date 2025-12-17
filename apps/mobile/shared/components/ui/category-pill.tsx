@@ -1,6 +1,6 @@
-import { Colors } from "@/shared/constants/colors";
 import { CategoryConfigDetails } from "@/types/categoryConfig";
 import { FontAwesome5 } from "@expo/vector-icons";
+import { Colors } from "@pickandtag/domain";
 import React from "react";
 import { Animated, StyleSheet, Text } from "react-native";
 

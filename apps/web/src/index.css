@@ -20,26 +20,6 @@ code {
     monospace;
 }
 
-/* CSS Variables for colors */
-:root {
-  --primary: #88c76e;
-  --accent: #4CAF50;
-  --secondary: #37474F;
-  --inactive: #9E9E9E;
-  --background: #FAFAFA;
-  --text: #263238;
-  --white: #FFFFFF;
-  --disabled: #E0E0E0;
-  
-  /* Category colors */
-  --plastic: #FFD54F;
-  --poly: #FFB74D;
-  --paper: #1976D2;
-  --glass: #388E3C;
-  --metal: #C62828;
-  --other-category: #6D4C41;
-}
-
 /* Utility classes */
 .container {
   max-width: 1200px;
@@ -113,4 +93,42 @@ code {
     padding: 10px 20px;
     font-size: 14px;
   }
+}
+
+
+
+
+:root {
+  /* Core navbar */
+  --navbar-bg: rgba(136, 199, 110, 0.15); /* translucent primary */
+  --navbar-accent: rgba(76, 175, 80, 0.25); /* active pill accent */
+  --navbar-hover: rgba(136, 199, 110, 0.2); /* hover pill glow */
+
+  /* Text & icons */
+  --navbar-text: var(--text);  /* uses your existing --text color */
+  --navbar-icon: var(--text);  /* same as text */
+
+  /* Rounded pill */
+  --navbar-radius: 24px;
+
+  /* Shadow */
+  --navbar-shadow: 0 2px 10px rgba(0,0,0,0.08);
+
+  --search-bg: rgba(255, 255, 255, 0.25);   /* translucent frosted surface */
+  --search-hover: rgba(255, 255, 255, 0.35); /* slightly brighter on hover/focus */
+  --search-text: var(--text);               /* use your existing text color */
+  --search-icon: var(--text-secondary);    /* subtle icon color */
+  --search-radius: 30px;                    /* pill shape */
+  --search-shadow: 0 4px 20px rgba(0,0,0,0.08); /* subtle depth */
+
+
+  --table-bg: rgba(255, 255, 255, 0.25);      /* frosted background */
+  --table-hover: rgba(255, 255, 255, 0.35);   /* row hover */
+  --table-text: var(--text);
+  --table-header-text: var(--text-secondary);
+  --table-border: rgba(255, 255, 255, 0.2);   /* subtle row separation */
+  --table-radius: 16px;                        /* rounded container */
+  --table-shadow: 0 4px 20px rgba(0,0,0,0.08);
+
+
 }

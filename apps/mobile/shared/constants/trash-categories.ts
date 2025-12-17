@@ -1,6 +1,6 @@
 import { CategoryConfig } from "@/types/categoryConfig";
 import { TrashCount } from "@/types/trash";
-import { Colors } from "./colors";
+import { Colors } from '@pickandtag/domain';
 
 // Categories mises à jour
 export const TrashCategories: CategoryConfig = {

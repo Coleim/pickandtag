@@ -1,0 +1,39 @@
+.playerListWrapper {
+  width: 90%;
+  margin: 24px auto;
+  background-color: var(--table-bg);
+  backdrop-filter: blur(12px);
+  border-radius: var(--table-radius);
+  box-shadow: var(--table-shadow);
+  overflow: hidden; /* rounded corners clip table */
+}
+
+.playerListTable {
+  width: 100%;
+  border-collapse: separate; /* allow spacing if needed */
+  border-spacing: 0;
+  font-size: 14px;
+  color: var(--table-text);
+}
+
+.playerListTable thead {
+  background-color: rgba(255, 255, 255, 0.3);
+  color: var(--table-header-text);
+  font-weight: 600;
+}
+
+.playerListTable th,
+.playerListTable td {
+  padding: 12px 16px;
+  text-align: left;
+}
+
+.playerListTable tbody tr {
+  transition: background-color 0.15s ease;
+  cursor: default;
+}
+
+.playerListTable tbody tr:hover {
+  background-color: var(--table-hover);
+}
+

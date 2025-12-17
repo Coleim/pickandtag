@@ -1,5 +1,5 @@
 import { Button } from "@/shared/components/ui/buttons";
-import { Colors } from "@/shared/constants/colors";
+import { Colors } from "@pickandtag/domain";
 import { CameraView, useCameraPermissions } from "expo-camera";
 import { File, Paths } from 'expo-file-system';
 import { ImageManipulator, SaveFormat } from 'expo-image-manipulator';

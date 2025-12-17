@@ -1,5 +1,5 @@
-import { Colors } from "@/shared/constants/colors";
 import { getLevelForXP } from "@/shared/constants/levels";
+import { Colors } from "@pickandtag/domain";
 import React, { useMemo } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import XPSection from "./xp-section";

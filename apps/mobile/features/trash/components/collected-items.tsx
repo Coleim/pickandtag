@@ -1,7 +1,7 @@
-import { Colors } from "@/shared/constants/colors";
 import { TrashCategories } from "@/shared/constants/trash-categories";
 import { Trash } from "@/types/trash";
 import { FontAwesome5 } from "@expo/vector-icons";
+import { Colors } from "@pickandtag/domain";
 import React, { memo } from "react";
 import { StyleSheet, Text, TouchableOpacity } from "react-native";
 

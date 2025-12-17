@@ -1,4 +1,3 @@
-
 //TODO: type in english
 export type TrashCategory =
   | "Cigarette"

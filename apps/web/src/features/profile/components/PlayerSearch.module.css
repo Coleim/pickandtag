@@ -1,0 +1,42 @@
+.searchBarWrapper {
+  width: 80%;                        /* 80% of parent container */
+  display: flex;
+  justify-content: center;
+  margin: 16px auto;                 /* center horizontally with some spacing */
+}
+
+.searchBar {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 8px 16px;
+  background-color: var(--search-bg);
+  backdrop-filter: blur(12px);       /* frosted glass effect */
+  border-radius: var(--search-radius);
+  box-shadow: var(--search-shadow);
+  transition: all 0.2s ease;
+}
+
+.searchBar:hover,
+.searchBar:focus-within {
+  background-color: var(--search-hover);
+}
+
+.searchBar input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--search-text);
+  font-size: 16px;
+  padding: 8px;
+}
+
+.searchBar .searchIcon {
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+  flex-shrink: 0;
+  color: var(--search-icon);
+}
+

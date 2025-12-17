@@ -13,7 +13,7 @@ export function NavBar() {
             className={({ isActive }) =>
               `${styles.navLink} ${isActive ? styles.navLinkActive : ''}`
             }>
-            <FaUserFriends className="navIcon" />
+            <FaUserFriends />
             Players
           </NavLink>
         </li>

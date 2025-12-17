@@ -1,5 +1,5 @@
 import { Button } from "@/shared/components/ui/buttons";
-import { Colors } from "@/shared/constants/colors";
+import { Colors } from "@pickandtag/domain";
 import { useRouter } from "expo-router";
 import React from "react";
 import { Dimensions, Image, StyleSheet, Text, View } from "react-native";

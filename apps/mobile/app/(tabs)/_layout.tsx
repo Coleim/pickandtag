@@ -1,6 +1,6 @@
-import { Colors } from "@/shared/constants/colors";
 import { playerStore } from "@/shared/stores/player-store";
 import { Ionicons } from "@expo/vector-icons";
+import { Colors } from "@pickandtag/domain";
 import { useStore } from "@tanstack/react-store";
 import { Tabs } from "expo-router";
 import { Text, View } from "react-native";

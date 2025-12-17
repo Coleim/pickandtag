@@ -1,6 +1,6 @@
 import { Button } from "@/shared/components/ui/buttons";
 import { NoteText, SubTitle } from "@/shared/components/ui/titles";
-import { Colors } from "@/shared/constants/colors";
+import { Colors } from "@pickandtag/domain";
 import { useState } from "react";
 import { Image, StyleSheet, View } from "react-native";
 import { CategoryPicker } from "./category-picker";

@@ -1,10 +1,10 @@
 import { Button } from '@/shared/components/ui/buttons';
 import { CategoryPill } from '@/shared/components/ui/category-pill';
-import { Colors } from '@/shared/constants/colors';
 import { TrashCategories } from '@/shared/constants/trash-categories';
 import { CategoryConfigDetails } from '@/types/categoryConfig';
 import { Trash } from '@/types/trash';
 import { FontAwesome5 } from '@expo/vector-icons';
+import { Colors } from '@pickandtag/domain';
 import * as Location from 'expo-location';
 import { useEffect, useState } from 'react';
 import { Alert, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';

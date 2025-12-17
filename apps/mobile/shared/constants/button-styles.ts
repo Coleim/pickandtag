@@ -1,5 +1,5 @@
+import { Colors } from "@pickandtag/domain";
 import { StyleSheet } from "react-native";
-import { Colors } from "./colors";
 
 export const buttonStyles = StyleSheet.create({
   primary: {

@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import './App.css';
 import { AppLayout } from './app/AppLayout';
 import HomePage from './features/landing/pages/HomePage';
@@ -8,7 +8,10 @@ import Help from './features/legal/pages/Help';
 import LegalPage from './features/legal/pages/LegalPage';
 import Privacy from './features/legal/pages/Privacy';
 import Terms from './features/legal/pages/Terms';
+import LocationRankingPage from './features/profile/pages/LocationRankingPage';
 import PlayerProfilePage from './features/profile/pages/PlayerProfilePage';
+import PlayerRankingPage from './features/profile/pages/PlayerRankingPage';
+import PlayerSearchPage from './features/profile/pages/PlayerSearchPage';
 
 function App() {
 
@@ -29,10 +32,11 @@ function App() {
           <Route path="/" element={<HomePage />} />
 
           <Route path="/app" element={<AppLayout />}>
-            <Route index element={<PlayerProfilePage />} />
-            {/* <Route path="players" element={<Players />} /> */}
-            {/* <Route path="player-rankings" element={<PlayerRankings />} /> */}
-            {/* <Route path="location-rankings" element={<LocationRankings />} /> */}
+            <Route index element={<Navigate to="players" replace />} />
+            <Route path="players" element={<PlayerSearchPage />} />
+            <Route path="players/:id" element={<PlayerProfilePage />} />
+            <Route path="player-rankings" element={<PlayerRankingPage />} />
+            <Route path="location-rankings" element={<LocationRankingPage />} />
           </Route>
 
 

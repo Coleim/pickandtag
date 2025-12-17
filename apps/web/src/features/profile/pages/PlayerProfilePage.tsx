@@ -7,7 +7,6 @@ export default function PlayerProfilePage() {
   const { id } = useParams<{ id: string }>();
   const { player, loading, error } = usePlayerData(id);
 
-
   if (loading) {
     return (
       <div className="loading-container">

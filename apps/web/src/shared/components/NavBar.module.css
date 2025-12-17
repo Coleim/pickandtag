@@ -1,0 +1,39 @@
+.navbar {
+  display: flex;
+  justify-content: start;
+  padding: 0 32px;        
+  background-color: var(--primary);
+  height: 50px;            
+  align-items: stretch;    
+}
+
+.nav {
+  display: flex;
+  gap: 32px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.navLink {
+  display: flex;          
+  align-items: center;  
+  gap: 6px;                 
+  color: var(--text);
+  text-decoration: none;
+  padding: 0 12px;        
+  font-weight: 500;
+  border-bottom: 5px solid transparent;
+  height: 100%;           
+  box-sizing: border-box;
+  transition: color 0.15s ease;
+}
+
+.navLink:hover:not(.navLinkActive) {
+  color: var(--white);
+}
+
+.navLinkActive {
+  border-bottom-color: var(--accent);
+}
+

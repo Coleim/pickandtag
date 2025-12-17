@@ -1,4 +1,5 @@
 import { Outlet } from "react-router-dom";
+import { NavBar } from "../shared/components/NavBar";
 
 
 export function AppLayout() {
@@ -6,7 +7,7 @@ export function AppLayout() {
 
   return (
     <div>
-      <h1>"AppLayout"</h1>
+      <NavBar />
       <Outlet />
     </div>
   )

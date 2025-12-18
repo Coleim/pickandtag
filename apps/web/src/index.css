@@ -114,21 +114,23 @@ code {
   /* Shadow */
   --navbar-shadow: 0 2px 10px rgba(0,0,0,0.08);
 
-  --search-bg: rgba(255, 255, 255, 0.25);   /* translucent frosted surface */
-  --search-hover: rgba(255, 255, 255, 0.35); /* slightly brighter on hover/focus */
-  --search-text: var(--text);               /* use your existing text color */
-  --search-icon: var(--text-secondary);    /* subtle icon color */
-  --search-radius: 30px;                    /* pill shape */
-  --search-shadow: 0 4px 20px rgba(0,0,0,0.08); /* subtle depth */
+  /* Search bar vars */
+  --search-bg: rgba(255, 255, 255, 0.25);   
+  --search-hover: rgba(255, 255, 255, 0.35); 
+  --search-text: var(--text);               
+  --search-icon: var(--text-secondary);    
+  --search-radius: 30px;                    
+  --search-shadow: 0 4px 20px rgba(0,0,0,0.08); 
 
-
-  --table-bg: rgba(255, 255, 255, 0.25);      /* frosted background */
-  --table-hover: rgba(255, 255, 255, 0.35);   /* row hover */
+  /* Table vars */
+  --table-bg: rgba(255, 255, 255, 0.25);      
+  --table-hover: var(--navbar-hover);
   --table-text: var(--text);
   --table-header-text: var(--text-secondary);
-  --table-border: rgba(255, 255, 255, 0.2);   /* subtle row separation */
-  --table-radius: 16px;                        /* rounded container */
+  --table-border: rgba(255, 255, 255, 0.2);   
+  --table-radius: 16px;                        
   --table-shadow: 0 4px 20px rgba(0,0,0,0.08);
 
-
+  /* New var for row hover shadow (green glow) */
+  --table-hover-shadow: rgba(76, 175, 80, 0.15);
 }

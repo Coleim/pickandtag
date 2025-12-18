@@ -8,7 +8,7 @@ export default function PlayerSearch() {
     <div className={styles.searchBarWrapper}>
       <div className={styles.searchBar}>
         <FaSearch className={styles.searchIcon} />
-        <input type="text" placeholder="Search players, rankings..." />
+        <input type="text" placeholder="Search by pseudo..." />
       </div>
     </div>
   )

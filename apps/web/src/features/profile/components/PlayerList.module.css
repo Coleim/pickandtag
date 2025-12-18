@@ -5,13 +5,13 @@
   backdrop-filter: blur(12px);
   border-radius: var(--table-radius);
   box-shadow: var(--table-shadow);
-  overflow: hidden; /* rounded corners clip table */
+  overflow: hidden;
 }
 
 .playerListTable {
   width: 100%;
-  border-collapse: separate; /* allow spacing if needed */
-  border-spacing: 0;
+  border-collapse: separate;
+  border-spacing: 0 0px; 
   font-size: 14px;
   color: var(--table-text);
 }
@@ -22,6 +22,7 @@
   font-weight: 600;
 }
 
+
 .playerListTable th,
 .playerListTable td {
   padding: 12px 16px;
@@ -29,11 +30,14 @@
 }
 
 .playerListTable tbody tr {
-  transition: background-color 0.15s ease;
-  cursor: default;
+  cursor: pointer;
+  border-radius: 24px; 
+  background-color: var(--white);
 }
 
 .playerListTable tbody tr:hover {
-  background-color: var(--table-hover);
+  background-color: var(--table-hover);    
+  backdrop-filter: blur(12px);
+  box-shadow: 0 4px 16px var(--table-hover-shadow); 
 }
 

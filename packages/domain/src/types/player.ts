@@ -1,8 +1,10 @@
+import { Level } from "./level";
+
 export type Player = {
   id: string;
   displayName: string;
   xp: number;
-  level: number;
+  level: Level;
   totalItems: number;
   updated_at: Date;
 }

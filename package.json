@@ -5,8 +5,10 @@
   "workspaces": ["apps/*", "packages/*"],
   "scripts": {
     "start:web": "pnpm --filter @pickandtag/web start",
-    "start:mobile": "pnpm --filter mobile start-dev:wsl",
-    "build:mobile:production": "pnpm --filter mobile eas build -p android --profile production",
+    "start:mobile": "pnpm --filter mobile start:wsl",
+    "start:mobile-dev": "pnpm --filter mobile start-dev:wsl",
+    "build:mobile:dev": "pnpm --filter mobile build:dev",
+    "build:mobile:production": "pnpm --filter mobile build:production",
     "build": "turbo run build"
   },
   "dependencies": {

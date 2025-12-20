@@ -9,7 +9,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (data.session) {
         console.log(" Data session: ", data.session)
         await syncPlayerProfile();
-        // setProfile(profile);
       }
     });
 
@@ -17,6 +16,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       async (event) => {
         if (event === "SIGNED_IN" || event === "TOKEN_REFRESHED") {
           console.log("SIGNED IN !!! ")
+          await syncPlayerProfile();
         }
         if (event === "SIGNED_OUT") {
           console.log("SIGNED OUT !")

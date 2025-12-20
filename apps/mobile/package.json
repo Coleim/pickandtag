@@ -5,6 +5,8 @@
   "scripts": {
     "start:wsl": "REACT_NATIVE_PACKAGER_HOSTNAME=$(node --env-file-if-exists=.env.local ./get_network_local_ip.js) npx expo start",
     "start-dev:wsl": "REACT_NATIVE_PACKAGER_HOSTNAME=$(node --env-file-if-exists=.env.local ./get_network_local_ip.js) npx expo start --dev-client",
+    "build:production": "eas build -p android --profile production",
+    "build:dev": "eas build --profile development --platform android",
     "lint": "expo lint"
   },
   "dependencies": {

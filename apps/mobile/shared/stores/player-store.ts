@@ -1,3 +1,4 @@
+import { syncPlayerProfile } from '@/features/player/services/userService';
 import { TrashCategories } from '@/shared/constants/trash-categories';
 import { database } from '@/shared/database/db';
 import { Trash, TrashCount } from '@/types/trash';
@@ -57,7 +58,6 @@ export function initializeTrashStore() {
             database.getLastNTrashes(20),
             database.getPlayer()
           ]);
-
 
         console.log('⏱️ TOTAL DB:', Date.now() - start, 'ms');
 
@@ -250,5 +250,17 @@ export async function deleteTrash(trash: Trash) {
       updatedAt: new Date()
     }
   });
+}
+
+
+export function updateDisplayName(name: string) {
+  playerStore.setState((prev) => {
+    return {
+      ...prev,
+      displayName: name
+    }
+  });
+  syncPlayerProfile()
+
 }
 

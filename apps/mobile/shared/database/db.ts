@@ -4,10 +4,11 @@ import * as SQLite from 'expo-sqlite';
 import { init_database_schema } from "./migrations/1_init";
 import { images_urls_v2 } from "./migrations/2_images_urls";
 import { add_player_display_name } from "./migrations/3_player_display_name";
+import { PLAYERS_SCHEMA } from "./schema/player";
+import { TRASHES_SCHEMA } from "./schema/trashes";
 
 export const db = SQLite.openDatabaseSync("pickntag.db");
 
-// const build_database = [init_database_schema];
 const build_database = [init_database_schema, images_urls_v2, add_player_display_name];
 
 class Database {
@@ -21,9 +22,6 @@ class Database {
 
   private async initDb() {
     try {
-      // await this.db.execAsync('DROP TABLE players')
-      // await this.db.execAsync('DROP TABLE trashes')
-      // await this.db.execAsync('DROP TABLE meta')
 
       await this.db.execAsync(`CREATE TABLE IF NOT EXISTS meta (
         key TEXT,
@@ -32,17 +30,36 @@ class Database {
       )`);
 
       const meta_row: { value: number } | null = await this.db.getFirstAsync(`SELECT value FROM meta where key = 'db_version'`);
-      let version = Number(meta_row ? meta_row.value : 0);
+      const currentVersion = meta_row ? Number(meta_row.value) : 0;
+      const targetVersion = build_database.length;
 
-      console.log("- We are at version: ", version)
+      console.log('[DB] current:', currentVersion, 'target:', targetVersion);
 
-      for (let i = version; i < build_database.length; ++i) {
+      // FRESH INSTALL
+      if (currentVersion === 0) {
+        console.log('[DB] Fresh install → create final schema');
+
+        // schémas finaux
+        await this.db.execAsync(TRASHES_SCHEMA);
+        await this.db.execAsync(PLAYERS_SCHEMA);
+
+        await this.db.runAsync(
+          `INSERT INTO meta (key, value) VALUES ('db_version', ?)`,
+          targetVersion.toString()
+        );
+
+        return;
+      }
+
+
+      for (let i = currentVersion; i < targetVersion; ++i) {
+        console.log('[DB] migrate', i, '→', i + 1);
         await build_database[i](this.db);
-        await this.db.runAsync(`INSERT OR REPLACE INTO meta (key, value) VALUES('db_version', ?)`, (i + 1).toString());
+        await this.db.runAsync(`UPDATE meta SET value = ? WHERE key = 'db_version'`, (i + 1).toString());
       }
 
     } catch (err) {
-      console.error("err: ", err)
+      console.error('[DB] init error:', err);
     }
   }
 

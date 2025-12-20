@@ -1,7 +1,7 @@
+import { getLevelForXP, type Player } from "@pickandtag/domain";
 import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabase";
 
-interface Player { } //TODO: Use generic one from domain
 
 interface UsePlayerDataReturn {
   player: Player | null;
@@ -30,7 +30,7 @@ export function usePlayerData(playerId: string | undefined): UsePlayerDataReturn
 
         const { data, error: supabaseError } = await supabase
           .from('players')
-          .select('display_name, xp, trash_collected')
+          .select('id, display_name, xp, trash_collected, updated_at')
           .eq('id', playerId)
           .single();
 
@@ -42,9 +42,16 @@ export function usePlayerData(playerId: string | undefined): UsePlayerDataReturn
           throw new Error('Player not found');
         }
 
+        const player: Player = {
+          id: data.id,
+          displayName: data.display_name,
+          xp: data.xp,
+          level: getLevelForXP(data.xp).current,
+          totalItems: data.trash_collected,
+          updated_at: data.updated_at
+        }
 
-        console.log("DATA: ", data)
-        setPlayer(data);
+        setPlayer(player);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to load player data');
         setPlayer(null);

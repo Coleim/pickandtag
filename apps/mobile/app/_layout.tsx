@@ -21,7 +21,11 @@ export default function RootLayout() {
               options={{ presentation: "modal", headerShown: false }}
             />
             <Stack.Screen
-              name="auth/new"
+              name="auth/login"
+              options={{ presentation: "modal", headerShown: false }}
+            />
+            <Stack.Screen
+              name="profile/settings"
               options={{ presentation: "modal", headerShown: false }}
             />
           </Stack>

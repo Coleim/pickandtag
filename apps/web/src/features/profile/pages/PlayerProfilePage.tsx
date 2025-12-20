@@ -27,7 +27,10 @@ export default function PlayerProfilePage() {
 
   return (
     <div className="player-profile-page">
-      {JSON.stringify(player)}
+      <h1>{player.displayName}</h1>
+      <h2>{player.level.title}</h2>
+      <h3>Level {player.level.level}</h3>
+      <h3>XP: {player.xp}</h3>
       {/* <PlayerProfile player={player} isPublic /> */}
     </div>
   );

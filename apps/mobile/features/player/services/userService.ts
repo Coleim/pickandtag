@@ -8,7 +8,6 @@ export async function syncPlayerProfile() {
   if (!user) return null;
 
   const localState = playerStore.state;
-  console.log(" State before : ", localState)
 
   const trashCount = localState.trashCount?.total ? localState.trashCount.total.reduce((acc, val) => acc + val.count, 0) : 0;
   const { data: updatedPlayer, error } = await supabase.rpc("update_player_progress", {
@@ -36,7 +35,6 @@ export async function syncPlayerProfile() {
     isInit: true,
     hasTrashes: p.trash_collected > 0,
   }));
-  console.log(" NEW STORE : ", playerStore)
 
   await database.updatePlayer(p.xp, p.trash_collected, p.display_name);
 

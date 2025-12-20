@@ -21,6 +21,7 @@ export type PlayerState = {
   lastNTrashes: Trash[];
   currentXp: number;
   displayName?: string;
+  playerId?: string;
   updatedAt?: Date;
 };
 

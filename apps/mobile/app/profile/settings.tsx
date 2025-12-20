@@ -11,6 +11,7 @@ import { Pressable, Share, StyleSheet, Text, TextInput, View } from 'react-nativ
 export default function ProfileSettings() {
   const router = useRouter();
   const displayName = useStore(playerStore, s => s.displayName);
+  const playerId = useStore(playerStore, s => s.playerId);
 
   const [editing, setEditing] = useState(false);
   const [name, setName] = useState(displayName);
@@ -28,7 +29,7 @@ export default function ProfileSettings() {
   const shareProfile = async () => {
     try {
       await Share.share({
-        message: `Voici mon profil : https://myapp.com/user/${displayName}`,
+        message: `Voici mon profil : https://pickandtag.onrender.com/app/players/${playerId}`,
       });
     } catch (error) {
       console.error('Erreur partage :', error);

@@ -34,6 +34,7 @@ export async function syncPlayerProfile() {
     updatedAt: p.updated_at,
     isInit: true,
     hasTrashes: p.trash_collected > 0,
+    playerId: p.id
   }));
 
   await database.updatePlayer(p.xp, p.trash_collected, p.display_name);

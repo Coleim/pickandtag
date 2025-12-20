@@ -1,14 +1,16 @@
-import { syncPlayerProfile } from '@/features/player/services/userService';
 import { supabase } from '@/lib/supabase';
 import { makeRedirectUri } from 'expo-auth-session';
 import * as QueryParams from 'expo-auth-session/build/QueryParams';
 import * as WebBrowser from 'expo-web-browser';
 
-WebBrowser.maybeCompleteAuthSession();
+// WebBrowser.maybeCompleteAuthSession();
+
 
 const redirectTo = makeRedirectUri({
   path: '(tabs)/profile',
 });
+//
+// const redirectTo = makeRedirectUri();
 
 export async function signInWithOAuth(provider: 'google' | 'github') {
   const { data, error } = await supabase.auth.signInWithOAuth({
@@ -21,21 +23,26 @@ export async function signInWithOAuth(provider: 'google' | 'github') {
   const res = await WebBrowser.openAuthSessionAsync(data.url!, redirectTo);
 
   if (res.type === 'success') {
+    WebBrowser.dismissBrowser();
     const { params } = QueryParams.getQueryParams(res.url);
     if (params?.access_token) {
       await supabase.auth.setSession({
         access_token: params.access_token,
         refresh_token: params.refresh_token,
       });
+
     }
   }
-  syncPlayerProfile();
+  // await syncPlayerProfile();
 }
 
 export async function signOut() {
   console.log(' SIGN OUT ')
-  console.log(supabase.auth)
-  await supabase.auth.signOut();
-  console.log("Logged out")
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session) {
+    console.log("No session to sign out")
+    return;
+  }
+  return supabase.auth.signOut();
 }
 

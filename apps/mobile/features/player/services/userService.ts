@@ -5,11 +5,13 @@ import { playerStore } from "@/shared/stores/player-store";
 
 export async function syncPlayerProfile() {
   const { data: { user } } = await supabase.auth.getUser();
+
   if (!user) return null;
 
   const localState = playerStore.state;
 
   const trashCount = localState.trashCount?.total ? localState.trashCount.total.reduce((acc, val) => acc + val.count, 0) : 0;
+
   const { data: updatedPlayer, error } = await supabase.rpc("update_player_progress", {
     p_id: user.id,
     p_xp: localState.currentXp,

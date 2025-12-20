@@ -16,13 +16,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       async (event) => {
         if (event === "SIGNED_IN" || event === "TOKEN_REFRESHED") {
           console.log("SIGNED IN !!! ")
-          await syncPlayerProfile();
+
         }
         if (event === "SIGNED_OUT") {
           console.log("SIGNED OUT !")
           // useUserStore.getState().reset();
           //TODO: What to do if sign out ?
         }
+        await syncPlayerProfile();
+        console.log("OK SYNC !!!! ")
+
       }
     );
 

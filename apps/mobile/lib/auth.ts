@@ -1,3 +1,4 @@
+import { syncPlayerProfile } from '@/features/player/services/userService';
 import { supabase } from '@/lib/supabase';
 import { makeRedirectUri } from 'expo-auth-session';
 import * as QueryParams from 'expo-auth-session/build/QueryParams';
@@ -28,9 +29,13 @@ export async function signInWithOAuth(provider: 'google' | 'github') {
       });
     }
   }
+  syncPlayerProfile();
 }
 
-export function signOut() {
-  return supabase.auth.signOut();
+export async function signOut() {
+  console.log(' SIGN OUT ')
+  console.log(supabase.auth)
+  await supabase.auth.signOut();
+  console.log("Logged out")
 }
 

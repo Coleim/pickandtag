@@ -12,12 +12,15 @@ export default function ProfileSettings() {
   const router = useRouter();
   const displayName = useStore(playerStore, s => s.displayName);
   const playerId = useStore(playerStore, s => s.playerId);
+  const [loading, setLoading] = useState(false);
 
   const [editing, setEditing] = useState(false);
   const [name, setName] = useState(displayName);
 
   const logout = async () => {
+    setLoading(true);
     await signOut();
+    setLoading(false);
     router.replace('(tabs)/profile');
   };
 
@@ -38,7 +41,6 @@ export default function ProfileSettings() {
 
   return (
     <View style={styles.container}>
-      {/* ───────── Header ───────── */}
       <View style={styles.header}>
         <Text style={styles.label}>Compte</Text>
         <View style={styles.nameRow}>
@@ -72,7 +74,7 @@ export default function ProfileSettings() {
       </View>
 
       {/* ───────── Actions ───────── */}
-      <View style={styles.section}>
+      <View>
         <AppButton
           label="Partager mon profil"
           icon="share-alt"
@@ -81,12 +83,13 @@ export default function ProfileSettings() {
       </View>
 
       {/* ───────── Danger zone ───────── */}
-      <View style={styles.section}>
+      <View>
         <AppButton
           label="Se déconnecter"
           icon="sign-out-alt"
           variant="danger"
           onPress={logout}
+        // loading={loading}
         />
       </View>
     </View>
@@ -132,10 +135,6 @@ const styles = StyleSheet.create({
     padding: 4,
   },
 
-  /* Sections */
-  section: {
-    marginBottom: 32,
-  },
 });
 
 

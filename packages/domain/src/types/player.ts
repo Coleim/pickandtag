@@ -1,4 +1,4 @@
-import { Level } from "./level";
+import { type Level } from "./level";
 
 export type Player = {
   id: string;

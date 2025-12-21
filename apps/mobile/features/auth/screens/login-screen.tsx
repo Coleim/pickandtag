@@ -45,7 +45,7 @@ export function LoginScreen() {
       <Text style={styles.footerText}>
         En continuant, tu acceptes nos <Text
           style={styles.link}
-          onPress={() => Linking.openURL('https://example.com/conditions')}>
+          onPress={() => Linking.openURL('https://pickandtag.onrender.com/terms')}>
           conditions d’utilisation
         </Text>.
       </Text>

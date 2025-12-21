@@ -195,6 +195,11 @@ class Database {
       [trashId]
     );
   }
+
+  async getNotSyncedImageUrls() {
+    await this.isInitialized;
+    return this.db.getAllAsync(`SELECT id, imageUrl FROM trashes WHERE syncStatus IN ('dirty', 'LOCAL', 'ERROR')`);
+  }
 }
 
 export const database = new Database();

@@ -1,10 +1,10 @@
 import { supabase } from "@/lib/supabase";
 import { database } from "@/shared/database/db";
 import { playerStore } from "@/shared/stores/player-store";
+import { User } from "@supabase/supabase-js";
 
 
-export async function syncPlayerProfile() {
-  const { data: { user } } = await supabase.auth.getUser();
+export async function syncPlayerProfile(user: User) {
 
   if (!user) return null;
 

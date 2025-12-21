@@ -1,4 +1,5 @@
 import { AuthProvider } from "@/features/auth/components/auth-provider";
+import { SyncBootstrap } from "@/features/sync/components/SyncBootstrap";
 import { Stack } from "expo-router";
 import React, { useState } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
@@ -10,6 +11,7 @@ export default function RootLayout() {
 
   return (
     <AuthProvider>
+      <SyncBootstrap />
       <SafeAreaProvider>
         {!ready ? (
           <RootGate onReady={() => setReady(true)} />

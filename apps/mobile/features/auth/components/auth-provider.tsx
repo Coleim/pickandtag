@@ -1,5 +1,5 @@
-import { syncPlayerProfile } from "@/features/player/services/userService";
 import { supabase } from "@/lib/supabase";
+import { setAuthSession } from "@/shared/stores/auth-store";
 import { Session } from "@supabase/supabase-js";
 import { ReactNode, useEffect, useState } from "react";
 
@@ -10,7 +10,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     supabase.auth.getSession().then(async ({ data }) => {
       if (data.session) {
-        setSession(data.session)
+        setAuthSession(data.session);
         console.log(" Data session: ", data.session)
       }
     });
@@ -19,23 +19,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       async (event, session) => {
         if (event === "SIGNED_IN" || event === "TOKEN_REFRESHED") {
           console.log("SIGNED IN !!! ")
-          setSession(session)
+          setAuthSession(session);
         }
         if (event === "SIGNED_OUT") {
           console.log("SIGNED OUT !")
-          setSession(null)
+          setAuthSession(null)
         }
-        console.log("OK SYNC !!!! ")
       }
     );
 
     return () => listener.subscription.unsubscribe();
   }, []);
 
-  useEffect(() => {
-    if (!session) return;
-    syncPlayerProfile();
-  }, [session]);
+  // useEffect(() => {
+  //   if (!session) return;
+  //   await syncPlayerProfile();
+  //   await syncImages(session.user.id);
+  //
+  // }, [session]);
 
   return children;
 }

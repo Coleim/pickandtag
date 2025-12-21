@@ -9,7 +9,6 @@ export const TRASHES_SCHEMA = `
     country TEXT,
     region TEXT,
     subregion TEXT,
-    imageb64 BLOB,
     imageUrl TEXT,
     syncStatus TEXT,
     createdAt INTEGER,

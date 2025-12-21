@@ -19,9 +19,6 @@ export function ViewTrashScreen() {
       const id = Array.isArray(trashId) ? trashId[0] : trashId;
       if (!id) return;
       const trashData = await database.getTrashById(id);
-
-      console.log(trashData)
-
       setTrash(trashData);
       setLoading(false);
     };

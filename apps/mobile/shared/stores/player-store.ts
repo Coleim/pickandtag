@@ -1,4 +1,3 @@
-import { syncPlayerProfile } from '@/features/player/services/userService';
 import { TrashCategories } from '@/shared/constants/trash-categories';
 import { database } from '@/shared/database/db';
 import { Trash, TrashCount } from '@/types/trash';
@@ -261,7 +260,5 @@ export function updateDisplayName(name: string) {
       displayName: name
     }
   });
-  syncPlayerProfile()
-
 }
 

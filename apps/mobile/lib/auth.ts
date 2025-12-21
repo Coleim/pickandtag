@@ -3,19 +3,20 @@ import { makeRedirectUri } from 'expo-auth-session';
 import * as QueryParams from 'expo-auth-session/build/QueryParams';
 import * as WebBrowser from 'expo-web-browser';
 
-// WebBrowser.maybeCompleteAuthSession();
+WebBrowser.maybeCompleteAuthSession();
 
 
 const redirectTo = makeRedirectUri({
   path: '(tabs)/profile',
 });
-//
-// const redirectTo = makeRedirectUri();
 
 export async function signInWithOAuth(provider: 'google' | 'github') {
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider,
-    options: { redirectTo },
+    options: {
+      redirectTo: redirectTo,
+      skipBrowserRedirect: true,
+    },
   });
 
   if (error) throw error;

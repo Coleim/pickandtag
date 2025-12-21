@@ -59,7 +59,51 @@ const Terms = () => {
           </section>
 
           <section>
-            <h2>5. Contenu utilisateur</h2>
+            <h2>5. Visibilité du profil et des données</h2>
+            <p>
+              En utilisant Pick and Tag, vous acceptez que certaines informations de votre profil soient publiques et
+              accessibles à l’ensemble des utilisateurs de l’application.
+            </p>
+            <p>
+              Les informations publiques incluent notamment :
+            </p>
+            <ul>
+              <li>Votre nom ou pseudonyme</li>
+              <li>Votre niveau, XP et titres</li>
+              <li>Vos statistiques de collecte de déchets</li>
+            </ul>
+            <p>
+              Ces données sont utilisées afin de favoriser l’aspect communautaire, compétitif et collaboratif de l’application.
+            </p>
+          </section>
+
+          <section>
+            <h2>6. Contenu utilisateur et photos</h2>
+            <p>
+              Les photos de déchets que vous prenez et publiez via l’application sont publiques et peuvent être consultées
+              par tous les utilisateurs.
+            </p>
+            <p>
+              En publiant une photo, vous vous engagez à :
+            </p>
+            <ul>
+              <li>Photographier uniquement des déchets réels et pertinents</li>
+              <li>Ne pas inclure de personnes reconnaissables sans leur consentement</li>
+              <li>Ne pas publier de contenu offensant, choquant ou hors contexte</li>
+              <li>Respecter la loi et la vie privée d’autrui</li>
+            </ul>
+            <p>
+              Merci de ne pas prendre en photo n’importe quel contenu. Tout abus pourra entraîner la suppression du contenu
+              ou la suspension du compte.
+            </p>
+            <p>
+              Vous conservez les droits sur le contenu que vous publiez. En publiant du contenu, vous nous accordez une
+              licence non exclusive pour l’utiliser dans le cadre des services Pick and Tag (affichage, promotion, statistiques).
+            </p>
+          </section>
+
+          <section>
+            <h2>7. Contenu utilisateur</h2>
             <p>
               Vous conservez les droits sur le contenu que vous publiez. En publiant du contenu, vous nous accordez
               une licence non exclusive pour l'utiliser dans le cadre de nos services.
@@ -67,7 +111,7 @@ const Terms = () => {
           </section>
 
           <section>
-            <h2>6. Propriété intellectuelle</h2>
+            <h2>8. Propriété intellectuelle</h2>
             <p>
               L'application Pick and Tag et son contenu sont protégés par les droits d'auteur et autres droits de propriété intellectuelle.
               Vous ne pouvez pas copier, modifier ou distribuer notre contenu sans autorisation.

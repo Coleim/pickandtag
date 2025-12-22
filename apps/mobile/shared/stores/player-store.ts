@@ -1,7 +1,9 @@
+import { supabase } from '@/lib/supabase';
 import { TrashCategories } from '@/shared/constants/trash-categories';
 import { database } from '@/shared/database/db';
 import { Trash, TrashCount } from '@/types/trash';
 import { Store } from '@tanstack/react-store';
+import { File } from 'expo-file-system';
 
 export type PlayerState = {
   isInit: boolean;
@@ -32,20 +34,21 @@ export const playerStore = new Store<PlayerState>({
   currentXp: 0,
 });
 
+
+const LAST_N_TRASHES_LIMIT = 20;
+
 let initPromise: Promise<void> | null = null;
+initializeTrashStore();
 
 export function initializeTrashStore() {
   if (!initPromise) {
     initPromise = (async () => {
-
       try {
-
         const start = Date.now();
-
         const [hasTrashes, bestWeekCount,
           dailyTrashCount, weeklyTrashCount, monthlyTrashCount, totalTrashCount,
           yesterdayTrashCount, lastWeekTrashCount, lastMonthTrashCount,
-          lastNTrashes, player] = await Promise.all([
+          lastNTrashes] = await Promise.all([
             database.hasTrashes(),
             database.getBestWeekCount(),
             database.getTrashesByCategoriesAfter(getToday()),
@@ -55,10 +58,14 @@ export function initializeTrashStore() {
             database.getTrashesByCategoriesBetween(getYesterdayRange()),
             database.getTrashesByCategoriesBetween(getLastWeek()),
             database.getTrashesByCategoriesBetween(getLastMonth()),
-            database.getLastNTrashes(20),
-            database.getPlayer()
+            database.getLastNTrashes(20)
           ]);
 
+        let player = await database.getPlayer();
+        if( player === null ) {
+          await database.newPlayer();
+          player = await database.getPlayer();
+        }
         console.log('⏱️ TOTAL DB:', Date.now() - start, 'ms');
 
         playerStore.setState((state) => ({
@@ -81,20 +88,19 @@ export function initializeTrashStore() {
             lastMonth: lastMonthTrashCount
           },
           currentXp: player?.xp ?? 0,
+          displayName: player?.displayName ?? undefined,
           updatedAt: player?.updated_at ? new Date(player?.updated_at) : new Date()
         }));
 
 
       } catch (error) {
-        console.log("Error ", error)
+        console.error("Error ", error)
       }
     })();
   }
   return initPromise;
 }
 
-initializeTrashStore();
-// REVIEW: Side-effectful initialization at import time can complicate testing and SSR. Consider explicit bootstrap in app root.
 
 function getToday(): Date {
   const today = new Date();
@@ -182,7 +188,7 @@ export async function addTrash(trash: Trash) {
     return {
       ...prev,
       hasTrashes: true,
-      lastNTrashes: [trash, ...prev.lastNTrashes.slice(0, prev.lastNTrashes.length - 1)],
+      lastNTrashes: [trash, ...prev.lastNTrashes].slice(0, LAST_N_TRASHES_LIMIT),
       trashCount: {
         total: updateCount(prev.trashCount?.total, trash.category),
         monthly: trash.createdAt >= getThisMonth() ? updateCount(prev.trashCount?.monthly, trash.category) : prev.trashCount?.monthly ?? [],
@@ -206,6 +212,20 @@ export async function deleteTrash(trash: Trash) {
   // 1️⃣ Delete from DB
   await database.deleteTrashById(trash.id);
 
+  // Delete image from storage
+  if( trash.imageUrl && (trash.syncStatus === 'LOCAL') ) {
+    // Delete local image
+    const sourceFile = new File(trash.imageUrl);
+    sourceFile.delete();
+  } else if (trash.imageUrl) {
+    const playerId = playerStore.state.playerId;
+    const { error } = await supabase.storage.from('trash-images')
+      .remove([`${playerId}/${trash.id}.png`]);
+    if (error) {
+      console.error('Failed to delete remote image:', error);
+    }
+  }
+
   // 2️⃣ Subtract XP
   const lostXP = TrashCategories[trash.category].points;
   await database.addTrashToPlayer(-lostXP);
@@ -222,7 +242,7 @@ export async function deleteTrash(trash: Trash) {
       database.getTrashesByCategoriesBetween(getYesterdayRange()),
       database.getTrashesByCategoriesBetween(getLastWeek()),
       database.getTrashesByCategoriesBetween(getLastMonth()),
-      database.getLastNTrashes(20),
+      database.getLastNTrashes(LAST_N_TRASHES_LIMIT),
     ]);
 
   // 3️⃣ Update store

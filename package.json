@@ -5,6 +5,7 @@
   "workspaces": ["apps/*", "packages/*"],
   "scripts": {
     "start:web": "pnpm --filter @pickandtag/web start",
+    "start-dev": "pnpm --filter mobile start-dev",
     "start:mobile": "pnpm --filter mobile start:wsl",
     "start:mobile-dev": "pnpm --filter mobile start-dev:wsl",
     "build:mobile:dev": "pnpm --filter mobile build:dev",

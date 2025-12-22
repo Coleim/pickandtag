@@ -1,3 +1,4 @@
+import { type SyncStatus } from "./syncStatus";
 
 export type Trash = {
   id: string;
@@ -10,7 +11,7 @@ export type Trash = {
   region: string;
   country: string;
   imageUrl?: string;
-  syncStatus: 'dirty' | 'syncing' | 'synced' | 'failed' | 'pending_delete' | 'deleted' | 'conflict';
+  syncStatus: SyncStatus;
   createdAt: Date;
   updatedAt: Date;
   lastSyncedAt: Date;

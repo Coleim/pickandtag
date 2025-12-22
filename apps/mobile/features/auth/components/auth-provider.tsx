@@ -1,17 +1,13 @@
 import { supabase } from "@/lib/supabase";
 import { setAuthSession } from "@/shared/stores/auth-store";
-import { Session } from "@supabase/supabase-js";
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useEffect } from "react";
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-
-  const [session, setSession] = useState<Session | null>(null);
 
   useEffect(() => {
     supabase.auth.getSession().then(async ({ data }) => {
       if (data.session) {
         setAuthSession(data.session);
-        console.log(" Data session: ", data.session)
       }
     });
 
@@ -30,13 +26,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     return () => listener.subscription.unsubscribe();
   }, []);
-
-  // useEffect(() => {
-  //   if (!session) return;
-  //   await syncPlayerProfile();
-  //   await syncImages(session.user.id);
-  //
-  // }, [session]);
 
   return children;
 }

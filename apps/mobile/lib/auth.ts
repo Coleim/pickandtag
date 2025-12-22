@@ -41,7 +41,7 @@ export async function signOut() {
   console.log(' SIGN OUT ')
   const { data: { session } } = await supabase.auth.getSession();
   if (!session) {
-    console.log("No session to sign out")
+    console.error("No session to sign out")
     return;
   }
   return supabase.auth.signOut();

@@ -29,18 +29,4 @@ export async function init_database_schema(db: SQLite.SQLiteDatabase) {
       updated_at INTEGER
     );
   `);
-
-  const row: { count: number } | null = await db.getFirstAsync(`SELECT COUNT(*) as count FROM players`);
-  if (row?.count === 0) {
-    const id = randomUUID();
-    await db.runAsync(
-      `INSERT INTO players(id, xp, trash_collected, updated_at) VALUES(?, 0, 0, CURRENT_TIMESTAMP)`,
-      id
-    );
-    console.log("Player inserted with id:", id);
-  } else {
-    console.log("Players table is not empty, skipping insert.");
-  }
-
-
 }

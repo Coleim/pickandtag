@@ -1,39 +1,53 @@
 import { AuthProvider } from "@/features/auth/components/auth-provider";
 import { SyncBootstrap } from "@/features/sync/components/SyncBootstrap";
 import { Stack } from "expo-router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import RootGate from "./root-gate";
+import { initializeTrashStore } from "@/shared/stores/player-store";
 
 export default function RootLayout() {
-  console.log("Root Layout ")
-  const [ready, setReady] = useState(false);
+  const [gateReady, setGateReady] = useState(false);
+  const [storeReady, setStoreReady] = useState(false);
+
+  useEffect(() => {
+    async function bootstrap() {
+      await initializeTrashStore();
+      setStoreReady(true);
+    }
+    bootstrap();
+  }, []);
+
+  const appReady = storeReady && gateReady;
 
   return (
     <AuthProvider>
-      <SyncBootstrap />
       <SafeAreaProvider>
-        {!ready ? (
-          <RootGate onReady={() => setReady(true)} />
+        {!appReady ? (
+          <RootGate onReady={() => setGateReady(true)} />
         ) : (
-          <Stack screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="(tabs)" />
-            <Stack.Screen
-              name="collect/new-collect"
-              options={{ presentation: "modal", headerShown: false }}
-            />
-            <Stack.Screen
-              name="auth/login"
-              options={{ presentation: "modal", headerShown: false }}
-            />
-            <Stack.Screen
-              name="profile/settings"
-              options={{ presentation: "modal", headerShown: false }}
-            />
-          </Stack>
+          <>
+            <SyncBootstrap />
+            <Stack screenOptions={{ headerShown: false }}>
+              <Stack.Screen name="(tabs)" />
+              <Stack.Screen
+                name="collect/new-collect"
+                options={{ presentation: "modal", headerShown: false }}
+              />
+              <Stack.Screen
+                name="auth/login"
+                options={{ presentation: "modal", headerShown: false }}
+              />
+              <Stack.Screen
+                name="profile/settings"
+                options={{ presentation: "modal", headerShown: false }}
+              />
+            </Stack>
+          </>
         )}
       </SafeAreaProvider>
     </AuthProvider>
   );
 }
+
 

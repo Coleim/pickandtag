@@ -3,6 +3,7 @@
   "main": "expo-router/entry",
   "version": "1.0.0",
   "scripts": {
+    "start-dev": "npx expo start --dev-client",
     "start:wsl": "REACT_NATIVE_PACKAGER_HOSTNAME=$(node --env-file-if-exists=.env.local ./get_network_local_ip.js) npx expo start",
     "start-dev:wsl": "REACT_NATIVE_PACKAGER_HOSTNAME=$(node --env-file-if-exists=.env.local ./get_network_local_ip.js) npx expo start --dev-client",
     "build:production": "eas build -p android --profile production",
@@ -19,6 +20,7 @@
     "@react-navigation/native": "^7.1.6",
     "@tanstack/react-store": "^0.7.4",
     "aes-js": "^3.1.2",
+    "base64-arraybuffer": "^1.0.2",
     "expo": "^54.0.29",
     "expo-auth-session": "~7.0.8",
     "expo-blur": "~15.0.6",

@@ -29,7 +29,7 @@ export default function RootGate({ onReady }: { onReady: () => void }) {
       setLoading(false);
     };
     init();
-  }, []);
+  }, [onReady]);
 
   if (loading) {
     return (

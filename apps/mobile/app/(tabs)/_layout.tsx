@@ -3,20 +3,18 @@ import { Ionicons } from "@expo/vector-icons";
 import { Colors } from "@pickandtag/domain";
 import { useStore } from "@tanstack/react-store";
 import { Tabs } from "expo-router";
-import { Text, View } from "react-native";
+import { ActivityIndicator, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Onboarding from "../onboarding/onboarding";
 
 export default function TabsLayout() {
-  console.log(" Tabs Layout ")
   const hasTrashes = useStore(playerStore, store => store.hasTrashes);
   const isInit = useStore(playerStore, store => store.isInit);
 
   if (!isInit) {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <Text>Bite</Text>
-        {/* <ActivityIndicator size="large" /> */}
+        <ActivityIndicator size="large" />
       </View>
     );
   }

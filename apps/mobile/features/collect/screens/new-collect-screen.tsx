@@ -40,13 +40,13 @@ export function NewCollectScreen() {
           )
         ]);
       } catch (error) {
-        console.log('Failed to get current position, falling back to last known:', error);
+        console.error('Failed to get current position, falling back to last known:', error);
         setLocationError(true);
         // Fallback to last known position
         try {
           currentLocation = await Location.getLastKnownPositionAsync({});
         } catch (fallbackError) {
-          console.log('No location available:', fallbackError);
+          console.error('No location available:', fallbackError);
           setLocationError(true);
           return;
         }
@@ -78,8 +78,7 @@ export function NewCollectScreen() {
             }));
           }
         } catch (geocodeError) {
-          console.log('Reverse geocoding failed:', geocodeError);
-          // Continue without city/region info
+          console.error('Reverse geocoding failed:', geocodeError);
         }
       }
     }
@@ -101,7 +100,7 @@ export function NewCollectScreen() {
       createdAt: new Date(),
       updatedAt: new Date(),
       lastSyncedAt: new Date(),
-      syncStatus: 'dirty'
+      syncStatus: 'LOCAL'
     };
   };
 

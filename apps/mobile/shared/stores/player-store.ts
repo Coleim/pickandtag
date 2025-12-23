@@ -8,6 +8,14 @@ import { File } from 'expo-file-system';
 export type PlayerState = {
   isInit: boolean;
   hasTrashes: boolean;
+  lastNTrashes: Trash[];
+  currentXp: number;
+  displayName?: string;
+  playerId?: string;
+  updatedAt?: Date;
+
+
+
   trashCount: {
     total: TrashCount[];
     bestWeek: number,
@@ -19,11 +27,6 @@ export type PlayerState = {
     lastWeek: TrashCount[],
     lastMonth: TrashCount[]
   } | null,
-  lastNTrashes: Trash[];
-  currentXp: number;
-  displayName?: string;
-  playerId?: string;
-  updatedAt?: Date;
 };
 
 export const playerStore = new Store<PlayerState>({
@@ -43,6 +46,7 @@ initializeTrashStore();
 export function initializeTrashStore() {
   if (!initPromise) {
     initPromise = (async () => {
+    console.log( ">>>>>>> Initializing player store..." );
       try {
         const start = Date.now();
         const [hasTrashes, totalTrashCount, bestWeekCount,
@@ -61,11 +65,13 @@ export function initializeTrashStore() {
             database.getLastNTrashes(20)
           ]);
 
+        console.log('Has trashes:', hasTrashes);
         let player = await database.getPlayer();
         if( player === null ) {
           await database.newPlayer();
           player = await database.getPlayer();
         }
+        console.log(">>>>>>> Loaded player from DB:", player);
         console.log('⏱️ TOTAL DB:', Date.now() - start, 'ms');
 
         playerStore.setState((state) => ({
@@ -89,10 +95,8 @@ export function initializeTrashStore() {
           },
           currentXp: player?.xp ?? 0,
           displayName: player?.displayName ?? undefined,
-          updatedAt: player?.updated_at ? new Date(player?.updated_at) : new Date()
+          updatedAt: player?.updated_at ? player?.updated_at : new Date()
         }));
-
-
       } catch (error) {
         console.error("Error ", error)
       }
@@ -150,6 +154,26 @@ function getLastMonth(): { from: Date, to: Date } {
 
   return { from, to };
 }
+
+
+export async function applyTrashAdded(trash: Trash, gainedXP: number) {
+  await initializeTrashStore();
+  playerStore.setState((prev) => {
+    const newXP = prev.currentXp + gainedXP;
+    return {
+      ...prev,
+      hasTrashes: true,
+      lastNTrashes: [trash, ...prev.lastNTrashes].slice(0, LAST_N_TRASHES_LIMIT),
+      currentXp: newXP,
+      updatedAt: new Date()
+    };
+  });
+}
+
+
+
+
+
 
 export async function addTrash(trash: Trash) {
   await initializeTrashStore();
@@ -227,11 +251,15 @@ export async function deleteTrash(trash: Trash) {
     }
   }
 
-  await supabase
+  console.log( "Deleting trash from supabase:", trash.id, playerId);
+
+  const error = await supabase
     .from('trashes')
     .delete()
     .eq('id', trash.id)
     .eq('player_id', playerId);
+
+  console.log( "Supabase delete error:", error);
 
   // 2️⃣ Subtract XP
   const lostXP = TrashCategories[trash.category].points;
@@ -277,6 +305,9 @@ export async function deleteTrash(trash: Trash) {
       updatedAt: new Date()
     }
   });
+
+  const player = await database.getPlayer()
+  console.log("Updated player after trash deletion:", player);
 }
 
 

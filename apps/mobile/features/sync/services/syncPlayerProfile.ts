@@ -5,11 +5,15 @@ import { User } from "@supabase/supabase-js";
 
 
 export async function syncPlayerProfile(user: User) {
+  console.log(" >>>> >syncPlayerProfile >>>>>>");
+
   if (!user) return null;
 
   const localState = playerStore.state;
   const trashCount = localState.trashCount?.total ? localState.trashCount.total.reduce((acc, val) => acc + val.count, 0) : 0;
 
+  console.log("ISO String of updatedAt:", localState.updatedAt);
+  
   const input = {
     p_id: user.id,
     p_xp: localState.currentXp,
@@ -18,9 +22,7 @@ export async function syncPlayerProfile(user: User) {
     p_updated_at: localState.updatedAt
   };
   console.log("SyncPlayerProfile input: ", input);
-
   const { data: updatedPlayer, error } = await supabase.rpc("update_player_progress", input);
-
   if (error) {
     console.error("syncPlayerProfile RPC error:", error);
     return null;
@@ -29,6 +31,7 @@ export async function syncPlayerProfile(user: User) {
   if (!updatedPlayer?.length) return null;
 
   const p = updatedPlayer[0];
+  console.log( "SyncPlayerProfile updated player: ", p );
   playerStore.setState((state) => ({
     ...state,
     currentXp: p.xp,

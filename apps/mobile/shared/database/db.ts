@@ -73,10 +73,12 @@ class Database {
   }
 
   async hasTrashes(): Promise<boolean> {
+    console.log(">>>>>>> Checking for trashes in DB...");
     await this.isInitialized;
     const row = await this.db.getFirstAsync(
       `SELECT 1 FROM trashes LIMIT 1`
     );
+    console.log("Has trashes row: ", row);
     return !!row;
   }
 
@@ -112,6 +114,7 @@ class Database {
     const start = Date.now();
     const player: Player | null = await this.db.getFirstAsync('SELECT * FROM players');
     console.log('[DB] getPlayer:', Date.now() - start, 'ms');
+    console.log('[player]', player);
     return player;
   }
 
@@ -141,7 +144,7 @@ class Database {
 
   async insertTrash(trash: Trash) {
     await this.isInitialized;
-    const query = 'INSERT INTO trashes (id, event_id, category, latitude, longitude, city, country, region, subregion, imageUrl, syncStatus, createdAt, updatedAt) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
+    const query = 'INSERT INTO trashes (id, event_id, category, latitude, longitude, city, country, region, subregion, imageUrl, syncStatus, createdAt, updatedAt) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)';
     try {
       await this.db.runAsync(query, trash.id, trash.event_id ?? null, trash.category, trash.latitude, trash.longitude,
         trash.city, trash.country, trash.region, trash.subregion, trash.imageUrl ?? null, trash.syncStatus, trash.createdAt.getTime(), trash.updatedAt.getTime());

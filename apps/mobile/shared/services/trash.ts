@@ -1,28 +1,30 @@
 import { type Trash } from "@pickandtag/domain";
-// import { database } from "../database/db";
+import { database } from "../database/db";
+import { TrashCategories } from "../constants/trash-categories";
+import { applyTrashAdded } from "../stores/player-store";
 
 
 
 export async function addTrash(trash: Trash) {
-  // TODO a faire ici
 
-//   await initializeTrashStore();
-//   await database.insertTrash(trash);
+    // await initializeTrashStore();
+    await database.insertTrash(trash);
+    const gainedXP = TrashCategories[trash.category].points;
+    await database.addTrashToPlayer(gainedXP);
 
-//   const gainedXP = TrashCategories[trash.category].points;
+    //TODO: update trash count stats + insert db 
+    await applyTrashAdded(trash, gainedXP);
 
-//   // DB first (source of truth)
-//   const updatedTrashCount = await database.addTrashToPlayer(gainedXP);
+    // mark stats dirty
+    // trashStatsStore.setState({ dirty: true });
 
-//   // Then update store
-//   applyTrashAdded({
-//     trash,
-//     gainedXP,
-//     updatedTrashCount
-//   });
+    // async recompute
+    // refreshTrashStatsIfNeeded();
 
-//   1. insert DB locale
-//   2. recalc stats depuis DB
-//   3. update playerStore
-//   4. mark trash as local (syncStatus)
+
+    // sync with server
+    // pushPlayerStatsToServer 
+    // push Stats 
+    // async push trashes 
+
 }

@@ -3,5 +3,5 @@
 
 export default function PlayerRankingPage() {
 
-  return " PlayerRankingPage "
+  return " Bientot disponible ";
 }

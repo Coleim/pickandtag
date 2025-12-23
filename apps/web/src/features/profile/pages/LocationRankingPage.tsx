@@ -2,5 +2,5 @@
 
 export default function LocationRankingPage() {
 
-  return "LocationRankingPage"
+  return " Bientot disponible ";
 }

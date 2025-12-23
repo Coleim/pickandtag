@@ -5,4 +5,3 @@ export async function dirty_to_local(db: SQLite.SQLiteDatabase) {
     SET syncStatus = 'LOCAL'
     WHERE syncStatus = 'dirty';`);
 }
-

@@ -12,8 +12,7 @@ export const TRASHES_SCHEMA = `
     imageUrl TEXT,
     syncStatus TEXT,
     createdAt INTEGER,
-    updatedAt INTEGER,
-    lastSyncedAt INTEGER
+    updatedAt INTEGER
   );
 `;
 

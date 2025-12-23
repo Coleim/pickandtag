@@ -1,5 +1,5 @@
 import { type Player } from '@pickandtag/domain';
-import styles from './PlayerList.module.css';
+import tableStyles from '@/shared/components/Table.module.css';
 
 interface PlayerListProps {
   players: Player[];
@@ -9,8 +9,8 @@ interface PlayerListProps {
 
 export default function PlayerList({ players, onPlayerSelect }: PlayerListProps) {
   return (
-    <div className={styles.playerListWrapper} >
-      <table className={styles.playerListTable}>
+    <div className={tableStyles.tableWrapper} >
+      <table className={tableStyles.table}>
         <thead>
           <tr>
             <th>Rank</th>

@@ -5,7 +5,6 @@ import { useState } from "react";
 import { Image, StyleSheet, View } from "react-native";
 import { CategoryPicker } from "./category-picker";
 
-
 export function TrashEntry({ urlPicture, city, country, onAddTrash }: { urlPicture: string, city: string | null, country: string | null, onAddTrash: (category: string, addAnother: boolean) => void }) {
   const [category, setCategory] = useState<string | undefined>();
 
@@ -14,10 +13,8 @@ export function TrashEntry({ urlPicture, city, country, onAddTrash }: { urlPictu
       <View style={detailsStyles.imageBox}>
         <Image
           style={detailsStyles.image}
-          source={{
-            uri: urlPicture
-          }} />
-        {/* REVIEW: Base64 images can be heavy; consider caching/thumbnail or using ImageManipulator to resize. */}
+          source={{ uri: urlPicture }}
+           />
       </View>
       {city && country &&
         <NoteText text={`Ce déchet a été ramassé à ${city}, ${country}`} />

@@ -203,6 +203,9 @@ importers:
       react-icons:
         specifier: ^5.5.0
         version: 5.5.0(react@19.1.0)
+      react-modal:
+        specifier: ^3.16.3
+        version: 3.16.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       react-router-dom:
         specifier: ^7.10.1
         version: 7.10.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -219,6 +222,9 @@ importers:
       '@types/react-dom':
         specifier: ~19.2.0
         version: 19.2.3(@types/react@19.2.7)
+      '@types/react-modal':
+        specifier: ^3.16.3
+        version: 3.16.3
       '@vitejs/plugin-react':
         specifier: ^5.1.1
         version: 5.1.2(vite@7.3.0(@types/node@24.10.4)(lightningcss@1.30.2)(terser@5.44.1)(yaml@2.8.2))
@@ -1768,6 +1774,9 @@ packages:
     peerDependencies:
       '@types/react': ^19.2.0
 
+  '@types/react-modal@3.16.3':
+    resolution: {integrity: sha512-xXuGavyEGaFQDgBv4UVm8/ZsG+qxeQ7f77yNrW3n+1J6XAstUy5rYHeIHPh1KzsGc6IkCIdu6lQ2xWzu1jBTLg==}
+
   '@types/react@19.1.17':
     resolution: {integrity: sha512-Qec1E3mhALmaspIrhWt9jkQMNdw6bReVu64mjvhbhq2NFPftLPVr+l1SZgmw/66WwBNpDh7ao5AT6gF5v41PFA==}
 
@@ -2714,6 +2723,9 @@ packages:
 
   exec-async@2.2.0:
     resolution: {integrity: sha512-87OpwcEiMia/DeiKFzaQNBNFeN3XkkpYIh9FyOqq5mS2oKv3CBE67PXoEKcr6nodWdXNogTiQ0jE2NGuoffXPw==}
+
+  exenv@1.2.2:
+    resolution: {integrity: sha512-Z+ktTxTwv9ILfgKCk32OX3n/doe+OcLTRtqK9pcL+JsP3J1/VW8Uvl4ZjLlKqeW4rzK4oesDOGMEMRIZqtP4Iw==}
 
   expo-application@7.0.8:
     resolution: {integrity: sha512-qFGyxk7VJbrNOQWBbE09XUuGuvkOgFS9QfToaK2FdagM2aQ+x3CvGV2DuVgl/l4ZxPgIf3b/MNh9xHpwSwn74Q==}
@@ -4169,6 +4181,15 @@ packages:
   react-is@19.2.3:
     resolution: {integrity: sha512-qJNJfu81ByyabuG7hPFEbXqNcWSU3+eVus+KJs+0ncpGfMyYdvSmxiJxbWR65lYi1I+/0HBcliO029gc4F+PnA==}
 
+  react-lifecycles-compat@3.0.4:
+    resolution: {integrity: sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==}
+
+  react-modal@3.16.3:
+    resolution: {integrity: sha512-yCYRJB5YkeQDQlTt17WGAgFJ7jr2QYcWa1SHqZ3PluDmnKJ/7+tVU+E6uKyZ0nODaeEj+xCpK4LcSnKXLMC0Nw==}
+    peerDependencies:
+      react: 19.1.0
+      react-dom: 19.1.0
+
   react-native-chart-kit@6.12.0:
     resolution: {integrity: sha512-nZLGyCFzZ7zmX0KjYeeSV1HKuPhl1wOMlTAqa0JhlyW62qV/1ZPXHgT8o9s8mkFaGxdqbspOeuaa6I9jUQDgnA==}
     peerDependencies:
@@ -4973,6 +4994,9 @@ packages:
 
   warn-once@0.1.1:
     resolution: {integrity: sha512-VkQZJbO8zVImzYFteBXvBOZEl1qL175WH8VmZcxF2fZAoudNhNDvHi+doCaAEdU2l2vtcIwa2zn0QK5+I1HQ3Q==}
+
+  warning@4.0.3:
+    resolution: {integrity: sha512-rpJyN222KWIvHJ/F53XSZv0Zl/accqHR8et1kpaMTD/fLCRxtV8iX8czMzY7sVZupTI3zcUTg8eycS2kNF9l6w==}
 
   wcwidth@1.0.1:
     resolution: {integrity: sha512-XHPEwS0q6TaxcvG85+8EYkbiCux2XtWG2mkc47Ng2A77BQu9+DqIOJldST4HgPkuea7dvKSj5VgX3P1d4rW8Tg==}
@@ -6936,6 +6960,10 @@ snapshots:
     dependencies:
       '@types/react': 19.2.7
 
+  '@types/react-modal@3.16.3':
+    dependencies:
+      '@types/react': 19.2.7
+
   '@types/react@19.1.17':
     dependencies:
       csstype: 3.2.3
@@ -8192,6 +8220,8 @@ snapshots:
   event-target-shim@5.0.1: {}
 
   exec-async@2.2.0: {}
+
+  exenv@1.2.2: {}
 
   expo-application@7.0.8(expo@54.0.29):
     dependencies:
@@ -9889,6 +9919,17 @@ snapshots:
 
   react-is@19.2.3: {}
 
+  react-lifecycles-compat@3.0.4: {}
+
+  react-modal@3.16.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0):
+    dependencies:
+      exenv: 1.2.2
+      prop-types: 15.8.1
+      react: 19.1.0
+      react-dom: 19.1.0(react@19.1.0)
+      react-lifecycles-compat: 3.0.4
+      warning: 4.0.3
+
   react-native-chart-kit@6.12.0(react-native-svg@15.15.1(react-native@0.81.4(@babel/core@7.28.5)(@types/react@19.2.7)(react@19.1.0))(react@19.1.0))(react-native@0.81.4(@babel/core@7.28.5)(@types/react@19.2.7)(react@19.1.0))(react@19.1.0):
     dependencies:
       lodash: 4.17.21
@@ -10785,6 +10826,10 @@ snapshots:
       makeerror: 1.0.12
 
   warn-once@0.1.1: {}
+
+  warning@4.0.3:
+    dependencies:
+      loose-envify: 1.4.0
 
   wcwidth@1.0.1:
     dependencies:

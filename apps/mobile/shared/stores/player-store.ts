@@ -1,7 +1,7 @@
 import { supabase } from '@/lib/supabase';
 import { TrashCategories } from '@/shared/constants/trash-categories';
 import { database } from '@/shared/database/db';
-import { Trash, TrashCount } from '@/types/trash';
+import { Trash, TrashCount } from '@pickandtag/domain';
 import { Store } from '@tanstack/react-store';
 import { File } from 'expo-file-system';
 
@@ -45,19 +45,19 @@ export function initializeTrashStore() {
     initPromise = (async () => {
       try {
         const start = Date.now();
-        const [hasTrashes, bestWeekCount,
-          dailyTrashCount, weeklyTrashCount, monthlyTrashCount, totalTrashCount,
+        const [hasTrashes, totalTrashCount, bestWeekCount,
+          dailyTrashCount, weeklyTrashCount, monthlyTrashCount,
           yesterdayTrashCount, lastWeekTrashCount, lastMonthTrashCount,
           lastNTrashes] = await Promise.all([
             database.hasTrashes(),
-            database.getBestWeekCount(),
-            database.getTrashesByCategoriesAfter(getToday()),
-            database.getTrashesByCategoriesAfter(getThisWeek()),
-            database.getTrashesByCategoriesAfter(getThisMonth()),
             database.getTrashesByCategories(),
-            database.getTrashesByCategoriesBetween(getYesterdayRange()),
-            database.getTrashesByCategoriesBetween(getLastWeek()),
-            database.getTrashesByCategoriesBetween(getLastMonth()),
+            database.getBestWeekCount(),
+            database.getTrashesByCategoriesAfter(getToday()), // calculate from db/store
+            database.getTrashesByCategoriesAfter(getThisWeek()), // calculate from db/store
+            database.getTrashesByCategoriesAfter(getThisMonth()), // calculate from db/store
+            database.getTrashesByCategoriesBetween(getYesterdayRange()), // calculate from db/store
+            database.getTrashesByCategoriesBetween(getLastWeek()), // calculate from db/store
+            database.getTrashesByCategoriesBetween(getLastMonth()),// calculate from db/store
             database.getLastNTrashes(20)
           ]);
 
@@ -212,19 +212,26 @@ export async function deleteTrash(trash: Trash) {
   // 1️⃣ Delete from DB
   await database.deleteTrashById(trash.id);
 
+  const playerId = playerStore.state.playerId;
+
   // Delete image from storage
   if( trash.imageUrl && (trash.syncStatus === 'LOCAL') ) {
     // Delete local image
     const sourceFile = new File(trash.imageUrl);
     sourceFile.delete();
   } else if (trash.imageUrl) {
-    const playerId = playerStore.state.playerId;
     const { error } = await supabase.storage.from('trash-images')
       .remove([`${playerId}/${trash.id}.png`]);
     if (error) {
       console.error('Failed to delete remote image:', error);
     }
   }
+
+  await supabase
+    .from('trashes')
+    .delete()
+    .eq('id', trash.id)
+    .eq('player_id', playerId);
 
   // 2️⃣ Subtract XP
   const lostXP = TrashCategories[trash.category].points;

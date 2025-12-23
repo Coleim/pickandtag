@@ -1,9 +1,22 @@
 {
   "compilerOptions": {
-    "target": "ES2022",
-    "moduleResolution": "Bundler",
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "moduleDetection": "force",
     "strict": true,
     "skipLibCheck": true,
+    "noEmit": true,
+    "verbatimModuleSyntax": true,
+    "allowImportingTsExtensions": true,
+    
+    /* Linting */
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedSideEffectImports": true,
+    "erasableSyntaxOnly": true,
+    
     "baseUrl": ".",
     "paths": {
       "@pickandtag/domain": ["packages/domain/src"],

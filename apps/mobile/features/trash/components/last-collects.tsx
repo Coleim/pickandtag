@@ -1,4 +1,4 @@
-import { Trash } from "@/types/trash";
+import { type Trash } from "@pickandtag/domain";
 import { useMemo } from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
 import CollectedItem from "./collected-items";

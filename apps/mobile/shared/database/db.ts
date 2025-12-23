@@ -1,5 +1,4 @@
-import { Trash, TrashCount } from "@/types/trash";
-import { Player } from "@pickandtag/domain";
+import { Player, Trash, TrashCount} from "@pickandtag/domain";
 import * as SQLite from 'expo-sqlite';
 import { init_database_schema } from "./migrations/1_init";
 import { images_urls_v2 } from "./migrations/2_images_urls";
@@ -8,10 +7,11 @@ import { PLAYERS_SCHEMA } from "./schema/player";
 import { TRASHES_SCHEMA } from "./schema/trashes";
 import { dirty_to_local } from "./migrations/4_dirty_to_local";
 import { randomUUID } from "expo-crypto";
+import { remove_last_synced_at } from "./migrations/5_remove_last_sync";
 
 export const db = SQLite.openDatabaseSync("pickntag.db");
 
-const build_database = [init_database_schema, images_urls_v2, add_player_display_name, dirty_to_local];
+const build_database = [init_database_schema, images_urls_v2, add_player_display_name, dirty_to_local, remove_last_synced_at];
 
 class Database {
   private isInitialized: Promise<void>;
@@ -141,10 +141,10 @@ class Database {
 
   async insertTrash(trash: Trash) {
     await this.isInitialized;
-    const query = 'INSERT INTO trashes (id, event_id, category, latitude, longitude, city, country, region, subregion, imageUrl, syncStatus, createdAt, updatedAt, lastSyncedAt) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
+    const query = 'INSERT INTO trashes (id, event_id, category, latitude, longitude, city, country, region, subregion, imageUrl, syncStatus, createdAt, updatedAt) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
     try {
       await this.db.runAsync(query, trash.id, trash.event_id ?? null, trash.category, trash.latitude, trash.longitude,
-        trash.city, trash.country, trash.region, trash.subregion, trash.imageUrl ?? null, trash.syncStatus, trash.createdAt.getTime(), trash.updatedAt.getTime(), trash.lastSyncedAt.getTime());
+        trash.city, trash.country, trash.region, trash.subregion, trash.imageUrl ?? null, trash.syncStatus, trash.createdAt.getTime(), trash.updatedAt.getTime());
     } catch (error) {
       console.error("error : ", error)
     }
@@ -197,8 +197,7 @@ class Database {
       imageUrl: row.imageUrl ?? undefined,
       syncStatus: row.syncStatus as Trash['syncStatus'],
       createdAt: new Date(row.createdAt),
-      updatedAt: new Date(row.updatedAt),
-      lastSyncedAt: new Date(row.lastSyncedAt),
+      updatedAt: new Date(row.updatedAt)
     };
 
     return trash;
@@ -215,7 +214,29 @@ class Database {
 
   async getNotSyncedImageUrls(): Promise<{ id: string; imageUrl: string | null }[]> {
     await this.isInitialized;
-    return this.db.getAllAsync<{ id: string; imageUrl: string | null }>(`SELECT id, imageUrl FROM trashes WHERE syncStatus IN ('dirty', 'LOCAL', 'ERROR')`);
+    return this.db.getAllAsync<{ id: string; imageUrl: string | null }>(`SELECT id, imageUrl FROM trashes WHERE syncStatus IN ('LOCAL')`);
+  }
+
+  async getNotSyncedTrashes(): Promise<Trash[]> {
+    await this.isInitialized;
+    const rows: any[] = await this.db.getAllAsync(
+      `SELECT * FROM trashes WHERE syncStatus IN ('IMAGE_UPLOADED', 'LOCAL')`
+    );
+    return rows.map(row => ({
+      id: row.id,
+      event_id: row.event_id ?? undefined,
+      category: row.category,
+      latitude: row.latitude,
+      longitude: row.longitude,
+      city: row.city,
+      subregion: row.subregion,
+      region: row.region,
+      country: row.country,
+      imageUrl: row.imageUrl ?? undefined,
+      syncStatus: row.syncStatus,
+      createdAt: new Date(row.createdAt),
+      updatedAt: new Date(row.updatedAt),
+    }));
   }
 
   async updateTrashImageUrl(trashId: string, remoteImageUrl: string) {

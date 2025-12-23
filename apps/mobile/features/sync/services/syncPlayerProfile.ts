@@ -17,7 +17,7 @@ export async function syncPlayerProfile(user: User) {
     p_display_name: localState.displayName ?? null,
     p_updated_at: localState.updatedAt
   };
-  console.log("syncPlayerProfile input: ", input);
+  console.log("SyncPlayerProfile input: ", input);
 
   const { data: updatedPlayer, error } = await supabase.rpc("update_player_progress", input);
 

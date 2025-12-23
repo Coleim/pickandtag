@@ -1,8 +1,7 @@
 import { addTrash } from "@/shared/stores/player-store";
 import { LocationInfo } from "@/types/locationInfo";
-import { Trash } from "@/types/trash";
 import { MaterialIcons } from "@expo/vector-icons";
-import { Colors } from "@pickandtag/domain";
+import { Colors, type Trash } from "@pickandtag/domain";
 import { randomUUID } from 'expo-crypto';
 import * as Location from 'expo-location';
 import { useRouter } from "expo-router";
@@ -99,7 +98,6 @@ export function NewCollectScreen() {
       imageUrl: urlPicture,
       createdAt: new Date(),
       updatedAt: new Date(),
-      lastSyncedAt: new Date(),
       syncStatus: 'LOCAL'
     };
   };

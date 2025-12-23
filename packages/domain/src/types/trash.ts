@@ -14,7 +14,6 @@ export type Trash = {
   syncStatus: SyncStatus;
   createdAt: Date;
   updatedAt: Date;
-  lastSyncedAt: Date;
 };
 
 

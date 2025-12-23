@@ -1,4 +1,3 @@
-import { randomUUID } from "expo-crypto";
 import * as SQLite from 'expo-sqlite';
 
 export async function init_database_schema(db: SQLite.SQLiteDatabase) {

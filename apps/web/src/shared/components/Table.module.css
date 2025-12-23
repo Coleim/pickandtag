@@ -1,4 +1,4 @@
-.playerListWrapper {
+.tableWrapper {
   width: 90%;
   margin: 24px auto;
   background-color: var(--table-bg);
@@ -8,36 +8,34 @@
   overflow: hidden;
 }
 
-.playerListTable {
+.table {
   width: 100%;
   border-collapse: separate;
-  border-spacing: 0 0px; 
+  border-spacing: 0;
   font-size: 14px;
   color: var(--table-text);
 }
 
-.playerListTable thead {
+.table thead {
   background-color: rgba(255, 255, 255, 0.3);
   color: var(--table-header-text);
   font-weight: 600;
 }
 
-
-.playerListTable th,
-.playerListTable td {
+.table th,
+.table td {
   padding: 12px 16px;
   text-align: left;
 }
 
-.playerListTable tbody tr {
+.table tbody tr {
   cursor: pointer;
-  border-radius: 24px; 
+  border-radius: 24px;
   background-color: var(--white);
 }
 
-.playerListTable tbody tr:hover {
-  background-color: var(--table-hover);    
+.table tbody tr:hover {
+  background-color: var(--table-hover);
   backdrop-filter: blur(12px);
-  box-shadow: 0 4px 16px var(--table-hover-shadow); 
+  box-shadow: 0 4px 16px var(--table-hover-shadow);
 }
-

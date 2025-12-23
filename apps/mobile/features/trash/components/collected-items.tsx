@@ -1,7 +1,6 @@
 import { TrashCategories } from "@/shared/constants/trash-categories";
-import { Trash } from "@/types/trash";
 import { FontAwesome5 } from "@expo/vector-icons";
-import { Colors } from "@pickandtag/domain";
+import { Colors, type Trash } from "@pickandtag/domain";
 import React, { memo } from "react";
 import { StyleSheet, Text, TouchableOpacity } from "react-native";
 
@@ -12,7 +11,7 @@ type CollectItemProps = {
 };
 
 // Composant memoisé
-const CollectedItem = memo(({ item, onPress }: CollectItemProps) => {
+const CollectedItem = memo( function CollectedItem({ item, onPress }: CollectItemProps) {
   const cfg = TrashCategories[item.category];
   const date = item.createdAt instanceof Date ? item.createdAt : new Date(item.createdAt);
 
@@ -49,8 +48,6 @@ const CollectedItem = memo(({ item, onPress }: CollectItemProps) => {
     </TouchableOpacity>
   );
 });
-
-
 
 export default CollectedItem;
 

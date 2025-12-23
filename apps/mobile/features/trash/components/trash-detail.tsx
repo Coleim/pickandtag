@@ -2,12 +2,11 @@ import { Button } from '@/shared/components/ui/buttons';
 import { CategoryPill } from '@/shared/components/ui/category-pill';
 import { TrashCategories } from '@/shared/constants/trash-categories';
 import { CategoryConfigDetails } from '@/types/categoryConfig';
-import { Trash } from '@/types/trash';
 import { FontAwesome5 } from '@expo/vector-icons';
-import { Colors } from '@pickandtag/domain';
+import { Colors, type Trash } from '@pickandtag/domain';
 import * as Location from 'expo-location';
 import { useEffect, useState } from 'react';
-import { Alert, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Alert, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 type TrashDetailProps = {
   trash: Trash;
@@ -16,6 +15,7 @@ type TrashDetailProps = {
 };
 
 export default function TrashDetail({ trash, onDelete, onBack }: TrashDetailProps) {
+  const [imageLoading, setImageLoading] = useState(true);
   const [reverseGeoCode, setReverseGeoCode] = useState<Location.LocationGeocodedAddress | null>(null);
   const trashCategoryDetails: CategoryConfigDetails = TrashCategories[trash.category];
 
@@ -60,18 +60,21 @@ export default function TrashDetail({ trash, onDelete, onBack }: TrashDetailProp
 
   return (
     <View style={styles.container}>
-      {/* Bouton Supprimer */}
       <TouchableOpacity style={styles.deleteButton} onPress={handleDelete}>
         <FontAwesome5 name="trash" size={16} color={Colors.error} style={{ marginRight: 6 }} />
         <Text style={styles.deleteText}>Supprimer le déchet</Text>
       </TouchableOpacity>
 
-      {/* Image */}
       {trash.imageUrl ? (
         <View style={styles.imageContainer}>
+          { imageLoading && (
+            <ActivityIndicator />
+          )}
           <Image
             style={styles.image}
             resizeMode="cover"
+            onLoadStart={() => setImageLoading(true)}
+            onLoadEnd={() => setImageLoading(false)}
             source={{ uri: trash.imageUrl! }}
           />
         </View>
@@ -81,7 +84,6 @@ export default function TrashDetail({ trash, onDelete, onBack }: TrashDetailProp
         </View>
       )}
 
-      {/* Contenu */}
       <View style={styles.content}>
         <View style={styles.inlineSection}>
           <Text>Catégorie</Text>

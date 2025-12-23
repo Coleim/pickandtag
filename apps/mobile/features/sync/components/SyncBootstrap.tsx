@@ -3,6 +3,7 @@ import { useStore } from "@tanstack/react-store";
 import { useEffect } from "react";
 import { syncImages } from "../services/syncImages";
 import { syncPlayerProfile } from "../services/syncPlayerProfile";
+import { syncTrashes } from "../services/syncTrashes";
 import { playerStore } from "@/shared/stores/player-store";
 
 
@@ -18,6 +19,7 @@ export function SyncBootstrap() {
       try {
         await syncPlayerProfile(user!);
         await syncImages(userId!);
+        await syncTrashes(userId!);
       } catch (e) {
         console.warn('Sync failed', e);
       }

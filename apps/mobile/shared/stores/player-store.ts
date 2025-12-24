@@ -1,11 +1,6 @@
-import { supabase } from '@/lib/supabase';
-import { TrashCategories } from '@/shared/constants/trash-categories';
-import { database } from '@/shared/database/db';
 import { Trash, TrashCount } from '@pickandtag/domain';
 import { Store } from '@tanstack/react-store';
-import { File } from 'expo-file-system';
 import { refreshPlayerStore } from '../services/player';
-import { getLastMonth, getLastWeek, getThisMonth, getThisWeek, getToday, getYesterdayRange } from '../services/dateRanges';
 
 type StoreStatus = 'idle' | 'loading' | 'ready' | 'error';
 

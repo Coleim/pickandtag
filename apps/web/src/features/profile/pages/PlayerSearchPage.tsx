@@ -1,5 +1,5 @@
 import type { Player } from "@pickandtag/domain";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import usePlayers from "../../../shared/hooks/usePlayers";
 import PlayerList from "../components/PlayerList";
@@ -8,14 +8,23 @@ import PlayerSearch from "../components/PlayerSearch";
 export default function PlayerSearchPage() {
 
   const [searchTerm, setSearchTerm] = useState("")
-  const { players, loading } = usePlayers(searchTerm)
+  const [debouncedTerm, setDebouncedTerm] = useState(searchTerm);
+  const { players, loading } = usePlayers(debouncedTerm);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedTerm(searchTerm);
+    }, 300);
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [searchTerm]);
 
   const navigate = useNavigate();
 
   const handlePlayerSelect = (player: Player) => {
     navigate(`/app/players/${player.id}`);
   };
-
 
   return (
     <div>

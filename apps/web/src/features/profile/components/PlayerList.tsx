@@ -13,7 +13,7 @@ export default function PlayerList({ players, onPlayerSelect }: PlayerListProps)
       <table className={tableStyles.table}>
         <thead>
           <tr>
-            <th>Rank</th>
+            <th>Rank <span className={tableStyles.inlineNote}>(updated every hour)</span></th>
             <th>Player</th>
             <th>Level</th>
             <th>XP</th>

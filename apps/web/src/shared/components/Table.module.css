@@ -35,7 +35,14 @@
 }
 
 .table tbody tr:hover {
-  background-color: var(--table-hover);
+  /* background-color: var(--table-hover); */
   backdrop-filter: blur(12px);
   box-shadow: 0 4px 16px var(--table-hover-shadow);
 }
+
+.inlineNote {
+  font-size: 0.7em;
+  color: #999;
+  font-style: italic;
+  margin-left: 2px;
+} 

@@ -1,7 +1,7 @@
 import { type Level } from "./level";
 
 export type Player = {
-  id: string;
+  id: string; 
   displayName: string;
   xp: number;
   level: Level;

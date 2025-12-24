@@ -1,10 +1,10 @@
 import { AuthProvider } from "@/features/auth/components/auth-provider";
 import { SyncBootstrap } from "@/features/sync/components/SyncBootstrap";
 import { Stack } from "expo-router";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import RootGate from "./root-gate";
-import { initializeTrashStore } from "@/shared/stores/player-store";
+import { initializePlayerStore, playerStore } from "@/shared/stores/player-store";
 
 export default function RootLayout() {
   const [gateReady, setGateReady] = useState(false);
@@ -12,8 +12,8 @@ export default function RootLayout() {
 
   useEffect(() => {
     async function bootstrap() {
-      await initializeTrashStore();
-      setStoreReady(true);
+      await initializePlayerStore();
+      setStoreReady(playerStore.state.isInitialized);
     }
     bootstrap();
   }, []);

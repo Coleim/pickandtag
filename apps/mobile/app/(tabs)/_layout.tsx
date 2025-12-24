@@ -6,15 +6,10 @@ import { Tabs } from "expo-router";
 import { ActivityIndicator, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Onboarding from "../onboarding/onboarding";
-import { useEffect } from "react";
 
 export default function TabsLayout() {
   const hasTrashes = useStore(playerStore, store => store.hasTrashes);
-  const isInit = useStore(playerStore, store => store.isInit);
-
-  useEffect(() => {
-    console.log(" >>>>>>>>.    hasTrashes", hasTrashes);
-  }, [hasTrashes]);
+  const isInit = useStore(playerStore, store => store.isInitialized);
 
 
   if (!isInit) {
@@ -26,15 +21,12 @@ export default function TabsLayout() {
   }
 
   if (!hasTrashes) {
-    console.log("No trashes found, showing onboarding");
     return (
       <SafeAreaView style={{ flex: 1 }} edges={['left', 'right', 'bottom', 'top']}>
         <Onboarding />
       </SafeAreaView>
     );
   }
-
-  console.log("Trashes found, showing main tabs");
 
   return (
     <SafeAreaView style={{ flex: 1 }} edges={['left', 'right']}>

@@ -1,11 +1,11 @@
 import { database } from "@/shared/database/db";
-import { deleteTrash } from "@/shared/stores/player-store";
 import { Colors, type Trash } from "@pickandtag/domain";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import TrashDetail from "../components/trash-detail";
+import { deleteTrash } from "@/shared/services/trash";
 
 export function ViewTrashScreen() {
   const router = useRouter();

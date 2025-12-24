@@ -1,8 +1,6 @@
-import { addTrash } from "@/shared/stores/player-store";
 import { LocationInfo } from "@/types/locationInfo";
 import { MaterialIcons } from "@expo/vector-icons";
-import { Colors, type Trash } from "@pickandtag/domain";
-import { randomUUID } from 'expo-crypto';
+import { Colors } from "@pickandtag/domain";
 import * as Location from 'expo-location';
 import { useRouter } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
@@ -10,6 +8,8 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { TrashEntry } from "../components/trash-entry";
 import TrashPhotoCapture from "../components/trash-photo-capture";
+import { addTrash } from "@/shared/services/trash";
+import { createTrash } from "@/shared/services/player";
 
 export function NewCollectScreen() {
   const router = useRouter();
@@ -84,35 +84,13 @@ export function NewCollectScreen() {
     getCurrentLocation();
   }, []);
 
-
-  function createTrash(category: string): Trash {
-    return {
-      id: randomUUID(),
-      category,
-      latitude: locationInfo.latitude,
-      longitude: locationInfo.longitude,
-      city: locationInfo.city,
-      region: locationInfo.region,
-      subregion: locationInfo.subregion,
-      country: locationInfo.country,
-      imageUrl: urlPicture,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      syncStatus: 'LOCAL'
-    };
-  };
-
-  function handleTrashAdded(category: string, addAnother: boolean) {
-    addTrash(createTrash(category)).then(() => {
-      if (addAnother) {
-        router.replace('/collect/new-collect');
-      } else {
-        router.back();
-      }
-    })
-      .catch((err) => {
-        // REVIEW: Consider error handling and user feedback (Toast/Alert) on DB failure.
-      });
+  async function handleTrashAdded(category: string, addAnother: boolean) {
+    await addTrash(createTrash(category, locationInfo, urlPicture))
+    if (addAnother) {
+      router.replace('/collect/new-collect');
+    } else {
+      router.back();
+    }
   }
 
   function getHeaderTitle() {

@@ -57,7 +57,6 @@ class Database {
           `INSERT INTO meta (key, value) VALUES ('db_version', ?)`,
           targetVersion.toString()
         );
-
         return;
       }
 
@@ -70,16 +69,6 @@ class Database {
     } catch (err) {
       console.error('[DB] init error:', err);
     }
-  }
-
-  async hasTrashes(): Promise<boolean> {
-    console.log(">>>>>>> Checking for trashes in DB...");
-    await this.isInitialized;
-    const row = await this.db.getFirstAsync(
-      `SELECT 1 FROM trashes LIMIT 1`
-    );
-    console.log("Has trashes row: ", row);
-    return !!row;
   }
 
   async getLastNTrashes(n: number): Promise<Trash[]> {
@@ -114,7 +103,6 @@ class Database {
     const start = Date.now();
     const player: Player | null = await this.db.getFirstAsync('SELECT * FROM players');
     console.log('[DB] getPlayer:', Date.now() - start, 'ms');
-    console.log('[player]', player);
     return player;
   }
 
@@ -166,13 +154,12 @@ class Database {
   }
 
 
-  async updatePlayer(xp: number, trash_collected: number, display_name: string) {
+  async updatePlayer(xp: number, trash_collected: number, display_name: string, playerId: string) {
     await this.isInitialized;
-    console.log("Updating player in DB: ", xp, trash_collected, display_name);
     try {
       await this.db.runAsync(
-        `UPDATE players SET xp = ?, trash_collected = ?, displayName = ?, updated_at = CURRENT_TIMESTAMP`,
-        [xp, trash_collected, display_name]
+        `UPDATE players SET xp = ?, trash_collected = ?, displayName = ?, updated_at = CURRENT_TIMESTAMP, id = ?`,
+        [xp, trash_collected, display_name, playerId]
       );
     } catch (error) {
       console.error(error)
@@ -245,8 +232,17 @@ class Database {
   async updateTrashImageUrl(trashId: string, remoteImageUrl: string) {
     await this.isInitialized;
     await this.db.runAsync(
-      `UPDATE trashes SET imageUrl = ?, syncStatus = 'IMAGE_UPLOADED', updatedAt = ? WHERE id = ?`,
-      [remoteImageUrl, Date.now(), trashId]
+      `UPDATE trashes SET imageUrl = ?, syncStatus = 'IMAGE_UPLOADED', updatedAt = CURRENT_TIMESTAMP WHERE id = ?`,
+      [remoteImageUrl, trashId]
+    );
+  }
+
+  async markTrashesAsSynced(trashIds: string[]) {
+    await this.isInitialized;
+    const placeholders = trashIds.map(() => '?').join(',');
+    await this.db.runAsync(
+      `UPDATE trashes SET syncStatus = 'SYNCED', updatedAt = CURRENT_TIMESTAMP WHERE id IN (${placeholders})`,
+      [...trashIds]
     );
   }
 }

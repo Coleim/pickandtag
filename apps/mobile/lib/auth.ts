@@ -34,11 +34,9 @@ export async function signInWithOAuth(provider: 'google' | 'github') {
 
     }
   }
-  // await syncPlayerProfile();
 }
 
 export async function signOut() {
-  console.log(' SIGN OUT ')
   const { data: { session } } = await supabase.auth.getSession();
   if (!session) {
     console.error("No session to sign out")

@@ -13,13 +13,14 @@ import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 
 export default function HomeScreen() {
   const router = useRouter();
-  const isInit = useStore(playerStore, store => store.isInit);
+  const isInit = useStore(playerStore, store => store.isInitialized);
   const currentXp = useStore(playerStore, store => store.currentXp);
   const lastNTrashes = useStore(playerStore, store => store.lastNTrashes);
   const bestWeek = useStore(playerStore, store => store.trashCount?.bestWeek);
   const weeklyCount = useStore(playerStore, store => store.trashCount?.weekly);
   const totalGlobal = weeklyCount?.reduce((acc, val) => acc + val.count, 0) || 0;
   const categoryBreakdown = useCategoryBreakdown(weeklyCount ?? []);
+
   if (!isInit) {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
@@ -31,7 +32,6 @@ export default function HomeScreen() {
   function handleTrashClicked(trashId: string) {
     router.navigate(`/trash/view-trash?trashId=${trashId}`);
   }
-
   return (
     <View style={styles.container}>
       {/* REVIEW: Componentize header (StatsHeader) to reuse on other screens and keep this file lean. */}
@@ -45,8 +45,8 @@ export default function HomeScreen() {
       </View>
 
       <View style={styles.content}>
-        <PlayerStats currentXp={currentXp} />
-        <LastCollects trashes={lastNTrashes} onTrashClicked={handleTrashClicked} />
+        <PlayerStats currentXp={currentXp??0} />
+        <LastCollects trashes={lastNTrashes??[]} onTrashClicked={handleTrashClicked} />
       </View >
       <Fab onPress={() => router.navigate("/collect/new-collect")} />
     </View>

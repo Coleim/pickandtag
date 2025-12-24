@@ -4,19 +4,22 @@ import { database } from '@/shared/database/db';
 import { Trash, TrashCount } from '@pickandtag/domain';
 import { Store } from '@tanstack/react-store';
 import { File } from 'expo-file-system';
+import { refreshPlayerStore } from '../services/player';
+import { getLastMonth, getLastWeek, getThisMonth, getThisWeek, getToday, getYesterdayRange } from '../services/dateRanges';
+
+type StoreStatus = 'idle' | 'loading' | 'ready' | 'error';
 
 export type PlayerState = {
-  isInit: boolean;
+  status: StoreStatus;
+  isInitialized: boolean;
   hasTrashes: boolean;
-  lastNTrashes: Trash[];
-  currentXp: number;
+  currentXp?: number;
   displayName?: string;
   playerId?: string;
   updatedAt?: Date;
 
-
-
-  trashCount: {
+  lastNTrashes?: Trash[];
+  trashCount?: {
     total: TrashCount[];
     bestWeek: number,
     thisWeek: number,
@@ -26,290 +29,29 @@ export type PlayerState = {
     yesterday: TrashCount[],
     lastWeek: TrashCount[],
     lastMonth: TrashCount[]
-  } | null,
+  },
 };
 
 export const playerStore = new Store<PlayerState>({
-  isInit: false,
-  hasTrashes: false,
-  trashCount: null,
-  lastNTrashes: [],
-  currentXp: 0,
+  status: 'idle',
+  isInitialized: false,
+  hasTrashes: false
 });
 
-
-const LAST_N_TRASHES_LIMIT = 20;
-
 let initPromise: Promise<void> | null = null;
-initializeTrashStore();
-
-export function initializeTrashStore() {
-  if (!initPromise) {
-    initPromise = (async () => {
-    console.log( ">>>>>>> Initializing player store..." );
-      try {
-        const start = Date.now();
-        const [hasTrashes, totalTrashCount, bestWeekCount,
-          dailyTrashCount, weeklyTrashCount, monthlyTrashCount,
-          yesterdayTrashCount, lastWeekTrashCount, lastMonthTrashCount,
-          lastNTrashes] = await Promise.all([
-            database.hasTrashes(),
-            database.getTrashesByCategories(),
-            database.getBestWeekCount(),
-            database.getTrashesByCategoriesAfter(getToday()), // calculate from db/store
-            database.getTrashesByCategoriesAfter(getThisWeek()), // calculate from db/store
-            database.getTrashesByCategoriesAfter(getThisMonth()), // calculate from db/store
-            database.getTrashesByCategoriesBetween(getYesterdayRange()), // calculate from db/store
-            database.getTrashesByCategoriesBetween(getLastWeek()), // calculate from db/store
-            database.getTrashesByCategoriesBetween(getLastMonth()),// calculate from db/store
-            database.getLastNTrashes(20)
-          ]);
-
-        console.log('Has trashes:', hasTrashes);
-        let player = await database.getPlayer();
-        if( player === null ) {
-          await database.newPlayer();
-          player = await database.getPlayer();
-        }
-        console.log(">>>>>>> Loaded player from DB:", player);
-        console.log('⏱️ TOTAL DB:', Date.now() - start, 'ms');
-
-        playerStore.setState((state) => ({
-          ...state,
-          isInit: true,
-          hasTrashes: hasTrashes,
-          lastNTrashes: lastNTrashes.map((t: any) => ({
-            ...t,
-            createdAt: new Date(t.createdAt), // here we just convert from db timestamp to a real date
-          })),
-          trashCount: {
-            total: totalTrashCount,
-            bestWeek: bestWeekCount,
-            thisWeek: weeklyTrashCount.reduce((acc, val) => acc + val.count, 0),
-            monthly: monthlyTrashCount,
-            weekly: weeklyTrashCount,
-            daily: dailyTrashCount,
-            yesterday: yesterdayTrashCount,
-            lastWeek: lastWeekTrashCount,
-            lastMonth: lastMonthTrashCount
-          },
-          currentXp: player?.xp ?? 0,
-          displayName: player?.displayName ?? undefined,
-          updatedAt: player?.updated_at ? player?.updated_at : new Date()
-        }));
-      } catch (error) {
-        console.error("Error ", error)
-      }
-    })();
-  }
+export function initializePlayerStore() {
+  if (initPromise) return initPromise;
+  initPromise = (async () => {
+    console.log('Initializing player store...');
+    try {
+      await refreshPlayerStore();
+      console.log('Player store initialized.');
+    } catch (error) {
+      console.error('Error initializing player store:', error);
+    }
+  })();
   return initPromise;
 }
-
-
-function getToday(): Date {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  return today;
-}
-
-function getYesterdayRange(): { from: Date, to: Date } {
-  const from = new Date();
-  from.setDate(from.getDate() - 1);
-  from.setHours(0, 0, 0, 0);
-  const to = new Date(from);
-  to.setDate(to.getDate() + 1);
-  return { from, to };
-}
-function getThisWeek(): Date {
-  const lastMonday = new Date();
-  const day = lastMonday.getDay();
-  lastMonday.setDate(lastMonday.getDate() - day + 1);
-  lastMonday.setHours(0, 0, 0, 0);
-  return lastMonday;
-}
-
-function getLastWeek(): { from: Date; to: Date } {
-  const to = getThisWeek();
-
-  const from = new Date(to);
-  from.setDate(to.getDate() - 7);
-
-  return { from, to };
-}
-
-function getThisMonth(): Date {
-  const now = new Date();
-  now.setDate(1);
-  now.setHours(0, 0, 0, 0);
-  return now;
-}
-
-function getLastMonth(): { from: Date, to: Date } {
-  const to = new Date();
-  to.setDate(1);
-  to.setHours(0, 0, 0, 0);
-
-  const from = new Date(to.getFullYear(), to.getMonth() - 1, 1);
-  from.setHours(0, 0, 0, 0);
-
-  return { from, to };
-}
-
-
-export async function applyTrashAdded(trash: Trash, gainedXP: number) {
-  await initializeTrashStore();
-  playerStore.setState((prev) => {
-    const newXP = prev.currentXp + gainedXP;
-    return {
-      ...prev,
-      hasTrashes: true,
-      lastNTrashes: [trash, ...prev.lastNTrashes].slice(0, LAST_N_TRASHES_LIMIT),
-      currentXp: newXP,
-      updatedAt: new Date()
-    };
-  });
-}
-
-
-
-
-
-
-export async function addTrash(trash: Trash) {
-  await initializeTrashStore();
-  await database.insertTrash(trash);
-
-  const gainedXP = TrashCategories[trash.category].points;
-  await database.addTrashToPlayer(gainedXP);
-
-  playerStore.setState((prev) => {
-    const newXP = prev.currentXp + gainedXP;
-    const updateCount = (counts: TrashCount[] = [], category: string): TrashCount[] => {
-      let found = false;
-      const updated = counts.map(e => {
-        if (e.category === category) {
-          found = true;
-          return { ...e, count: e.count + 1 };
-        }
-        return e;
-      });
-      if (!found) updated.push({ category, count: 1 });
-      return updated;
-    };
-
-    const prevCounts = prev.trashCount ?? {
-      total: [],
-      bestWeek: 0,
-      thisWeek: 0,
-      monthly: [],
-      weekly: [],
-      daily: [],
-      yesterday: [],
-      lastWeek: [],
-      lastMonth: []
-    };
-
-    return {
-      ...prev,
-      hasTrashes: true,
-      lastNTrashes: [trash, ...prev.lastNTrashes].slice(0, LAST_N_TRASHES_LIMIT),
-      trashCount: {
-        total: updateCount(prev.trashCount?.total, trash.category),
-        monthly: trash.createdAt >= getThisMonth() ? updateCount(prev.trashCount?.monthly, trash.category) : prev.trashCount?.monthly ?? [],
-        weekly: trash.createdAt >= getThisWeek() ? updateCount(prev.trashCount?.weekly, trash.category) : prev.trashCount?.weekly ?? [],
-        daily: trash.createdAt >= getToday() ? updateCount(prev.trashCount?.daily, trash.category) : prev.trashCount?.daily ?? [],
-        bestWeek: Math.max(prevCounts.bestWeek, prevCounts.thisWeek + 1),
-        thisWeek: prevCounts.thisWeek + 1,
-        yesterday: prevCounts.yesterday,
-        lastWeek: prevCounts.lastWeek,
-        lastMonth: prevCounts.lastMonth
-      },
-      currentXp: newXP,
-      updatedAt: new Date()
-    };
-  });
-}
-
-export async function deleteTrash(trash: Trash) {
-  await initializeTrashStore();
-
-  // 1️⃣ Delete from DB
-  await database.deleteTrashById(trash.id);
-
-  const playerId = playerStore.state.playerId;
-
-  // Delete image from storage
-  if( trash.imageUrl && (trash.syncStatus === 'LOCAL') ) {
-    // Delete local image
-    const sourceFile = new File(trash.imageUrl);
-    sourceFile.delete();
-  } else if (trash.imageUrl) {
-    const { error } = await supabase.storage.from('trash-images')
-      .remove([`${playerId}/${trash.id}.png`]);
-    if (error) {
-      console.error('Failed to delete remote image:', error);
-    }
-  }
-
-  console.log( "Deleting trash from supabase:", trash.id, playerId);
-
-  const error = await supabase
-    .from('trashes')
-    .delete()
-    .eq('id', trash.id)
-    .eq('player_id', playerId);
-
-  console.log( "Supabase delete error:", error);
-
-  // 2️⃣ Subtract XP
-  const lostXP = TrashCategories[trash.category].points;
-  await database.addTrashToPlayer(-lostXP);
-
-  const [bestWeekCount,
-    dailyTrashCount, weeklyTrashCount, monthlyTrashCount, totalTrashCount,
-    yesterdayTrashCount, lastWeekTrashCount, lastMonthTrashCount,
-    lastNTrashes] = await Promise.all([
-      database.getBestWeekCount(),
-      database.getTrashesByCategoriesAfter(getToday()),
-      database.getTrashesByCategoriesAfter(getThisWeek()),
-      database.getTrashesByCategoriesAfter(getThisMonth()),
-      database.getTrashesByCategories(),
-      database.getTrashesByCategoriesBetween(getYesterdayRange()),
-      database.getTrashesByCategoriesBetween(getLastWeek()),
-      database.getTrashesByCategoriesBetween(getLastMonth()),
-      database.getLastNTrashes(LAST_N_TRASHES_LIMIT),
-    ]);
-
-  // 3️⃣ Update store
-  playerStore.setState((prev) => {
-    const newXP = Math.max(prev.currentXp - lostXP, 0);
-
-    return {
-      ...prev,
-      lastNTrashes: lastNTrashes.map((t: any) => ({
-        ...t,
-        createdAt: new Date(t.createdAt), // here we just convert from db timestamp to a real date
-      })),
-      trashCount: {
-        total: totalTrashCount,
-        bestWeek: bestWeekCount,
-        thisWeek: weeklyTrashCount.reduce((acc, val) => acc + val.count, 0),
-        monthly: monthlyTrashCount,
-        weekly: weeklyTrashCount,
-        daily: dailyTrashCount,
-        yesterday: yesterdayTrashCount,
-        lastWeek: lastWeekTrashCount,
-        lastMonth: lastMonthTrashCount
-      },
-      currentXp: newXP,
-      updatedAt: new Date()
-    }
-  });
-
-  const player = await database.getPlayer()
-  console.log("Updated player after trash deletion:", player);
-}
-
 
 export function updateDisplayName(name: string) {
   playerStore.setState((prev) => {

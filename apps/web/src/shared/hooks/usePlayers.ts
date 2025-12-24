@@ -13,9 +13,10 @@ export default function usePlayers(search: string) {
       setLoading(true)
 
       const query = supabase
-        .from('players')
-        .select('*')
-        .limit(10)
+        .from('player_ranks')
+        .select('player_id, display_name, xp, trash_collected, rank')
+        .order('rank')
+        .limit(10);
 
       if (search.length > 0) {
         query.ilike('display_name', `*${search}*`)
@@ -25,12 +26,12 @@ export default function usePlayers(search: string) {
 
       if (!error) {
         const players = data.map(d => ({
-          id: d.id,
+          id: d.player_id,
           displayName: d.display_name,
           xp: d.xp,
           level: getLevelForXP(d.xp).current,
           totalItems: d.trash_collected,
-          updated_at: d.updated_at
+          updated_at: new Date(),
         }))
 
         setPlayers(players)

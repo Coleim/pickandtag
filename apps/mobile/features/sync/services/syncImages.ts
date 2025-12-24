@@ -34,9 +34,6 @@ export async function syncImages(playerId: string) {
       // Delete local image
       const sourceFile = new File(trash.imageUrl);
       sourceFile.delete();
-
-      console.log(`Successfully synced image for trash ${trash.id}`);
-      
     }
   } finally {
     isImageSyncRunning = false;

@@ -4,8 +4,7 @@ import { useCategoryBreakdown } from "@/features/trash/hooks/categoryBreakdown";
 import { supabase } from '@/lib/supabase';
 import { translate } from "@/locales";
 import { playerStore } from "@/shared/stores/player-store";
-import { TrashCount } from "@/types/trash";
-import { Colors } from "@pickandtag/domain";
+import { Colors, type TrashCount } from "@pickandtag/domain";
 import { Session } from '@supabase/supabase-js';
 import { useStore } from "@tanstack/react-store";
 import { useRouter } from "expo-router";
@@ -94,7 +93,7 @@ export default function ProfileScreen() {
         </View>
       </View>
       <View style={styles.content}>
-        <PlayerStats currentXp={currentXp} />
+        <PlayerStats currentXp={currentXp??0} />
         <View style={styles.totalTrashesCountContainer}>
           <Text style={styles.trashCountNumber}>{selectedTrashCount}</Text>
           <Text style={styles.trashText}>Déchet{selectedTrashCount > 1 ? 's' : ''}</Text>

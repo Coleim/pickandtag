@@ -9,7 +9,7 @@ export async function syncTrashes(playerId: string) {
     const trashes = await database.getNotSyncedTrashes();
 
     if (trashes.length === 0) return;
-
+    
     const payload = trashes.map((trash) => ({
       id: trash.id,
       event_id: trash.event_id || null,
@@ -26,13 +26,16 @@ export async function syncTrashes(playerId: string) {
       updated_at: trash.updatedAt?.getTime() || trash.createdAt.getTime()
     }));
 
-    console.log(`Syncing ${payload.length} trashes for player ${playerId}`);
     // Upsert vers Supabase
     const { error } = await supabase.from('trashes')
       .upsert(payload, { onConflict: 'id' });
+
     if(error) {
       console.error("syncTrashes upsert error:", error);
+    } else {
+      await database.markTrashesAsSynced(trashes.map(t => t.id));
     }
+
   } finally {
     isTrashSyncRunning = false;
   }

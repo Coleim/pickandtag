@@ -4,6 +4,8 @@ import { playerStore } from "../stores/player-store";
 import { getLastMonth, getLastWeek, getThisMonth, getThisWeek, getToday, getYesterdayRange } from "./dateRanges";
 import { type Trash } from "@pickandtag/domain";
 import { type LocationInfo } from "@/types/locationInfo";
+import { supabase } from "@/lib/supabase";
+import { authStore } from "../stores/auth-store";
 
 const LAST_N_TRASHES_LIMIT = 20;
 
@@ -40,16 +42,15 @@ export async function refreshPlayerStore() {
   }
 };
 
-
 async function loadPlayerSnapshot() {
   try {
     const start = Date.now();
-    const [totalTrashCount, bestWeekCount,
+    const [bestWeekCount, totalStats,
       dailyTrashCount, weeklyTrashCount, monthlyTrashCount,
       yesterdayTrashCount, lastWeekTrashCount, lastMonthTrashCount,
       lastNTrashes, player] = await Promise.all([
-        database.getTrashesByCategories(),
         database.getBestWeekCount(),
+        database.getTotalTrashStats(),
         database.getTrashesByCategoriesAfter(getToday()),
         database.getTrashesByCategoriesAfter(getThisWeek()),
         database.getTrashesByCategoriesAfter(getThisMonth()),
@@ -70,8 +71,8 @@ async function loadPlayerSnapshot() {
         ...t,
         createdAt: new Date(t.createdAt), // here we just convert from db timestamp to a real date
       })),
-      trashCount: {
-        total: totalTrashCount,
+      trashCount: { //TODO: get from table stats 
+        total: totalStats ?? [],
         bestWeek: bestWeekCount,
         thisWeek: weeklyTrashCount.reduce((acc, val) => acc + val.count, 0),
         monthly: monthlyTrashCount,
@@ -87,7 +88,6 @@ async function loadPlayerSnapshot() {
   }
   return null;
 }
-
 
 export function createTrash(category: string, locationInfo: LocationInfo, urlPicture: string): Trash {
   return {
@@ -105,3 +105,22 @@ export function createTrash(category: string, locationInfo: LocationInfo, urlPic
     syncStatus: 'LOCAL'
   };
 };
+
+
+export async function updateDisplayName(name: string) {
+  playerStore.setState((prev) => {
+    return {
+      ...prev,
+      displayName: name
+    }
+  });
+
+  const userId = authStore.state.session?.user.id;
+  await supabase
+    .from("players")
+    .update({ display_name: name, updated_at: new Date().toISOString() })
+    .eq("id", userId)
+    .select()
+    .single();
+
+}

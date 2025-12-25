@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import RootGate from "./root-gate";
 import { initializePlayerStore, playerStore } from "@/shared/stores/player-store";
+import { setAuthNeedSync } from "@/shared/stores/auth-store";
 
 export default function RootLayout() {
   const [gateReady, setGateReady] = useState(false);
@@ -13,7 +14,9 @@ export default function RootLayout() {
   useEffect(() => {
     async function bootstrap() {
       await initializePlayerStore();
+      console.log('Player store is initialized:', playerStore.state.isInitialized);
       setStoreReady(playerStore.state.isInitialized);
+      setAuthNeedSync(true);
     }
     bootstrap();
   }, []);

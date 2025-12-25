@@ -42,6 +42,7 @@ export async function remove_last_synced_at(db: SQLite.SQLiteDatabase) {
     console.log('Migration complete ✅');
   } catch (err) {
     console.error('Migration failed ❌', err);
+    throw err;
   }
 }
 

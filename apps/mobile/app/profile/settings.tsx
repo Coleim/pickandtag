@@ -1,5 +1,6 @@
 import { signOut } from '@/lib/auth';
-import { playerStore, updateDisplayName } from '@/shared/stores/player-store';
+import { updateDisplayName } from '@/shared/services/player';
+import { playerStore } from '@/shared/stores/player-store';
 import { FontAwesome5, MaterialIcons } from '@expo/vector-icons';
 import { Colors } from '@pickandtag/domain';
 import { useStore } from '@tanstack/react-store';
@@ -25,8 +26,8 @@ export default function ProfileSettings() {
     router.dismissAll();
   };
 
-  const saveName = () => {
-    updateDisplayName(name?.trim() || displayName || '');
+  const saveName = async () => {
+    await updateDisplayName(name?.trim() || displayName || '');
     setEditing(false);
   };
 

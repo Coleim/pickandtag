@@ -47,13 +47,3 @@ export function initializePlayerStore() {
   })();
   return initPromise;
 }
-
-export function updateDisplayName(name: string) {
-  playerStore.setState((prev) => {
-    return {
-      ...prev,
-      displayName: name
-    }
-  });
-}
-

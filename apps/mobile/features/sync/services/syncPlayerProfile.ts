@@ -1,38 +1,48 @@
 import { supabase } from "@/lib/supabase";
+import { TrashCategories } from "@/shared/constants/trash-categories";
 import { database } from "@/shared/database/db";
 import { playerStore } from "@/shared/stores/player-store";
 
 export async function syncPlayerProfile(userId: string) {
-  if (!userId) return null;
+  //TODO: Rework to be done (See syncPlayerStats ; sync first , then update local diffs)
+  console.log("[Syncing player] profile");
+  if (!userId) return;
 
-  const localState = playerStore.state;
-  const trashCount = localState.trashCount?.total ? localState.trashCount.total.reduce((acc, val) => acc + val.count, 0) : 0;
+  // 1️⃣ Récupérer le profil serveur
+  const { data: serverPlayer, error } = await supabase
+    .from("players")
+    .select("id, xp, trash_collected, display_name, updated_at")
+    .eq("id", userId)
+    .single();
 
-  const input = {
-    p_id: userId,
-    p_xp: localState.currentXp,
-    p_trash: trashCount,
-    p_display_name: localState.displayName ?? null,
-    p_updated_at: localState.updatedAt
-  };
-  const { data: updatedPlayer, error } = await supabase.rpc("update_player_progress", input);
   if (error) {
-    console.error("syncPlayerProfile RPC error:", error);
-    return null;
+    console.error("syncPlayerProfile error fetching server data:", error);
+    return;
   }
 
-  if (!updatedPlayer?.length) return null;
+  if (!serverPlayer) return;
 
-  const p = updatedPlayer[0];
+
+  // Diff avec le local 
+  const localTrashes = await database.getNotSyncedTrashes();
+  const totalCount = localTrashes.length + (serverPlayer.trash_collected || 0);
+  let totalXp = serverPlayer.xp; // + localXpGained; // TODO: Calculate local XP gained
+  // Calculate local XP gained
+  for (const t of localTrashes) {
+    // Assuming TrashCategories is accessible here
+    const categoryPoints = TrashCategories[t.category]?.points || 0;
+    totalXp += categoryPoints;
+  }
+
+  // 2️⃣ Mettre à jour le store local
   playerStore.setState((state) => ({
     ...state,
-    currentXp: p.xp,
-    displayName: p.display_name,
-    updatedAt: p.updated_at,
-    hasTrashes: p.trash_collected > 0,
-    playerId: p.id
+    currentXp: totalXp,
+    displayName: serverPlayer.display_name,
+    updatedAt: serverPlayer.updated_at,
+    hasTrashes: totalCount > 0,
+    playerId: serverPlayer.id
   }));
 
-  await database.updatePlayer(p.xp, p.trash_collected, p.display_name, p.id);
-  return p;
+  await database.updatePlayer(totalXp, totalCount, serverPlayer.display_name, serverPlayer.id);
 }

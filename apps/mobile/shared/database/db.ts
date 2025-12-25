@@ -8,10 +8,13 @@ import { TRASHES_SCHEMA } from "./schema/trashes";
 import { dirty_to_local } from "./migrations/4_dirty_to_local";
 import { randomUUID } from "expo-crypto";
 import { remove_last_synced_at } from "./migrations/5_remove_last_sync";
+import { TRASH_STATS_SCHEMA } from "./schema/trash-stats";
+import { create_trash_stats } from "./migrations/6_trash_stats";
 
 export const db = SQLite.openDatabaseSync("pickntag.db");
 
-const build_database = [init_database_schema, images_urls_v2, add_player_display_name, dirty_to_local, remove_last_synced_at];
+const build_database = [init_database_schema, images_urls_v2, add_player_display_name, dirty_to_local, 
+                        remove_last_synced_at, create_trash_stats];
 
 class Database {
   private isInitialized: Promise<void>;
@@ -52,7 +55,8 @@ class Database {
 
         // schémas finaux
         await this.db.execAsync(TRASHES_SCHEMA);
-        await this.db.execAsync(PLAYERS_SCHEMA);        
+        await this.db.execAsync(PLAYERS_SCHEMA);
+        await this.db.execAsync(TRASH_STATS_SCHEMA);
         await this.db.runAsync(
           `INSERT INTO meta (key, value) VALUES ('db_version', ?)`,
           targetVersion.toString()
@@ -62,8 +66,13 @@ class Database {
 
       for (let i = currentVersion; i < targetVersion; ++i) {
         console.info('[DB] migrate', i, '→', i + 1);
-        await build_database[i](this.db);
-        await this.db.runAsync(`UPDATE meta SET value = ? WHERE key = 'db_version'`, (i + 1).toString());
+        try {
+          await build_database[i](this.db);
+          await this.db.runAsync(`UPDATE meta SET value = ? WHERE key = 'db_version'`, (i + 1).toString());
+        } catch (err) {
+          console.error('[DB] migration failed at step', i, '→', i + 1, err);
+          throw err;
+        }
       }
 
     } catch (err) {
@@ -133,19 +142,22 @@ class Database {
   async insertTrash(trash: Trash) {
     await this.isInitialized;
     const query = 'INSERT INTO trashes (id, event_id, category, latitude, longitude, city, country, region, subregion, imageUrl, syncStatus, createdAt, updatedAt) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)';
+    const trashCount = 'UPDATE players SET trash_collected = trash_collected + 1, updated_at = CURRENT_TIMESTAMP'
     try {
       await this.db.runAsync(query, trash.id, trash.event_id ?? null, trash.category, trash.latitude, trash.longitude,
         trash.city, trash.country, trash.region, trash.subregion, trash.imageUrl ?? null, trash.syncStatus, trash.createdAt.getTime(), trash.updatedAt.getTime());
+      await this.db.runAsync(trashCount);
     } catch (error) {
       console.error("error : ", error)
     }
   }
 
-  async addTrashToPlayer(gainedXP: number) {
+  async addExperienceToPlayer(gainedXP: number) {
     await this.isInitialized;
+    console.log("[[[ Adding experience to player ]]] ", gainedXP);
     try {
       await this.db.runAsync(
-        `UPDATE players SET xp = xp + ?, updated_at = CURRENT_TIMESTAMP`,
+        `UPDATE players SET xp = MAX(xp + ?, 0), updated_at = CURRENT_TIMESTAMP`,
         [gainedXP]
       );
     } catch (error) {
@@ -158,7 +170,7 @@ class Database {
     await this.isInitialized;
     try {
       await this.db.runAsync(
-        `UPDATE players SET xp = ?, trash_collected = ?, displayName = ?, updated_at = CURRENT_TIMESTAMP, id = ?`,
+        `UPDATE players SET xp = MAX(?, 0), trash_collected = MAX(?, 0), displayName = ?, updated_at = CURRENT_TIMESTAMP, id = ?`,
         [xp, trash_collected, display_name, playerId]
       );
     } catch (error) {
@@ -199,6 +211,9 @@ class Database {
     await this.db.runAsync(
       `DELETE FROM trashes WHERE id = ?`,
       [trashId]
+    );
+    await this.db.runAsync(
+      `UPDATE players SET trash_collected = MAX(trash_collected - 1, 0), updated_at = CURRENT_TIMESTAMP`
     );
   }
 
@@ -244,6 +259,82 @@ class Database {
       `UPDATE trashes SET syncStatus = 'SYNCED', updatedAt = CURRENT_TIMESTAMP WHERE id IN (${placeholders})`,
       [...trashIds]
     );
+  }
+
+  async updateAllTrashStats(updatedStats: { category: string; count: number }[]) {
+    await this.isInitialized;
+    await this.isInitialized;
+    await this.db.withTransactionAsync(async () => {
+      for (const stat of updatedStats) {
+        await this.db.runAsync(
+          `INSERT INTO trash_stats (category, count) VALUES (?, ?)
+          ON CONFLICT(category) DO UPDATE SET count = ?; `,
+          [stat.category, stat.count, stat.count]
+        );
+      }
+    });
+  }
+
+  async updateTrashStats(category: string) {
+    await this.isInitialized;
+    try {
+      await this.db.runAsync(
+        `INSERT INTO trash_stats (category, count) VALUES (?, 1)
+         ON CONFLICT(category) DO UPDATE SET count = count + 1`,
+        [category]
+      );
+    } catch (error) {
+      console.error("error updating trash stats: ", error)
+    }
+  }
+
+  async decrementTrashStats(category: string) {
+    await this.isInitialized;
+    try {
+      await this.db.runAsync(
+        `UPDATE trash_stats SET count = CASE WHEN count > 0 THEN count - 1 ELSE 0 END WHERE category = ?`,
+        [category]
+      );
+    } catch (error) {
+      console.error("error decrementing trash stats: ", error)
+    }
+  }
+
+  async getTotalTrashStats() {
+    await this.isInitialized;
+    return this.db.getAllAsync<TrashCount>(`SELECT category, count FROM trash_stats`);
+  }
+
+  async insertTrashes(newTrashes: any) {
+    await this.isInitialized;
+    const placeholders = newTrashes
+      .map(() => `(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`)
+      .join(',');
+    const values = [];
+    for (const t of newTrashes) {
+      values.push(
+        t.id,
+        t.event_id,
+        t.category,
+        t.latitude,
+        t.longitude,
+        t.city,
+        t.subregion,
+        t.region,
+        t.country,
+        t.image_url,
+        'SYNCED',
+        t.created_at,
+        t.updated_at
+      );
+    }
+    await db.runAsync(`
+      INSERT OR IGNORE INTO trashes (
+        id, event_id, category, latitude, longitude,
+        city, subregion, region, country, imageUrl, syncStatus,
+        createdAt, updatedAt
+      ) VALUES ${placeholders};
+    `, values);
   }
 }
 

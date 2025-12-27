@@ -6,8 +6,20 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import RootGate from "./root-gate";
 import { initializePlayerStore, playerStore } from "@/shared/stores/player-store";
 import { setAuthNeedSync } from "@/shared/stores/auth-store";
+import * as Sentry from "@sentry/react-native";
 
-export default function RootLayout() {
+Sentry.init({
+  dsn: "https://d58008184265fae3dfbcb6ae80d38fda@o4510606017232896.ingest.de.sentry.io/4510606140375120",
+  // Adds more context data to events (IP address, cookies, user, etc.)
+  // For more information, visit: https://docs.sentry.io/platforms/react-native/data-management/data-collected/
+  sendDefaultPii: true,
+  // Enable logs to be sent to Sentry
+  // Learn more at https://docs.sentry.io/platforms/react-native/logs/
+  enableLogs: true,
+});
+
+
+function RootLayout() {
   const [gateReady, setGateReady] = useState(false);
   const [storeReady, setStoreReady] = useState(false);
 
@@ -54,3 +66,4 @@ export default function RootLayout() {
 }
 
 
+export default Sentry.wrap(RootLayout);

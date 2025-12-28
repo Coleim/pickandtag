@@ -1,12 +1,13 @@
 import { signInWithOAuth } from '@/lib/auth';
 import { Colors } from '@pickandtag/domain';
 import { useState } from 'react';
-import { Linking, StyleSheet, Text, View } from 'react-native';
+import { Linking, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { ConnectWithButton } from '../components/connect-with-button';
+import { useRouter } from 'expo-router';
 
 export function LoginScreen() {
   const [loadingProvider, setLoadingProvider] = useState<'google' | 'github' | null>(null);
-
+  const router = useRouter();
 
   const handleLogin = async (provider: 'google' | 'github') => {
     try {
@@ -20,6 +21,7 @@ export function LoginScreen() {
   };
 
   return (
+    
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.title}>Se connecter</Text>
@@ -40,6 +42,19 @@ export function LoginScreen() {
           onPress={() => handleLogin('github')}
           loading={loadingProvider === 'github'}
         />
+      </View>
+
+      {/* Bouton secondaire pour continuer sans compte */}
+      <TouchableOpacity 
+        style={styles.skipButton}
+        onPress={() => router.back()}
+      >
+        <Text style={styles.skipButtonText}>Continuer sans compte</Text>
+      </TouchableOpacity>
+        <View style={styles.skipInfo}>
+        <Text style={styles.skipInfoText}>
+          💡 Sans compte, tu ne pourras pas sauvegarder tes données
+        </Text>
       </View>
 
       <Text style={styles.footerText}>
@@ -90,6 +105,32 @@ const styles = StyleSheet.create({
     color: Colors.secondary,
     textDecorationLine: 'underline',
   },
+    skipButton: {
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    marginTop: 16,
+  },
+  skipButtonText: {
+    fontSize: 16,
+    color: '#666',
+    textAlign: 'center',
+    textDecorationLine: 'underline',
+  },
+  skipInfo: {
+    backgroundColor: '#F5F5F5',
+    borderRadius: 8,
+    padding: 12,
+    marginTop: 12,
+    marginBottom: 8,
+    borderLeftWidth: 3,
+    borderLeftColor: '#FFA500',
+  },
+  skipInfoText: {
+    fontSize: 14,
+    color: '#666',
+    lineHeight: 20,
+    textAlign: 'center',
+  }
 });
 
 

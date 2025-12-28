@@ -43,14 +43,41 @@ class Database {
         PRIMARY KEY(key)
       )`);
 
+      // select all rows from meta
+      const all_meta_rows = await this.db.getAllAsync(`SELECT * FROM meta`);
+
+      console.info('[DB] all_meta_rows:', all_meta_rows);
+
       const meta_row: { value: number } | null = await this.db.getFirstAsync(`SELECT value FROM meta where key = 'db_version'`);
-      const currentVersion = meta_row ? Number(meta_row.value) : 0;
+
+      console.info('[DB] meta_row:', meta_row);
+      let currentVersion = meta_row ? Number(meta_row.value) : -1;
       const targetVersion = build_database.length;
 
       console.info('[DB] current version:', currentVersion, ' - target version:', targetVersion);
 
+      // if version is -1 but there are rows in trashes, set version to 0 (legacy db)
+      if (currentVersion === -1) {
+        // check if the table exists first
+        const table_info = await this.db.getAllAsync(`SELECT name FROM sqlite_master WHERE type='table' AND name='trashes';`);
+        console.info('[DB] table_info for trashes:', table_info);
+        if (table_info.length === 0) {
+          console.info('[DB] No trashes table found, assuming fresh install.');
+        } else {
+          console.info('[DB] Trashes table exists, checking for existing data.');
+          const trash_count_row: { count: number } | null = await this.db.getFirstAsync(`SELECT COUNT(*) as count FROM trashes`);
+          if (trash_count_row && trash_count_row.count > 0) {
+            console.info('[DB] Legacy database detected, setting version to 0');
+            await this.db.runAsync(
+              `INSERT OR REPLACE INTO meta (key, value) VALUES ('db_version', '0')`
+            );
+            currentVersion = 0;
+          }
+        }
+      }
+
       // FRESH INSTALL
-      if (currentVersion === 0) {
+      if (currentVersion === -1) {
         console.info('[DB] Fresh install → create final schema');
 
         // schémas finaux

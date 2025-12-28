@@ -3,6 +3,7 @@
   "main": "expo-router/entry",
   "version": "1.0.0",
   "scripts": {
+    "start": "npx expo start",
     "start-dev": "npx expo start --dev-client",
     "start:wsl": "REACT_NATIVE_PACKAGER_HOSTNAME=$(node --env-file-if-exists=.env.local ./get_network_local_ip.js) npx expo start",
     "start-dev:wsl": "REACT_NATIVE_PACKAGER_HOSTNAME=$(node --env-file-if-exists=.env.local ./get_network_local_ip.js) npx expo start --dev-client",

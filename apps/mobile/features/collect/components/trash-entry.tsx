@@ -36,7 +36,6 @@ const detailsStyles = StyleSheet.create({
     backgroundColor: Colors.background,
     flexDirection: 'column',
     paddingTop: 20,
-    paddingHorizontal: 24,
   },
   map: {
     width: 300, // small map

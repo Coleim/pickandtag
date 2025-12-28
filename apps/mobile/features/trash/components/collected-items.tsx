@@ -23,12 +23,12 @@ const CollectedItem = memo( function CollectedItem({ item, onPress }: CollectIte
     const diffHour = Math.floor(diffMin / 60);
     const diffDay = Math.floor(diffHour / 24);
 
-    if (diffSec < 60) return "à l’instant";
+    if (diffSec < 60) return "à l'instant";
     if (diffMin < 60) return `il y a ${diffMin} min`;
     if (diffHour < 24 && now.getDate() === date.getDate()) return `il y a ${diffHour} h`;
 
-    if (diffDay === 0) return "Aujourd’hui";
-    if (diffDay === 1) return "Hier";
+    if (diffDay === 0 && now.getDate() === date.getDate() ) return "Aujourd'hui";
+    if (diffDay <= 1 && now.getDate() !== date.getDate() ) return "Hier";
     if (diffDay <= 7) return `il y a ${diffDay} jours`;
 
     return date.toLocaleDateString(locale, {
@@ -42,7 +42,7 @@ const CollectedItem = memo( function CollectedItem({ item, onPress }: CollectIte
     <TouchableOpacity style={styles.collectItem} onPress={onPress}>
       <FontAwesome5 name={cfg.icon as any} size={20} color={cfg.color} />
       <Text style={styles.collectText}>
-        {item.category}•{formatFriendlyDate(date)}{item.city && ` à ${item.city}`}
+        {item.category} • {formatFriendlyDate(date)}{item.city && ` à ${item.city}`}
       </Text>
       <Text style={styles.xpText}>+{TrashCategories[item.category].points}xp</Text>
     </TouchableOpacity>

@@ -45,21 +45,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     maxWidth: screenWidth * 0.9,
     alignSelf: "center",
-    gap: 12,
-    marginVertical: 16,
-  },
-  pill: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: 10,
-    paddingVertical: 10,
-    borderRadius: 24,
-    borderWidth: 1,
-    justifyContent: "center",
-  },
-  pillText: {
-    fontSize: 16,
-    fontWeight: "600",
-  },
+    gap: 10
+  }
 });
 

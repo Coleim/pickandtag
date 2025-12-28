@@ -43,7 +43,17 @@
           "url": "https://sentry.io/",
           "note": "Use SENTRY_AUTH_TOKEN env to authenticate with Sentry.",
           "project": "react-native",
-          "organization": "pick-and-tag"
+          "organization": "pick-and-tag",
+          "experimental_android": {
+            "enableAndroidGradlePlugin": true,
+            "autoUploadProguardMapping": true,
+            "includeProguardMapping": true,
+            "dexguardEnabled": true,
+            "uploadNativeSymbols": true,
+            "autoUploadNativeSymbols": true,
+            "includeNativeSources": true,
+            "includeSourceContext": true
+          }
         }
       ],
       [

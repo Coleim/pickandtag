@@ -1,5 +1,5 @@
 import { LocationInfo } from "@/types/locationInfo";
-import { MaterialIcons } from "@expo/vector-icons";
+import { FontAwesome5 } from "@expo/vector-icons";
 import { Colors } from "@pickandtag/domain";
 import * as Location from 'expo-location';
 import { useRouter } from "expo-router";
@@ -10,6 +10,7 @@ import { TrashEntry } from "../components/trash-entry";
 import TrashPhotoCapture from "../components/trash-photo-capture";
 import { addTrash } from "@/shared/services/trash";
 import { createTrash } from "@/shared/services/player";
+import { buttonStyles } from "@/shared/constants/button-styles";
 
 export function NewCollectScreen() {
   const router = useRouter();
@@ -21,8 +22,11 @@ export function NewCollectScreen() {
 
   useEffect(() => {
     async function getCurrentLocation() {
+      console.info('[getCurrentLocation] Requesting location permission...');
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
+        console.error('Location permission not granted');
+        setLocationError(true);
         return;
       }
 
@@ -51,6 +55,8 @@ export function NewCollectScreen() {
         }
       }
 
+      console.info('Obtained location: ', currentLocation);
+
       if (currentLocation) {
         setLocationError(false);
         setLocationInfo(prev => ({
@@ -65,6 +71,8 @@ export function NewCollectScreen() {
             latitude: currentLocation.coords.latitude,
             longitude: currentLocation.coords.longitude,
           });
+
+          console.info('Reversed geocode: ', reverseGeocode);
 
           if (reverseGeocode.length > 0) {
             const place = reverseGeocode[0];
@@ -109,20 +117,25 @@ export function NewCollectScreen() {
     <SafeAreaView style={{ flex: 1 }} edges={['left', 'right', 'bottom']}>
       <View style={styles.container}>
         <View style={styles.header}>
-          <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-            <MaterialIcons name="close" size={24} color="#fff" />
-          </TouchableOpacity>
           <Text style={styles.headerTitle}>{getHeaderTitle()}</Text>
         </View>
-        {locationError && (
-          <Text style={{ color: 'red', padding: 10, textAlign: 'center' }}>
-            Unable to get location. Please enable location services.
-          </Text>
-        )}
-        {urlPicture ?
-          <TrashEntry urlPicture={urlPicture} city={locationInfo.city} country={locationInfo.country} onAddTrash={handleTrashAdded} /> :
-          <TrashPhotoCapture onPhotoCaptured={handlePhotoCaptured} />
-        }
+
+        <View style={styles.content}>
+          <TouchableOpacity style={buttonStyles.linkButton} onPress={() => router.back()}>
+            <FontAwesome5 name="arrow-circle-left" size={16} color={Colors.secondary} style={{ marginRight: 6 }} />
+            <Text style={buttonStyles.linkButtonText}>Retour</Text>
+          </TouchableOpacity>
+
+          {locationError && (
+            <Text style={{ color: 'red', padding: 10, textAlign: 'center' }}>
+              Unable to get location. Please enable location services.
+            </Text>
+          )}
+          {urlPicture ?
+            <TrashEntry urlPicture={urlPicture} city={locationInfo.city} country={locationInfo.country} onAddTrash={handleTrashAdded} /> :
+            <TrashPhotoCapture onPhotoCaptured={handlePhotoCaptured} />
+          }
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -132,21 +145,13 @@ export function NewCollectScreen() {
 const styles = StyleSheet.create({
   header: {
     backgroundColor: Colors.primary,
-    paddingTop: 24,
+    paddingTop: 30,
     paddingBottom: 10,
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
     alignItems: "center",
     justifyContent: "center",
     flexDirection: 'row',
-  },
-  backButton: {
-    width: 40, // fixed size so the title can truly center
-    justifyContent: "center",
-    alignItems: "center",
-    position: 'absolute',
-    left: 10,
-    top: 24
   },
   headerTitle: {
     textAlign: "center",
@@ -158,11 +163,10 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.background,
     flexDirection: 'column',
-    // padding: 24
   },
   content: {
     flex: 1,
-    paddingHorizontal: 24,
+    paddingHorizontal: 10,
     justifyContent: "flex-start",
   },
   title: {

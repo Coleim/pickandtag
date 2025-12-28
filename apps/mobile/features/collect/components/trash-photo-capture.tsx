@@ -27,7 +27,6 @@ export default function TrashPhotoCapture({ onPhotoCaptured }: { onPhotoCaptured
 const styles = StyleSheet.create({
   content: {
     flex: 1,
-    paddingHorizontal: 24,
     paddingTop: 20,
     justifyContent: "flex-start",
   },

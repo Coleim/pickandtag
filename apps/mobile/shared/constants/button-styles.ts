@@ -95,5 +95,20 @@ export const buttonStyles = StyleSheet.create({
   },
 
 
+
+  linkButton: {
+    flexDirection: 'row',
+    marginTop: 12,
+    marginBottom: 4,
+  },
+  linkButtonText: {
+    color: Colors.secondary,
+    fontWeight: '600',
+    fontSize: 14,
+  },
+  linkButtonTextDanger: {
+    color: Colors.error,
+  }
+
 });
 

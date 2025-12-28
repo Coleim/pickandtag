@@ -1,5 +1,6 @@
 import { Button } from '@/shared/components/ui/buttons';
 import { CategoryPill } from '@/shared/components/ui/category-pill';
+import { buttonStyles } from '@/shared/constants/button-styles';
 import { TrashCategories } from '@/shared/constants/trash-categories';
 import { CategoryConfigDetails } from '@/types/categoryConfig';
 import { FontAwesome5 } from '@expo/vector-icons';
@@ -60,9 +61,9 @@ export default function TrashDetail({ trash, onDelete, onBack }: TrashDetailProp
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.deleteButton} onPress={handleDelete}>
+      <TouchableOpacity style={buttonStyles.linkButton} onPress={handleDelete}>
         <FontAwesome5 name="trash" size={16} color={Colors.error} style={{ marginRight: 6 }} />
-        <Text style={styles.deleteText}>Supprimer le déchet</Text>
+        <Text style={buttonStyles.linkButtonTextDanger}>Supprimer le déchet</Text>
       </TouchableOpacity>
 
       {trash.imageUrl ? (
@@ -160,16 +161,6 @@ const styles = StyleSheet.create({
     marginLeft: 'auto',
     fontWeight: '600',
     color: Colors.accent,
-  },
-  deleteButton: {
-    flexDirection: 'row',
-    marginTop: 12,
-    marginBottom: 4,
-  },
-  deleteText: {
-    color: Colors.error,
-    fontWeight: '600',
-    fontSize: 14,
-  },
+  }
 });
 

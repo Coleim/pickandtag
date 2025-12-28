@@ -80,10 +80,17 @@ class Database {
       if (currentVersion === -1) {
         console.info('[DB] Fresh install → create final schema');
 
+        await Promise.all([
+          this.db.execAsync("DROP TABLE IF EXISTS trashes;"),
+          this.db.execAsync("DROP TABLE IF EXISTS players;"),
+          this.db.execAsync("DROP TABLE IF EXISTS trash_stats;"),
+        ]);
         // schémas finaux
-        await this.db.execAsync(TRASHES_SCHEMA);
-        await this.db.execAsync(PLAYERS_SCHEMA);
-        await this.db.execAsync(TRASH_STATS_SCHEMA);
+        await Promise.all([
+          this.db.execAsync(TRASHES_SCHEMA),
+          this.db.execAsync(PLAYERS_SCHEMA),
+          this.db.execAsync(TRASH_STATS_SCHEMA)
+        ]);
         await this.db.runAsync(
           `INSERT INTO meta (key, value) VALUES ('db_version', ?)`,
           targetVersion.toString()

@@ -98,10 +98,14 @@ export default function TrashDetail({ trash, onDelete, onBack }: TrashDetailProp
 
         <View style={styles.section}>
           <Text style={styles.label}>Lieu de collecte</Text>
-          <Text style={styles.cityText}>{reverseGeoCode?.formattedAddress}</Text>
+          { reverseGeoCode && (
+            <Text style={styles.cityText}>{reverseGeoCode.formattedAddress}</Text>
+          )}
+          { !reverseGeoCode && (
+            <Text style={styles.errorText}>Non disponible</Text>
+          )}
         </View>
       </View>
-
       <View style={{ marginTop: 'auto', marginBottom: 10 }}>
         <Button onPress={onBack} title="Fermer" />
       </View>
@@ -161,6 +165,9 @@ const styles = StyleSheet.create({
     marginLeft: 'auto',
     fontWeight: '600',
     color: Colors.accent,
-  }
+  },
+  errorText: {
+    color: Colors.error,
+  },
 });
 

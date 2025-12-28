@@ -23,16 +23,25 @@ export function NewCollectScreen() {
   useEffect(() => {
     async function getCurrentLocation() {
       console.info('[getCurrentLocation] Requesting location permission...');
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== 'granted') {
-        console.error('Location permission not granted');
-        setLocationError(true);
-        return;
+      const { status: existingStatus } = await Location.getForegroundPermissionsAsync();
+      console.info('[getCurrentLocation] Existing permission status:', existingStatus);
+
+      if (existingStatus !== 'granted') {
+        let { status } = await Location.requestForegroundPermissionsAsync();
+        console.info('[getCurrentLocation] Permission status:', status);
+
+        if (status !== 'granted') {
+          console.error('Location permission not granted');
+          setLocationError(true);
+          return;
+        }
       }
+      console.info('[getCurrentLocation] Location permission granted.');
 
       let currentLocation: Location.LocationObject | null = null;
 
       try {
+        console.info('Attempting to get current position with timeout...');
         // Try to get current position with 2 second timeout
         currentLocation = await Promise.race([
           Location.getCurrentPositionAsync({
@@ -42,6 +51,7 @@ export function NewCollectScreen() {
             setTimeout(() => reject(new Error('Timeout')), 2000)
           )
         ]);
+        console.info('Current position obtained: ', currentLocation);
       } catch (error) {
         console.error('Failed to get current position, falling back to last known:', error);
         setLocationError(true);

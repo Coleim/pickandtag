@@ -14,7 +14,9 @@ export default function RootGate({ onReady }: { onReady: () => void }) {
 
   const checkPermissions = async () => {
     const cam = await Camera.getCameraPermissionsAsync();
+    console.info('Camera permission status: ', cam.status);
     const loc = await Location.getForegroundPermissionsAsync();
+    console.info('Location permission status: ', loc.status);
     return cam.status === "granted" && loc.status === "granted";
   };
 

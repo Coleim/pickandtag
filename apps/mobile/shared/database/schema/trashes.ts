@@ -1,5 +1,5 @@
 export const TRASHES_SCHEMA = `
-  CREATE TABLE trashes (
+  CREATE TABLE IF NOT EXISTS trashes (
     id TEXT PRIMARY KEY,
     event_id TEXT,
     category TEXT,

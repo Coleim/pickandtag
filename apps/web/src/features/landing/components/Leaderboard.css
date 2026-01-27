@@ -106,6 +106,39 @@
   gap: 8px;
   font-weight: 500;
   color: var(--text);
+  position: relative;
+}
+
+.feature-link {
+  text-decoration: none;
+  padding: 12px 20px;
+  border-radius: 12px;
+  background-color: rgba(136, 199, 110, 0.1);
+  border: 2px solid var(--primary);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.feature-link:hover {
+  background-color: rgba(136, 199, 110, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(136, 199, 110, 0.2);
+}
+
+.feature-coming-soon {
+  opacity: 0.6;
+}
+
+.coming-soon-badge {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--secondary);
+  background-color: rgba(0, 0, 0, 0.05);
+  padding: 4px 8px;
+  border-radius: 6px;
+  margin-left: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .feature-icon {

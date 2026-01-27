@@ -38,7 +38,7 @@ const Footer = () => {
                 <ul className="footer-list">
                   <li><a href="/#how-it-works">Comment ça marche</a></li>
                   <li><a href="/#leaderboard">Classement</a></li>
-                  <li><a href="/#beta">Rejoindre la bêta</a></li>
+                  <li><a href="https://play.google.com/store/apps/details?id=com.coleim.pickandtag" target="_blank" rel="noopener noreferrer">Télécharger sur Google Play</a></li>
                 </ul>
               </div>
 

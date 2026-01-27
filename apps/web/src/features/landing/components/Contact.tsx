@@ -131,7 +131,6 @@ const Contact = () => {
                     className="input"
                   >
                     <option value="">Sélectionnez un sujet</option>
-                    <option value="Contact::Rejoindre la bêta">Rejoindre la bêta</option>
                     <option value="Contact::Signaler un bug">Signaler un bug</option>
                     <option value="Contact::Suggestion de fonctionnalité">Suggestion de fonctionnalité</option>
                     <option value="Contact::Partenariat">Partenariat</option>

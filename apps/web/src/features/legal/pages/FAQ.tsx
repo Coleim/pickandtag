@@ -51,7 +51,7 @@ const FAQ = () => {
           <section>
             <h2>L'app est-elle disponible sur iOS ?</h2>
             <p>
-              Une bêta Android est prioritaire. L'iOS arrivera ensuite. Vous pouvez laisser votre email pour être notifié.
+              L'application est actuellement disponible sur Android via Google Play. Une version iOS est prévue pour plus tard.
             </p>
           </section>
         </motion.div>

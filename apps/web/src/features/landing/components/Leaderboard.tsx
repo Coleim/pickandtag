@@ -41,24 +41,25 @@ const Leaderboard = () => {
               🏆
             </motion.div>
 
-            <h3 className="coming-soon-title">Bientôt disponible !</h3>
+            <h3 className="coming-soon-title">Disponible maintenant !</h3>
             <p className="coming-soon-description">
-              Le classement en temps réel sera disponible dès le lancement de la bêta.
-              Prépare-toi à défier tes amis et à grimper dans les rangs !
+              Consulte le classement en temps réel et défie tes amis pour grimper dans les rangs !
             </p>
 
             <div className="coming-soon-features">
-              <div className="feature-item">
+              <a href="https://pickandtag.onrender.com/app" className="feature-item feature-link" target="_blank" rel="noopener noreferrer">
                 <span className="feature-icon">📊</span>
                 <span>Classement en temps réel</span>
-              </div>
-              <div className="feature-item">
+              </a>
+              <div className="feature-item feature-coming-soon">
                 <span className="feature-icon">👥</span>
                 <span>Défis entre amis</span>
+                <span className="coming-soon-badge">Bientôt</span>
               </div>
-              <div className="feature-item">
+              <div className="feature-item feature-coming-soon">
                 <span className="feature-icon">🏅</span>
                 <span>Badges exclusifs</span>
+                <span className="coming-soon-badge">Bientôt</span>
               </div>
             </div>
             {/* <motion.div

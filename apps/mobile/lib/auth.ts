@@ -1,16 +1,15 @@
-import { supabase } from '@/lib/supabase';
-import { makeRedirectUri } from 'expo-auth-session';
-import * as QueryParams from 'expo-auth-session/build/QueryParams';
-import * as WebBrowser from 'expo-web-browser';
+import { supabase } from "@/lib/supabase";
+import { makeRedirectUri } from "expo-auth-session";
+import * as QueryParams from "expo-auth-session/build/QueryParams";
+import * as WebBrowser from "expo-web-browser";
 
 WebBrowser.maybeCompleteAuthSession();
 
-
 const redirectTo = makeRedirectUri({
-  path: '(tabs)/profile',
+  path: "(tabs)/profile",
 });
 
-export async function signInWithOAuth(provider: 'google' | 'github') {
+export async function signInWithOAuth(provider: "google" | "github") {
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider,
     options: {
@@ -23,7 +22,7 @@ export async function signInWithOAuth(provider: 'google' | 'github') {
 
   const res = await WebBrowser.openAuthSessionAsync(data.url!, redirectTo);
 
-  if (res.type === 'success') {
+  if (res.type === "success") {
     WebBrowser.dismissBrowser();
     const { params } = QueryParams.getQueryParams(res.url);
     if (params?.access_token) {
@@ -31,17 +30,21 @@ export async function signInWithOAuth(provider: 'google' | 'github') {
         access_token: params.access_token,
         refresh_token: params.refresh_token,
       });
-
+    }
+    // Handle authorization code flow (MFA or PKCE flow)
+    if (params?.["code"]) {
+      await supabase.auth.exchangeCodeForSession(params["code"]);
     }
   }
 }
 
 export async function signOut() {
-  const { data: { session } } = await supabase.auth.getSession();
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
   if (!session) {
-    console.error("No session to sign out")
+    console.error("No session to sign out");
     return;
   }
   return supabase.auth.signOut();
 }
-
